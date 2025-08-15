@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ store.name }} 리뷰 목록</title>
+</head>
+<body>
+    <a href='{% url 'stores:store-detail' store.id %}'>가게 정보</a>
+    <br/>
+
+    <h2>{{ store.name }} 리뷰</h2>
+
+    {% if store.image %}
+        <a href="{{ store.image.url }}" target="_blank">
+            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="250" height="250">
+        </a>
+    {% else %}
+        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지">
+    {% endif %}
+
+    <!-- 평균 평점 -->
+    <div>
+    {{ avg_rating|floatformat:1 }}
+    <br/>
+    {% for i in stars_list %}
+        {% if i <= avg_star_count %}
+            ★
+        {% endif %}
+    {% endfor %}
+    </div>
+    <br/>
+
+    <!-- 별점별 리뷰 개수 -->
+    <div>
+        5점: {{ rating_counts.5 }}개<br/>
+        4점: {{ rating_counts.4 }}개<br/>
+        3점: {{ rating_counts.3 }}개<br/>
+        2점: {{ rating_counts.2 }}개<br/>
+        1점: {{ rating_counts.1 }}개
+    </div>
+
+    <hr/>
+
+    <!-- 리뷰 목록 -->
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review-item">
+                <h4>{{ review.user.username }}</h4>
+                {{ review.stars }}
+                {{ review.created_at|date:"Y-m-d" }}
+                <br/>
+                {{ review.comment|linebreaks }}
+                
+                {% for img in review.images.all %}
+                    <a href="{{ img.image.url }}" target="_blank">
+                        <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                    </a>
+                {% endfor %}
+
+                <!-- 로그인한 작성자만 삭제 -->
+                {% if review.user == request.user %}
+                    <br/>
+                    <a href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
+    {% else %}
+        아직 작성된 리뷰가 없습니다.
+    {% endif %}
+</body>
+</html>
