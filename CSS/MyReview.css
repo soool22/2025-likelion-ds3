@@ -1,0 +1,66 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+
+}
+
+header{
+    display: flex;
+    margin-top: 81px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 54px;
+}
+
+.back-img{
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.tittle{
+    font-size: 22px;
+    font-weight: 600;
+}
+.text{
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+.back-img{
+    width: 8px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 2px;
+    stroke: #000;
+}
+
+.bar{
+    display: flex;
+    align-items: centers;
+}
+.my-review{
+    color: #000;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 22px 73px 18px 73px;
+    border-bottom: 1.2px solid #7B7B7B;;
+}
+
+.picked{
+    border-bottom: 1.5px solid #000;
+
+}
