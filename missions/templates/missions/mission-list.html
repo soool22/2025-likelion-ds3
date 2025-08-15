@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>미션 목록(점주)</title>
+</head>
+<body>
+    <h2>{{ store.name }} - 내 미션 목록</h2>
+
+    <a href="{% url 'missions:mission-create' store.id %}">새 미션 생성</a>
+
+    {% for mission in missions %}
+        <div>
+        <h3>{{ mission.title }}</h3>
+        {{ mission.description }}
+        <br/>
+        보상: {{ mission.reward_description }}
+        <br/>
+        생성일: {{ mission.created_at|date:"Y-m-d" }}
+        <br/>
+        {{ mission.start_date }} ~ {{ mission.end_date }}
+        <br/>
+        <br/>
+
+        <a href="{% url 'missions:mission-update' mission.id %}">수정</a> 
+        <a href="{% url 'missions:mission-delete' mission.id %}">삭제</a>
+        
+    </div>
+{% empty %}
+    <br/>
+    생성한 미션이 없습니다.
+{% endfor %}
+
+</body>
+</html>

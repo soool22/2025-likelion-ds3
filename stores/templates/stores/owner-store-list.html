@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 가게 목록(점주용)</title>
+</head>
+<body>
+    <h2>내 가게 목록</h2>
+
+    <a href="{% url 'stores:store-create' %}">새 가게 등록하기</a>
+
+    {% for store in stores %}
+        <div>
+            <a href="{% url 'stores:store-detail' store.id %}">
+                <h3>{{ store.name }}</h3>
+            </a>
+            <!-- 점수 -->
+            ★{{ store.rating|floatformat:1 }} 
+            <!-- 리뷰 개수 -->
+            ({{ store.reviews.count }})
+            <br/>
+            주소 : {{ store.address }} <br/>
+            카테고리 : 
+            {% for category in store.category.all %}
+                {{ category.name }}
+                {% if not forloop.last %}, {% endif %} <!-- 쉼표 붙이기 -->
+            {% endfor %}
+            <br/>
+            <!-- 영업 -->
+            {% if store.open_time and store.close_time %}
+                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                {% if store.is_open %}
+                    (영업 중)
+                {% else %}
+                    (영업 종료)
+                {% endif %}
+            {% endif %}
+            <br/>
+
+            {% if store.image %}
+                <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="200" height="200">
+                <br/>
+            {% else %}
+                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="200" height="200">
+                <br/>
+            {% endif %}
+
+            <!-- 가게 수정/삭제 -->
+            <a href="{% url 'stores:store-update' store.id %}">정보 수정</a>
+            <a href="{% url 'stores:store-delete' store.id %}">가게 삭제</a>
+            <br/>
+
+            <!-- 미션 -->
+            <a href="{% url 'missions:mission-create' store.id %}">미션 생성</a>
+            <a href="{% url 'missions:mission-list' store.id %}">미션 목록</a>
+            <br/>
+        </div>
+
+        <hr/>
+    {% empty %}
+        등록된 가게가 없습니다.
+    {% endfor %}
+</body>
+</html>

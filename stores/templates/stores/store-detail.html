@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가게 정보</title>
+</head>
+<body>
+    <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
+    <br/>
+
+    {% if store.image %}
+        <a href="{{ store.image.url }}" target="_blank">
+            <img src="{{ store.image.url }}" width="200" height="200">
+        </a>
+    {% else %}
+        <img src="{% static 'img/default_store.png' %}" width="200" height="200">
+    {% endif %}
+
+    <h2>{{ store.name }}</h2>
+
+    주소: {{ store.address }} 
+    <br/>
+
+    <a href="{% url 'reviews:review-list' store.id %}">
+        <!-- 점수 -->
+        ★{{ store.rating|floatformat:1 }} 
+        <!-- 리뷰 개수 -->
+        ({{ store.reviews.count }})
+    </a>
+    <br/>
+
+    카테고리:
+        {% for category in store.category.all %}
+            {{ category.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    <br/>
+    <!-- 영업 -->
+            {% if store.open_time and store.close_time %}
+                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                {% if store.is_open %}
+                    (영업 중)
+                {% else %}
+                    (영업 종료)
+                {% endif %}
+            {% endif %}
+    <hr/>
+
+    <h3>진행 중인 미션</h3>
+    {% for mission in missions %}
+        <div>
+            <h4>{{ mission.title }}</h4>
+            {{ mission.description }}
+            <br/>
+            보상: {{ mission.reward_description }}
+            <br/>
+            {{ mission.start_date }} ~ {{ mission.end_date }}
+            <br/>
+
+            <!--미션 완료 링크(확인용 - 임의로 만들어 둠)-->
+            <a href='{% url 'missions:mission-complete' mission.id %}'>미션 완료</a>
+        </div>
+    {% empty %}
+        진행 중인 미션이 없습니다.
+    {% endfor %}
+
+    <!-- 메뉴 및 서비스 추가 예정 -->
+</body>
+</html>
+

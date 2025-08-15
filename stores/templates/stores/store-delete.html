@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>등록된 가게 삭제</title>
+</head>
+<body>
+    <h2>{{ store.name }} 삭제하시겠습니까?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">삭제</button> <br/>
+        <a href="{% url 'stores:owner-store-list' %}">취소</a>
+    </form>
+</body>
+</html>
+

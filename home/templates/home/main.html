@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+</head>
+<body>
+    <!-- 광고 -->
+    
+    <a href="{% url 'stores:public-store-list' %}">모든 가게</a>
+    <a href="{% url 'stores:popular-store-list' %}">방문자 랭킹</a>
+    <a href="{% url 'stores:review-best-list' %}">리뷰 Best</a>
+
+</body>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>등록된 가게 정보 수정</title>
+</head>
+<body>
+    <h2>가게 정보 수정</h2>
+    <form method="POST" action="{% url 'stores:store-update' store.id %}" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <div>
+            가게 이름
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div>
+            주소
+            {{ form.address }}
+            {{ form.address.errors }}
+        </div>
+
+        <!-- 위도/경도 (지도맵) -->
+        
+        <div>
+            카테고리
+            {% for checkbox in form.category %}
+                <div>
+                    {{ checkbox.tag }} {{ checkbox.choice_label }}
+                </div>
+            {% endfor %}
+            {{ form.category.errors }}
+        </div>
+
+        <div>
+            {% if store.image %}
+                기존 이미지: <br/>
+                <img width="200" height="200" src="{{ store.image.url }}"><br/>
+            {% endif %}
+            {{ form.image }}
+            {{ form.image.errors }}
+        </div>
+
+        <div>
+            오픈 시간
+            {{ form.open_time }}
+            {{ form.open_time.errors }}
+        </div>
+
+        <div>
+            종료 시간
+            {{ form.close_time }}
+            {{ form.close_time.errors }}
+        </div>
+    
+        <button type="submit">완료</button>
+    </form>
+</body>
+</html>
+
