@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>QR 방문 인증</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <h1>QR 방문 인증</h1>
+    <div id="reader" style="width:300px;height:300px;"></div>
+    <div id="status">카메라를 켜고 QR을 스캔해주세요.</div>
+
+    <script>
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 }
+        );
+        
+        // 페이지 로드 시 스캐너 시작
+        window.onload = function() {
+            html5QrcodeScanner.render(onScanSuccess);
+        };
+        
+        function onScanSuccess(decodedText) {
+            const statusEl = document.getElementById("status");
+            statusEl.textContent = "QR 인식됨: " + decodedText;
+            console.log("Scanned QR:", decodedText);
+        
+            let token;
+            try {
+                const urlObj = new URL(decodedText, window.location.origin);
+                token = urlObj.searchParams.get("token");
+                if (!token) throw new Error("토큰이 없습니다.");
+            } catch (err) {
+                console.error("Invalid QR URL:", err);
+                statusEl.textContent = "QR 데이터가 올바르지 않습니다.";
+                html5QrcodeScanner.clear();
+                return;
+            }
+        
+            const apiUrl = "/visit_rewards/visit/?token=" + token + "&test=1";
+        
+            fetch(apiUrl)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("네트워크 응답 실패: " + res.status);
+                    }
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.includes("application/json")) {
+                        return res.json();
+                    } else {
+                        throw new Error("서버 응답이 JSON이 아닙니다.");
+                    }
+                })
+                .then(data => {
+                    if (data.status === "ok") {
+                        statusEl.textContent =
+                            `[${data.store_name}] 방문을 환영합니다! (누적 방문 ${data.total_visits}회)`;
+                    } else if (data.status === "already_visited") {
+                        statusEl.textContent = "이미 방문한 QR입니다. 내일 다시 시도해주세요.";
+                    } else {
+                        statusEl.textContent = "인증 실패";
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch error:", err);
+                    statusEl.textContent = "인증 중 오류가 발생했습니다.";
+                })
+                .finally(() => {
+                    html5QrcodeScanner.clear(); // 항상 카메라 종료
+                });
+        }
+        </script>
+        
+    
+    
+    
+    <br><br>
+    {% if store %}
+    <h3>{{ store.name }} QR</h3>
+    <img src="{{ store_qr_url }}" alt="QR 코드">
+
+    {% else %}
+        <p>테스트용 가게가 없습니다.</p>
+    {% endif %}
+
+
+
+    <small>자영업자 UI 개발 전 테스트 발급</small><br>
+    store.id = {{ store.id }}
+
+</body>
+</html>
+    

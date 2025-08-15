@@ -15,6 +15,8 @@ path('delete/', delete_account, name='delete_account'),
 path('edit/', profile_edit, name='profile_edit'),
 path('api/user/', user_info_view, name='user_info'),
 
+path('visit_check/',visit_check,name='visit_check'),
+
 # FE 템플릿 렌더링
 path('page/mypage/', my_page_view, name='mypage'),
 path('page/login/', login_page_view, name='login_page'),
