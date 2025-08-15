@@ -1,0 +1,128 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
+from django.conf import settings
+
+from .forms import SignUpForm, UserUpdateForm
+
+import os
+
+
+# ========== 기능 API 뷰 ==========
+
+def signup(request):
+    if request.method == "GET":
+        return render(request, "accounts/signup.html", {'form': SignUpForm()})
+
+    form = SignUpForm(request.POST)
+    if form.is_valid():
+        user = form.save()
+        user.nickname = form.cleaned_data.get("nickname", "")
+        user.save()  
+        return redirect('/accounts/login/')  # 회원가입 후 로그인 페이지로 리다이렉트
+
+
+    return render(request, "accounts/signup.html", {'form': form})
+
+def login(request):
+    if request.method == "GET":
+        return render(request, "accounts/login.html", {"form": AuthenticationForm()})
+
+    form = AuthenticationForm(request, request.POST)
+    if form.is_valid():
+        auth_login(request, form.get_user())
+        return redirect('accounts:main')
+
+    return render(request, "accounts/login.html", {'form': form})
+
+def logout(request):
+    if request.user.is_authenticated:
+        auth_logout(request)
+    return redirect('accounts:main')  # 메인 페이지로 이동
+
+@login_required
+def delete_account(request):
+    if request.method == "POST":
+        request.user.delete()
+        auth_logout(request)  
+        messages.success(request, "회원 탈퇴가 완료되었습니다.")
+        return redirect('accounts:main')  # 메인 페이지로 이동
+    # GET 요청 등 예외 처리 (선택)
+    return redirect('accounts:mypage')
+
+@login_required
+def profile_edit(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "프로필이 수정되었습니다.")
+            return redirect('accounts:mypage')
+        else:
+    
+            return render(request, 'accounts/mypage.html', {'form': form})
+
+    form = UserUpdateForm(instance=request.user)
+    return render(request, 'accounts/mypage.html', {'form': form})
+
+@login_required
+def user_info_view(request):
+    user = request.user
+    
+    context = {
+        'username': user.username,
+        'nickname': getattr(user, 'nickname', ''),
+    }
+    return render(request, 'accounts/user_info.html', context)
+
+# ========== 페이지 렌더링 뷰 ==========
+
+
+def main_page_view(request):
+    return render(request, 'accounts/main.html')
+
+
+def signup_page_view(request):
+    return render(request, 'accounts/signup.html')
+
+
+def login_page_view(request):
+    return render(request, 'accounts/login.html')
+
+
+@login_required
+def my_page_view(request):
+    user = request.user
+    context = {
+        'nickname': user.nickname,
+        'email': user.email,
+    }
+    return render(request, 'accounts/mypage.html', context)
+
+
+
+def terms_or_policy_view(request, page_type):
+    # page_type에 따라 파일 경로, 제목을 결정
+    if page_type == 'terms':
+        file_name = 'terms_of_service.txt'
+        title = '서비스 이용약관'
+    elif page_type == 'privacy':
+        file_name = 'privacy_policy.txt'
+        title = '개인정보처리방침'
+    else:
+        # 알 수 없는 page_type이면 404 처리 (선택사항)
+        from django.http import Http404
+        raise Http404("Page not found")
+
+    file_path = os.path.join(settings.BASE_DIR, 'policies', file_name)
+    with open(file_path, encoding='utf-8') as f:
+        content = f.read()
+
+    context = {
+        'title': title,
+        'content': content,
+    }
+    return render(request, 'accounts/terms/terms_page.html', context)

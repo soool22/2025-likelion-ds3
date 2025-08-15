@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>마이페이지</title>
+</head>
+<body>
+    <h1>마이페이지</h1>
+    <a href="{% url 'accounts:main' %}">홈으로</a><br><br>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'accounts:profile_edit' %}">
+        {% csrf_token %}
+        
+        <div>
+            <label for="id_nickname">닉네임</label><br />
+            <input type="text" name="nickname" id="id_nickname" value="{{ user.nickname }}" required />
+        </div>
+
+        <div>
+            <label>이메일</label><br />
+            <input type="email" value="{{ user.email }}" readonly />
+        </div>
+
+        <input type="submit" value="프로필 수정" />
+    </form>
+
+    <section class="setting">
+        <h3>설정</h3>
+        <div class="setting_detail">
+            <p><a href="{% url 'accounts:terms_of_service' %}">이용약관</a></p>
+            <p><a href="{% url 'accounts:privacy_policy' %}">개인정보 처리방침</a></p>
+
+        </div>
+    </section>
+    
+
+    <p><a href="{% url 'accounts:logout' %}">로그아웃</a></p>
+    <form action="{% url 'accounts:delete_account' %}" method="POST" onsubmit="return confirm('정말 회원 탈퇴 하시겠습니까?');">
+        {% csrf_token %}
+        <button type="submit">회원 탈퇴</button>
+    </form>
+    
+
+</body>
+</html>
