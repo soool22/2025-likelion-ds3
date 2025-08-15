@@ -10,6 +10,8 @@ from .forms import SignUpForm, UserUpdateForm
 
 import os
 
+from visit_rewards import *
+
 
 # ========== 기능 API 뷰 ==========
 
@@ -92,6 +94,8 @@ def signup_page_view(request):
 def login_page_view(request):
     return render(request, 'accounts/login.html')
 
+def visit_check(request):
+    return render(request, 'visit_rewards/visit_checking.html')
 
 @login_required
 def my_page_view(request):
