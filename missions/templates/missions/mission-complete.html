@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 완료 안내</title>
+</head>
+<body>
+    <h2>{{ message }}</h2>
+    보상: {{ mission.reward_description }}
+    <br/>
+
+    <!-- 리뷰 작성 버튼 -->
+    <a href="{% url 'reviews:review-create' mission.store.id %}">리뷰 작성하기</a>
+    <br/>
+    <!-- 가게 상세로 돌아가기 -->
+    <a href="{% url 'stores:store-detail' mission.store.id %}">가게 정보 돌아가기</a>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성</title>
+
+    <!-- ############## CSS ############## -->
+    <style>
+        /*별*/
+        .rating {
+            display: flex;
+            justify-content: flex-start; /* 왼쪽 정렬 */
+            gap: 5px;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .rating span {
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        .rating span.hover,
+        .rating span.selected {
+            color: gold;
+        }
+        textarea {
+            width: 60%;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            font-size: 1rem;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>평가 및 리뷰 작성</h2>
+    <h3>{{ store.name }}</h3>
+
+    {% if store.image %}
+        <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="150" height="150">
+        <br/>
+    {% else %}
+        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150">
+        <br/>
+    {% endif %}
+
+    <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="rating" id="rating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+        
+        <!-- 선택한 별점을 form에 담기 위한 hidden input -->
+        <input type="hidden" name="rating" id="rating-input" required>
+
+        <textarea name="comment" placeholder="솔직한 리뷰를 작성해주세요. 상품과 서비스에 대해 자세히 써주시면 유용한 리뷰가 돼요." rows="10" required></textarea> 
+        <br/>
+
+        <!-- 사진 추가 -->
+        <input type="file" id="fileInput" name="images" accept="image/*" multiple><br>
+        <div id="preview"></div>
+        <br>
+
+        <button type="submit">완료</button>
+    </form>
+
+    <!-- 방문 인증 후 스탬프 적립-->
+
+    <!-- ############## JS ############## -->
+    <script>
+        // 별점
+        const stars = document.querySelectorAll('#rating span');
+        const ratingInput = document.getElementById('rating-input');
+        let selectedRating = 0;
+
+        stars.forEach((star, idx) => {
+            star.addEventListener('mouseover', () => {
+                stars.forEach((s, i) => {
+                    s.classList.toggle('hover', i <= idx);
+                });
+            });
+
+            star.addEventListener('mouseout', () => {
+                stars.forEach((s, i) => {
+                    s.classList.remove('hover');
+                    s.classList.toggle('selected', i < selectedRating);
+                });
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = idx + 1;
+                ratingInput.value = selectedRating; // form 전송 값 설정
+                stars.forEach((s, i) => {
+                    s.classList.toggle('selected', i < selectedRating);
+                });
+            });
+        });
+
+        // 다중 사진 추가 preview
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        let filesArray = [];
+
+        fileInput.addEventListener('change', (e) => {
+            for (let i = 0; i < e.target.files.length; i++) {
+                filesArray.push(e.target.files[i]);
+            }
+            preview.innerHTML = filesArray.map(f => `<p>${f.name}</p>`).join('');
+    
+            // FormData에 추가
+            const dataTransfer = new DataTransfer();
+            filesArray.forEach(f => dataTransfer.items.add(f));
+            fileInput.files = dataTransfer.files;
+        });
+    </script>
+
+</body>
+</html>

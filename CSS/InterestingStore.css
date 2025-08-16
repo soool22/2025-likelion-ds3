@@ -1,0 +1,130 @@
+
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+
+}
+
+header{
+    display: flex;
+    margin-top: 81px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 156px;
+}
+
+.tittle{
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.text{
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.store-list{
+    margin-left: 50px;
+}
+
+.list{
+    display: flex;
+}
+
+.store-text{
+    display: block;
+    margin-left: 24px;
+}
+
+.store-score{
+    display: flex;
+    align-items: center;
+}
+.store-name{
+    font-size: 22px;
+    font-weight: 600;
+}
+.yellow-star{
+    width: 13px;
+height: 13px;
+flex-shrink: 0;
+fill: #FFCC02;
+stroke-width: 3px;
+stroke: #FFCC02;
+}
+.store-score-num{
+    color: #000;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 9px;
+}
+.store-score-review{
+    color: #7B7B7B;
+font-size: 10px;
+font-weight: 600;
+line-height: normal;
+margin-left: 2px;
+}
+.store-info{
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccc;
+}
+/* 탭바 시작 */
+#tapBar{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    height: 64px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e5e5;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+}
+
+.tapBarBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.tapBarIcon{
+    width: 24px;
+    height: 24px;
+}
+
+.tapBarLabel{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cccccc;
+}
+
+.tapBarLabel.picked{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+/* 탭바 끝 */

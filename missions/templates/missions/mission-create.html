@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 생성(점주)</title>
+</head>
+<body>
+    <h2>( {{ store.name }} ) 미션 생성</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            미션 제목:<br/>
+            {{ form.title }}
+        </div>
+
+        <div>
+            미션 설명:<br/>
+            {{ form.description }}
+        </div>
+
+        <div>
+            보상 내용:<br/>
+            {{ form.reward_description }}
+        </div>
+
+        <div>
+            시작일:<br/>
+            {{ form.start_date }}
+        </div>
+
+        <div>
+            종료일:<br/>
+        {{ form.end_date }}
+        </div>
+        <br/>
+
+        <button type="submit">완료</button>
+        <a href="{% url 'stores:owner-store-list' %}">취소</a>
+    </form>
+</body>
+</html>
