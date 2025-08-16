@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 import os
+import uuid
 from uuid import uuid4
 from django.utils import timezone
 
@@ -18,6 +19,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+    import uuid
+
+def generate_uuid():
+    return uuid.uuid4().hex
+
+    
 # 가게
 class Store(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False) # 가게 이름
@@ -25,6 +32,9 @@ class Store(models.Model):
     address = models.CharField(max_length=255, null=False, blank=False) # 주소
     #latitude = models.FloatField(null=False) # 위도
     #longitude = models.FloatField(null=False) # 경도
+    
+    qr_token = models.CharField(max_length=255, unique=True, default=generate_uuid)
+
     
     category = models.ManyToManyField(Category, related_name="stores") # 카테고리
     rating = models.FloatField(default=0) # 평균 평점

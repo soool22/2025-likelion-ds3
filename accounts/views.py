@@ -84,7 +84,7 @@ def user_info_view(request):
 
 
 def main_page_view(request):
-    return render(request, 'accounts/main.html')
+    return render(request, 'home/main.html')
 
 
 def signup_page_view(request):

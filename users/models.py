@@ -4,6 +4,7 @@ import os
 from uuid import uuid4
 from django.utils import timezone
 
+
 def upload_filepath(instance, filename):
     today_str = timezone.now().strftime("%Y%m%d")
     file_basename = os.path.basename(filename)

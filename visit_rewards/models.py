@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.conf import settings
+from stores.models import Store
 
 
 # -----------------------------
@@ -11,28 +12,17 @@ def generate_uuid():
 
 
 # -----------------------------
-# 가게 정보
-# -----------------------------
-class Store(models.Model):
-    name = models.CharField(max_length=255)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_stores')
-    address = models.CharField(max_length=500)
-    description = models.TextField(blank=True)
-    qr_token = models.CharField(max_length=255, unique=True, default=generate_uuid)  # QR 코드용 토큰
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
-# -----------------------------
 # 방문 기록
 # -----------------------------
 class Visit(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='visits')
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='visits')
-    qr_token = models.CharField(max_length=255)             # QR 토큰 기록
-    test = models.BooleanField(default=False)              # 테스트용 구분
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='visits'
+    )
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name='visits'
+    )
+    qr_token = models.CharField(max_length=255)  # 방문 인증할 때 사용한 QR 토큰
+    test = models.BooleanField(default=False)    # 테스트 여부
     visit_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -40,34 +30,42 @@ class Visit(models.Model):
 
 
 # -----------------------------
-# 포인트/스탬프/기프티콘 관리
+# 교환 가능한 리워드
 # -----------------------------
 class Reward(models.Model):
     REWARD_TYPE_CHOICES = [
-        ('point', 'Point'),
-        ('stamp', 'Stamp'),
         ('gifticon', 'Gifticon'),
+        ('discount', 'Discount'),
+        ('item', 'Item'),
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rewards')
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='rewards', null=True, blank=True)
+
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name='available_rewards', null=True, blank=True
+    )
+    name = models.CharField(max_length=100)  # 리워드 이름 (예: 아메리카노, 10% 할인권)
     reward_type = models.CharField(max_length=20, choices=REWARD_TYPE_CHOICES)
-    amount = models.PositiveIntegerField(default=0)  # 포인트 수, 스탬프 개수 등
+    cost_points = models.PositiveIntegerField(default=0)  # 교환에 필요한 포인트
+    image = models.ImageField(upload_to="rewards/", blank=True, null=True)  # 가상의 기프티콘 이미지
     description = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.reward_type} ({self.amount})"
+        return f"{self.name} ({self.cost_points} pts)"
 
 
 # -----------------------------
-# 기프티콘 발급 내역
+# 유저가 실제로 교환한 리워드
 # -----------------------------
-class Gifticon(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='gifticons')
-    name = models.CharField(max_length=255)  # 예: 메가커피 아메리카노
-    code = models.CharField(max_length=255, unique=True)  # 실제 발급 코드
+class UserReward(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_rewards'
+    )
+    reward = models.ForeignKey(
+        Reward, on_delete=models.CASCADE, related_name='claimed_rewards'
+    )
+    code = models.CharField(max_length=255, unique=True, default=uuid.uuid4)  # 발급 코드
     issued_at = models.DateTimeField(auto_now_add=True)
     used = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.name} - {self.user.username} ({'사용됨' if self.used else '미사용'})"
+        return f"{self.reward.name} - {self.user.username} ({'사용됨' if self.used else '미사용'})"
