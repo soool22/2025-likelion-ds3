@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,7 @@
     <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
     <br/>
 
+    <!-- ######### 가게 정보 #########-->
     {% if store.image %}
         <a href="{{ store.image.url }}" target="_blank">
             <img src="{{ store.image.url }}" width="200" height="200">
@@ -47,8 +49,11 @@
                 {% endif %}
             {% endif %}
     <hr/>
+    <br/>
 
+    <!-- ######### 미션 ######### -->
     <h3>진행 중인 미션</h3>
+    <hr/>
     {% for mission in missions %}
         <div>
             <h4>{{ mission.title }}</h4>
@@ -65,8 +70,29 @@
     {% empty %}
         진행 중인 미션이 없습니다.
     {% endfor %}
+    <hr/>
+    <br/>
 
-    <!-- 메뉴 및 서비스 추가 예정 -->
+    <!-- ######### 상품/메뉴 ######### -->
+    <h3>상품/메뉴</h3>
+    <hr/>
+    {% for product in products %}
+    <div>
+        {% if product.image %}
+        <a href="{{ product.image.url }}" target="_blank">
+            <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
+        </a>
+        {% endif %}
+
+        <h4>{{ product.name }}</h4>
+        {{ product.price|floatformat:0|intcomma }}원
+        <br/>
+        {{ product.description }}
+    </div>
+        <hr/>
+    {% empty %}
+        등록된 상품이 없습니다.
+    {% endfor %}
 </body>
 </html>
 

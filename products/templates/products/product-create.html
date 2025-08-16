@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>상품/메뉴 등록</title>
+</head>
+<body>
+    <a href="{% url 'products:product-list' store.id %}">이전</a>
+    <br/>
+
+    <h2>{{ store.name }} - 상품 등록/수정</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div>
+            상품명
+            {{ form.name }}
+        </div>
+
+        <div>
+            가격
+            {{ form.price }} 원
+        </div>
+
+        <div>
+            이미지
+            {{ form.image }}
+        </div>
+
+        <div>
+            설명
+            {{ form.description }}
+        </div>
+
+        <button type="submit">완료</button>
+    </form>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Store
 
+# 가게 정보 입력 form
 class StoreForm(forms.ModelForm):
     open_time = forms.TimeField(
         widget=forms.TimeInput(attrs={'type': 'time'}),

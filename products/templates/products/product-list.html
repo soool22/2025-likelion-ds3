@@ -1,0 +1,45 @@
+{% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ store.name }} - 상품/메뉴 목록(점주용)</title>
+</head>
+<body>
+    <a href="{% url 'stores:owner-store-list' %}">이전</a>
+    <br/>
+
+    <h2>{{ store.name }} - 상품/메뉴 목록</h2>
+
+    <!-- 새 상품 등록 버튼 -->
+    <a href="{% url 'products:product-create' store.id %}">새 상품 등록</a>
+    <br/><br/>
+
+    {% for product in products %}
+        <div>
+
+            {% if product.image %}
+            <a href="{{ product.image.url }}" target="_blank">
+                <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
+            </a>
+            {% endif %}
+
+            <h3>{{ product.name }}</h3>
+            {{ product.price|floatformat:0|intcomma }}원
+            <br/>
+            {{ product.description }}
+            <br/>
+
+            <!-- 상품 수정 / 삭제 -->
+            <a href="{% url 'products:product-update' product.id %}">수정</a>
+            <a href="{% url 'products:product-delete' product.id %}">삭제</a>
+        </div>
+        <hr/>
+    {% empty %}
+        등록된 상품이 없습니다.
+    {% endfor %}
+</body>
+</html>

@@ -41,8 +41,10 @@
             <br/>
 
             {% if store.image %}
+            <a href="{{ store.image.url }}" target="_blank">
                 <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="200" height="200">
-                <br/>
+            </a>  
+            <br/>
             {% else %}
                 <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="200" height="200">
                 <br/>
@@ -54,8 +56,11 @@
             <br/>
 
             <!-- 미션 -->
-            <a href="{% url 'missions:mission-create' store.id %}">미션 생성</a>
-            <a href="{% url 'missions:mission-list' store.id %}">미션 목록</a>
+            <a href="{% url 'missions:mission-list' store.id %}">미션</a>
+            <br/>
+
+            <!-- 상품/메뉴 -->
+            <a href="{% url 'products:product-list' store.id %}">상품/메뉴</a>
             <br/>
         </div>
 

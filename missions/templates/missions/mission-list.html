@@ -8,6 +8,9 @@
     <title>미션 목록(점주)</title>
 </head>
 <body>
+    <a href="{% url 'stores:owner-store-list' %}">이전</a>
+    <br/>
+    
     <h2>{{ store.name }} - 내 미션 목록</h2>
 
     <a href="{% url 'missions:mission-create' store.id %}">새 미션 생성</a>

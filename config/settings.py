@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.humanize',
     'django.contrib.staticfiles',
     
     'accounts',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'stores',
     'reviews',
     'missions',
+    'products',
 ]
 
 MIDDLEWARE = [

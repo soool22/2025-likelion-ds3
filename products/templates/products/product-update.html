@@ -1,0 +1,47 @@
+{% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>상품/메뉴 수정</title>
+</head>
+<body>
+    <a href="{% url 'products:product-list' store.id %}">이전</a>
+    <br/>
+
+    <h2>{{ store.name }} - 상품 수정</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div>
+            상품명
+            {{ form.name }}
+        </div>
+
+        <div>
+            가격
+            {{ form.price }} 원
+        </div>
+
+        <div>
+            {% if form.instance.image %}
+                현재 이미지: 
+                <img src="{{ form.instance.image.url }}" width="100" height="100">
+                <br/>
+                {% endif %}
+            {{ form.image }}
+        </div>
+
+        <div>
+            설명
+            {{ form.description }}
+        </div>
+
+        <button type="submit">완료</button>
+    </form>
+
+</body>
+</html>

@@ -13,5 +13,6 @@ urlpatterns = [
     path('stores/',include('stores.urls')), # stores url
     path('reviews/',include('reviews.urls')), # reviews url
     path('missions/',include('missions.urls')), # missions url
+    path('products/',include('products.urls')), # products url
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

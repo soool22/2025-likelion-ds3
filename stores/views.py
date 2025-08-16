@@ -131,13 +131,16 @@ def review_best_list(request):
     })
 
 # 가게 정보
-def store_detail(request,store_id):
+def store_detail(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
     missions = store.missions.all()  # 모든 미션
-    active_missions = [m for m in missions if m.is_active]  # property 기반 필터링 (활성화)
+    active_missions = [m for m in missions if m.is_active]  # 활성화된 미션
+
+    products = store.products.all()  # 상품 목록
 
     return render(request, 'stores/store-detail.html', {
         'store': store,
         'missions': active_missions,
+        'products': products,
     })
