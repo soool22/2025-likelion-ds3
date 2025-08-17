@@ -52,25 +52,23 @@ def visit_store(request):
 
     store = get_object_or_404(Store, qr_token=token)
 
-    if not is_test and Visit.objects.filter(store=store, user=request.user).exists():
-        return JsonResponse({"status": "already_visited"})
-
-        # 방문 인증 생성
+    # 방문 인증 생성
     visit = Visit.objects.create(store=store, test=is_test, user=request.user)
 
     # 포인트 적립 (예: 방문 인증 1000포인트)
     points_earned = 1000
     Reward.objects.create(
-    user=request.user,
-    reward_type='visit',
-    amount=points_earned,
-    related_visit=visit
-)
-    
+        user=request.user,
+        reward_type='visit',
+        amount=points_earned,
+        related_visit=visit
+    )
+
     request.user.points += points_earned
     request.user.save()
 
-    total_visits = Visit.objects.filter(store=store).count()
+    # 로그인 사용자 기준 누적 방문 횟수
+    total_visits = Visit.objects.filter(store=store, user=request.user).count()
 
     return JsonResponse({
         "status": "ok",
