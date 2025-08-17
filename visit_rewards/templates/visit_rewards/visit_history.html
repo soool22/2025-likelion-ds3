@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 방문 내역</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f9f9f9; }
+        .store-link { color: #007bff; text-decoration: none; font-weight: bold; }
+        .store-link:hover { text-decoration: underline; }
+        .highlight { background-color: #fffae6; padding: 5px; margin-bottom: 10px; display: inline-block; }
+    </style>
+</head>
+<body>
+<h2>나의 방문 내역</h2>
+<a href="{% url 'home:main' %}">홈으로</a>
+<br><br>
+
+{% if most_visited %}
+<div class="highlight">
+    <strong>가장 많이 찾은 가게:</strong>
+    <a href="{% url 'stores:store-detail' most_visited.store__id %}" class="store-link">
+        {{ most_visited.store__name }}
+    </a>
+    (방문 횟수: {{ most_visited.visits_count }}회)
+</div>
+{% endif %}
+
+{% if latest_visit %}
+<div class="highlight">
+    <strong>가장 최근에 찾은 가게:</strong>
+    <a href="{% url 'stores:store-detail' latest_visit.store.id %}" class="store-link">
+        {{ latest_visit.store.name }}
+    </a>
+    (방문 시간: {{ latest_visit.visit_time|date:"Y-m-d H:i" }})
+</div>
+{% endif %}
+
+{% if visits %}
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>가게 이름</th>
+            <th>테스트 여부</th>
+            <th>방문 시간</th>
+            <th>획득 포인트</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for visit in visits %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <a href="{% url 'stores:store-detail' visit.store.id %}" class="store-link">
+                    {{ visit.store.name }}
+                </a>
+            </td>
+            <td>{% if visit.test %}테스트{% else %}실제{% endif %}</td>
+            <td>{{ visit.visit_time|date:"Y-m-d H:i" }}</td>
+            <td>
+                {% with visit.reward_set.first as r %}
+                    {% if r %}{{ r.amount }}P{% else %}-{% endif %}
+                {% endwith %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>아직 방문한 가게가 없습니다.</p>
+{% endif %}
+</body>
+</html>
