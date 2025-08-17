@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관심 설정</title>
+</head>
+<body>
+<h2>관심 설정</h2>
+<a href="{% url 'home:main' %}">홈으로</a>
+<br><br>
+
+<form method="post" action="{% url 'accounts:user_preferences' %}">
+    {% csrf_token %}
+
+    <!-- 선호 음식 선택 -->
+    <label for="preferred_food">선호 음식:</label>
+    <select name="preferred_food" id="preferred_food">
+        <option value="">선택</option>
+        <option value="한식" {% if preference.preferred_food == "한식" %}selected{% endif %}>한식</option>
+        <option value="양식" {% if preference.preferred_food == "양식" %}selected{% endif %}>양식</option>
+        <option value="중식" {% if preference.preferred_food == "중식" %}selected{% endif %}>중식</option>
+        <option value="일식" {% if preference.preferred_food == "일식" %}selected{% endif %}>일식</option>
+        <option value="기타" {% if preference.preferred_food == "기타" %}selected{% endif %}>기타</option>
+    </select>
+    <br><br>
+
+    <!-- 위치 입력 -->
+    <label for="preferred_location">선호 위치:</label>
+    <input type="text" name="preferred_location" id="preferred_location"
+        value="{{ preference.preferred_location }}" placeholder="예: 강남구">
+    <br><br>
+
+    <button type="submit">저장</button>
+</form>

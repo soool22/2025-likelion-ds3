@@ -26,6 +26,19 @@
         <input type="submit" value="프로필 수정" />
     </form>
 
+    <h3>관심 설정</h3>
+
+    <p>선호 음식: {{ preference.preferred_food|default:"설정되지 않음" }}</p>
+    <p>선호 위치: {{ preference.preferred_location|default:"설정되지 않음" }}</p>
+
+
+    <a href="{% url 'accounts:user_preferences' %}">
+        <button type="button">수정</button>
+    </a>
+
+    <h3>찜한 가게</h3>
+    <a href="{% url 'accounts:favorite_stores' %}">찜 목록</a><br><br>
+
     <h3>방문 내역</h3>
     <a href="{% url 'visit_rewards:visit_history' %}">방문 내역</a><br><br>
 
