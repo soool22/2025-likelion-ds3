@@ -38,7 +38,7 @@
         <a href="{% url 'visit_rewards:buy_gifticon' g.id %}" 
            class="gifticon-link"
            onclick="return confirm('정말 {{ g.name }} 기프티콘을 구매하시겠습니까?\n가격: {{ g.point_cost }}P\n(구매 후 잔여 포인트: {{ g.remaining_points }}P)')">
-          {{ g.name }} - {{ g.point_cost }}P
+          {{ g.name }} {{ g.description }}- {{ g.point_cost }}P
         </a>
       {% else %}
         <a href="javascript:void(0);" 

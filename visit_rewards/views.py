@@ -248,3 +248,18 @@ def use_gifticon(request):
     reward.save()
 
     return JsonResponse({"success": True})
+
+@login_required
+def purchase_history(request):
+    """
+    현재 유저의 기프티콘 구매 내역
+    """
+    history = PurchaseHistory.objects.filter(user=request.user).select_related('gifticon').order_by('-purchased_at')
+    
+    # 각 구매 내역마다 사용 여부 표시
+    for ph in history:
+        ph.used = Reward.objects.filter(user=request.user, gifticon=ph.gifticon, used=True).exists()
+    
+    return render(request, 'visit_rewards/purchase_history.html', {
+        'purchase_history': history
+    })

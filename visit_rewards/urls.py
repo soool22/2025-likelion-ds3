@@ -20,4 +20,7 @@ urlpatterns = [
     path('shop/gifticons/buy/<int:gifticon_id>/', views.buy_gifticon, name='buy_gifticon'),  # 기프티콘 구매
     path('gifticons/my/', views.my_gifticons, name='my_gifticons'),              # 보유 기프티콘 확인
     path('gifticons/use/', views.use_gifticon, name='use_gifticon'),
+    
+    # 구매 내역
+    path('gifticons/purchase-history/', views.purchase_history, name='purchase_history'),
 ]
