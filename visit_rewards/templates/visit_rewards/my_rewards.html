@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>QR 방문 인증</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <a href="{% url 'accounts:main' %}">홈으로</a><br><br>
+    <h2>내 포인트: {{ points }}점</h2>
+
+    <h3>내 아이템</h3>
+    <ul>
+    {% for user_item in items %}
+        <li>{{ user_item.item.name }}</li>
+    {% empty %}
+        <li>보유한 아이템이 없습니다.</li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'visit_rewards:my_gifticons' %}">내 기프티콘</a><br><br>
+
+
+    <a href="{% url 'visit_rewards:shop_items' %}">아이템 샵</a>
+    <a href="{% url 'visit_rewards:shop_gifticons' %}">기프티콘 샵</a>
+
+</body>
+</html>
+    

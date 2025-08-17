@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>기프티콘 샵</title>
+    <style>
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        margin: 10px 0;
+      }
+      .gifticon-link {
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        padding: 8px 12px;
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .gifticon-link:hover {
+        background: #f0f0f0;
+      }
+    </style>
+</head>
+<body>
+<h2>기프티콘 샵</h2>
+<p>내 포인트: {{ user_points }}점</p><br>
+<a href="{% url 'visit_rewards:my_gifticons' %}">내 기프티콘 보관함 보기</a><br><br>
+
+<ul>
+  {% for g in gifticons %}
+    <li>
+      {% if g.remaining_points >= 0 %}
+        <a href="{% url 'visit_rewards:buy_gifticon' g.id %}" 
+           class="gifticon-link"
+           onclick="return confirm('정말 {{ g.name }} 기프티콘을 구매하시겠습니까?\n가격: {{ g.point_cost }}P\n(구매 후 잔여 포인트: {{ g.remaining_points }}P)')">
+          {{ g.name }} - {{ g.point_cost }}P
+        </a>
+      {% else %}
+        <a href="javascript:void(0);" 
+           class="gifticon-link"
+           onclick="alert('잔여 포인트가 부족합니다.')">
+          {{ g.name }} - {{ g.point_cost }}P
+        </a>
+      {% endif %}
+    </li>
+{% endfor %}
+
+</ul>
+
+</body>
+</html>

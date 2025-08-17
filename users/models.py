@@ -14,6 +14,8 @@ class User(AbstractUser):
     email = models.EmailField(max_length=30, unique=True)
     nickname = models.CharField(max_length=30, unique=True)
     profile_image = models.ImageField(upload_to=upload_filepath, blank=True)
+    
+    points = models.PositiveIntegerField(default=0)
 
     groups = models.ManyToManyField(Group, related_name='users_custom', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='users_custom', blank=True)

@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.conf import settings
 from stores.models import Store
+from django.utils import timezone
 
 
 # -----------------------------
@@ -30,42 +31,66 @@ class Visit(models.Model):
 
 
 # -----------------------------
-# 교환 가능한 리워드
+# 캐릭터 꾸미기 아이템
+# -----------------------------
+class Item(models.Model):
+    ITEM_TYPE_CHOICES = [
+        ('decoration', 'Decoration'),
+        ('accessory', 'Accessory'),
+    ]
+
+    name = models.CharField(max_length=50)
+    item_type = models.CharField(max_length=20, choices=ITEM_TYPE_CHOICES)
+    point_cost = models.PositiveIntegerField(default=0)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='items/', blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+# -----------------------------
+# 기프티콘
+# -----------------------------
+class Gifticon(models.Model):
+    name = models.CharField(max_length=50)
+    point_cost = models.PositiveIntegerField(default=0)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='gifticons/', blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+# -----------------------------
+# 유저 리워드
 # -----------------------------
 class Reward(models.Model):
     REWARD_TYPE_CHOICES = [
-        ('gifticon', 'Gifticon'),
-        ('discount', 'Discount'),
+        ('point', 'Point'),
         ('item', 'Item'),
+        ('gifticon', 'Gifticon'),
     ]
 
-    store = models.ForeignKey(
-        Store, on_delete=models.CASCADE, related_name='available_rewards', null=True, blank=True
-    )
-    name = models.CharField(max_length=100)  # 리워드 이름 (예: 아메리카노, 10% 할인권)
-    reward_type = models.CharField(max_length=20, choices=REWARD_TYPE_CHOICES)
-    cost_points = models.PositiveIntegerField(default=0)  # 교환에 필요한 포인트
-    image = models.ImageField(upload_to="rewards/", blank=True, null=True)  # 가상의 기프티콘 이미지
-    description = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
+    reward_type = models.CharField(max_length=20, choices=REWARD_TYPE_CHOICES, default='point')
+    related_visit = models.ForeignKey(Visit, null=True, blank=True, on_delete=models.SET_NULL)
+    amount = models.PositiveIntegerField(default=0)  # 포인트
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
+    gifticon = models.ForeignKey(Gifticon, on_delete=models.SET_NULL, null=True, blank=True)
+    description = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.name} ({self.cost_points} pts)"
-
-
-# -----------------------------
-# 유저가 실제로 교환한 리워드
-# -----------------------------
-class UserReward(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_rewards'
-    )
-    reward = models.ForeignKey(
-        Reward, on_delete=models.CASCADE, related_name='claimed_rewards'
-    )
-    code = models.CharField(max_length=255, unique=True, default=uuid.uuid4)  # 발급 코드
-    issued_at = models.DateTimeField(auto_now_add=True)
     used = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.reward.name} - {self.user.username} ({'사용됨' if self.used else '미사용'})"
+        if self.item:
+            return f"{self.user.username} - {self.item.name}"
+        if self.gifticon:
+            return f"{self.user.username} - {self.gifticon.name}"
+        return f"{self.user.username} - {self.reward_type} - {self.amount}"
+    
+class PurchaseHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
+    gifticon = models.ForeignKey(Gifticon, on_delete=models.SET_NULL, null=True, blank=True)
+    points_spent = models.PositiveIntegerField(default=0)
+    purchased_at = models.DateTimeField(auto_now_add=True)
