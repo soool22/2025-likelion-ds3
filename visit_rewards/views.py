@@ -9,6 +9,7 @@ from .models import *
 from django.db.models import Sum
 from django.views.decorators.http import require_POST
 import json
+from django.db.models import Count
 
 # 방문 인증 페이지 + QR 생성
 def visit_check(request, store_id):
@@ -75,6 +76,28 @@ def visit_store(request):
         "store_name": store.name,
         "total_visits": total_visits,
         "points_earned": points_earned
+    })
+    
+@login_required
+def visit_history(request):
+    # 로그인 사용자의 방문 내역 (최근 순)
+    visits = Visit.objects.filter(user=request.user).select_related('store').order_by('-visit_time')
+
+    # 가장 많이 방문한 가게 (중복 방문 카운트)
+    most_visited = (
+        visits
+        .values('store', 'store__name', 'store__id')
+        .annotate(visits_count=Count('id'))
+        .order_by('-visits_count')
+    ).first()
+
+    # 가장 최근에 방문한 가게
+    latest_visit = visits.first()
+
+    return render(request, 'visit_rewards/visit_history.html', {
+        'visits': visits,
+        'most_visited': most_visited,
+        'latest_visit': latest_visit,
     })
 
 

@@ -23,4 +23,6 @@ urlpatterns = [
     
     # 구매 내역
     path('gifticons/purchase-history/', views.purchase_history, name='purchase_history'),
+    # 방문 내역
+    path('visit_history/', views.visit_history, name='visit_history'),
 ]
