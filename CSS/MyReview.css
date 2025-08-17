@@ -14,7 +14,7 @@ main{
 
 header{
     display: flex;
-    margin-top: 81px;
+    margin-top: 32px;
     gap: 101px;
     align-items: center;
     height: 29px;
@@ -56,8 +56,9 @@ header{
     text-align: center;
     font-size: 18px;
     font-weight: 600;
-    padding: 22px 73px 18px 73px;
+    padding: 22px 67px 18px 67px;
     border-bottom: 1.2px solid #7B7B7B;;
+    white-space: nowrap;
 }
 
 .picked{

@@ -14,7 +14,7 @@ main{
 
 header{
     display: flex;
-    margin-top: 86px;
+    margin-top: 32px;
     gap: 106px;
     align-items: center;
     height: 29px;
