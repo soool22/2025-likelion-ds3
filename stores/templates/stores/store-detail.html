@@ -9,7 +9,7 @@
 </head>
 <body>
     <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
-    <br/>
+    <br/><br>
 
     {% if store.image %}
         <a href="{{ store.image.url }}" target="_blank">
@@ -21,34 +21,38 @@
 
     <h2>{{ store.name }}</h2>
 
+    <!-- 찜 버튼 -->
+    <button id="favorite-btn" data-store="{{ store.id }}">
+        {% if is_favorite %}
+            ♥ 찜 해제
+        {% else %}
+            ♡ 찜하기
+        {% endif %}
+    </button>
+    <br/><br/>
+
     주소: {{ store.address }} 
     <br/>
 
     <a href="{% url 'reviews:review-list' store.id %}">
-        <!-- 점수 -->
         ★{{ store.rating|floatformat:1 }} 
-        <!-- 리뷰 개수 -->
         ({{ store.reviews.count }})
     </a>
     <br/>
 
     카테고리:
-        {% for category in store.category.all %}
-            {{ category.name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
+    {% for category in store.category.all %}
+        {{ category.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
     <br/><br>
 
     <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
+    <br/><br>
 
-    <!-- 영업 -->
-            {% if store.open_time and store.close_time %}
-                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-                {% if store.is_open %}
-                    (영업 중)
-                {% else %}
-                    (영업 종료)
-                {% endif %}
-            {% endif %}
+    {% if store.open_time and store.close_time %}
+        영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+        {% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}
+    {% endif %}
     <hr/>
 
     <h3>진행 중인 미션</h3>
@@ -61,15 +65,34 @@
             <br/>
             {{ mission.start_date }} ~ {{ mission.end_date }}
             <br/>
-
-            <!--미션 완료 링크(확인용 - 임의로 만들어 둠)-->
             <a href='{% url 'missions:mission-complete' mission.id %}'>미션 완료</a>
         </div>
     {% empty %}
         진행 중인 미션이 없습니다.
     {% endfor %}
 
-    <!-- 메뉴 및 서비스 추가 예정 -->
+<script>
+document.getElementById('favorite-btn').addEventListener('click', function() {
+    const storeId = this.dataset.store;
+    fetch("{% url 'accounts:toggle_favorite' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: `store_id=${storeId}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "added") {
+            this.textContent = "♥ 찜 해제";
+        } else if(data.status === "removed") {
+            this.textContent = "♡ 찜하기";
+        } else {
+            alert("찜 처리에 실패했습니다.");
+        }
+    });
+});
+</script>
 </body>
 </html>
-

@@ -1,13 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.conf import settings
-
+from users.models import UserPreference, FavoriteStore
 from .forms import SignUpForm, UserUpdateForm
-
+from stores.models import Store
 import os
 
 from visit_rewards import *
@@ -100,11 +100,16 @@ def visit_check(request):
 @login_required
 def my_page_view(request):
     user = request.user
+    # UserPreference 가져오기 (없으면 생성)
+    preference, _ = UserPreference.objects.get_or_create(user=user)
+
     context = {
         'nickname': user.nickname,
         'email': user.email,
+        'preference': preference,  # 마이페이지에서 관심 설정 표시 가능
     }
     return render(request, 'accounts/mypage.html', context)
+
 
 
 
@@ -130,3 +135,52 @@ def terms_or_policy_view(request, page_type):
         'content': content,
     }
     return render(request, 'accounts/terms/terms_page.html', context)
+
+
+
+#------------------------------------------------------------------
+
+
+# -----------------------------
+# 관심 설정 (UserPreference)
+# -----------------------------
+@login_required
+def user_preferences(request):
+    preference, _ = UserPreference.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        preference.preferred_food = request.POST.get("preferred_food", "")
+        preference.preferred_location = request.POST.get("preferred_location", "")
+        preference.save()
+        return redirect('accounts:mypage')  # 저장 후 마이페이지 이동
+
+    return render(request, 'accounts/user_preferences.html', {'preference': preference})
+
+
+
+
+# -----------------------------
+# 찜한 가게 보기
+# -----------------------------
+@login_required
+def favorite_stores(request):
+    favorites = FavoriteStore.objects.filter(user=request.user).select_related('store')
+    return render(request, 'accounts/favorite_stores.html', {'favorites': favorites})
+
+
+# -----------------------------
+# 찜/해제 Ajax
+# -----------------------------
+from django.views.decorators.http import require_POST
+
+@login_required
+@require_POST
+def toggle_favorite(request):
+    store_id = request.POST.get("store_id")
+    store = get_object_or_404(Store, id=store_id)
+
+    favorite, created = FavoriteStore.objects.get_or_create(user=request.user, store=store)
+    if not created:
+        favorite.delete()
+        return JsonResponse({"status": "removed"})
+    return JsonResponse({"status": "added"})

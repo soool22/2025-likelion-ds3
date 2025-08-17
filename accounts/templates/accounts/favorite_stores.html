@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>찜한 가게</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        a.store-link { color: blue; text-decoration: underline; }
+        button { padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h2>찜한 가게</h2>
+<a href="{% url 'home:main' %}">홈으로</a>
+<br><br>
+
+{% if favorites %}
+<table>
+    <thead>
+        <tr>
+            <th>가게 이름</th>
+            <th>찜 날짜</th>
+            <th>액션</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fav in favorites %}
+        <tr id="fav-{{ fav.id }}">
+            <td>
+                <a href="{% url 'stores:store-detail' fav.store.id %}" class="store-link">
+                    {{ fav.store.name }}
+                </a>
+            </td>
+            <td>{{ fav.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                <button class="toggle-fav" data-store="{{ fav.store.id }}">찜 해제</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>찜한 가게가 없습니다.</p>
+{% endif %}
+
+<script>
+document.querySelectorAll('.toggle-fav').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const storeId = btn.dataset.store;
+        if(confirm("찜을 해제하시겠습니까?")) {
+            fetch("{% url 'accounts:toggle_favorite' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `store_id=${storeId}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "removed") {
+                    const row = document.getElementById(`fav-${storeId}`);
+                    if(row) row.remove();
+                } else {
+                    alert("찜 해제 실패");
+                }
+            });
+        }
+    });
+});
+</script>
+</body>
+</html>
