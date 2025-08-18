@@ -6,7 +6,8 @@ from datetime import timedelta
 from django.utils import timezone
 from .models import *
 from stores.models import Store
-from collections import Counter
+from django.db.models import Count
+from django.http import JsonResponse
 
 # 리뷰 작성 
 @login_required
@@ -43,19 +44,36 @@ def review_create(request, store_id):
 @login_required
 def review_list(request, store_id):
     store = get_object_or_404(Store, id=store_id)
-    reviews = Review.objects.filter(store=store).prefetch_related('images').order_by('-created_at')
 
-    # 평균 평점 (모델에 저장되어 있음)
+    # 기본 QuerySet
+    reviews = Review.objects.filter(store=store).prefetch_related('images').annotate(
+        helpful_count=Count('likes')  # 좋아요 수 계산
+    )
+
+    # 정렬 파라미터
+    sort = request.GET.get('sort', 'latest')  # 기본값 최신순
+    if sort == 'latest':
+        reviews = reviews.order_by('-created_at')
+    elif sort == 'rating_desc':
+        reviews = reviews.order_by('-rating')
+    elif sort == 'rating_asc':
+        reviews = reviews.order_by('rating')
+    elif sort == 'helpful':
+        reviews = reviews.order_by('-helpful_count')
+
+    # 평균 평점 계산
     avg_rating = store.rating
-    avg_star_count = int(round(avg_rating))  # 반올림해서 별 개수
+    avg_star_count = int(round(avg_rating))
 
     # 별 리스트 1~5
     stars_list = range(1, 6)
 
     # 별점별 리뷰 개수 (1~5)
-    rating_counts = {}
-    for i in range(1, 6):
-        rating_counts[i] = reviews.filter(rating=i).count()
+    rating_counts = {i: reviews.filter(rating=i).count() for i in range(1, 6)}
+
+    # 각 리뷰에 별 표시 추가
+    for review in reviews:
+        review.stars = "★" * review.rating
 
     return render(request, 'reviews/review-list.html', {
         'store': store,
@@ -64,6 +82,7 @@ def review_list(request, store_id):
         'avg_star_count': avg_star_count,
         'stars_list': stars_list,
         'rating_counts': rating_counts,
+        'sort': sort,
     })
 
 # 리뷰 삭제
@@ -81,3 +100,43 @@ def review_delete(request, review_id):
     review.stars = "★" * review.rating
 
     return render(request, 'reviews/review-delete.html', {'review': review})
+
+# 리뷰 좋아요/취소 (도움이 돼요)
+@login_required
+def review_like_toggle(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    user = request.user
+
+    # 자기 리뷰는 좋아요 불가
+    if review.user == user:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse(status=400)
+        return redirect('reviews:review-list', store_id=review.store.id)
+
+    # 좋아요 
+    if user in review.likes.all():
+        review.likes.remove(user)
+        liked = False
+    else:
+        review.likes.add(user)
+        liked = True
+
+    like_count = review.likes.count()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'like_count': like_count})
+
+    return redirect('reviews:review-list', store_id=review.store.id)
+
+# 내가 작성한 리뷰
+@login_required
+def my_review(request):
+    reviews = Review.objects.filter(user=request.user).prefetch_related('images').order_by('-created_at')
+
+    # 별점 표시용
+    for review in reviews:
+        review.stars = "★" * review.rating
+
+    return render(request, 'reviews/my-review.html', {
+        'reviews': reviews,
+    })

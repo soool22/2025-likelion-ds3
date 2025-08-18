@@ -2,17 +2,29 @@ from django import forms
 from .models import Mission
 from django.utils import timezone
 
-# 챌린지 생성 
 class MissionForm(forms.ModelForm):
+    # 초 단위 제거
+    now = timezone.now().replace(second=0, microsecond=0)
+
     start_date = forms.DateTimeField(
-        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'step': 60,  # 초 단위 제거
+            }
+        ),
         label="미션 시작일",
-        initial=timezone.now
+        initial=now
     )
     end_date = forms.DateTimeField(
-        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'step': 60,
+            }
+        ),
         label="미션 종료일",
-        initial=timezone.now
+        initial=now
     )
 
     class Meta:
@@ -21,8 +33,8 @@ class MissionForm(forms.ModelForm):
             'title', 
             'description', 
             'reward_description', 
-            'mission_type',     # 챌린지 종류 선택
-            'target_value',     # 목표치 입력 (금액, 방문 횟수, 기간)
+            'mission_type',
+            'target_value',
             'start_date', 
             'end_date'
         ]

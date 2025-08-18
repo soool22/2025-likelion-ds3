@@ -5,48 +5,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>미션 생성(점주)</title>
+    <title>챌린지 생성(점주)</title>
 </head>
 <body>
-    <h2>( {{ store.name }} ) 미션 생성</h2>
+    <h2>( {{ store.name }} ) 챌린지 생성</h2>
+
     <form method="post">
         {% csrf_token %}
+
         <div>
-            미션 제목:<br/>
+            <label>챌린지 제목:</label><br/>
             {{ form.title }}
+            {% if form.title.errors %}
+                <p style="color:red">{{ form.title.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            미션 설명:<br/>
+            <label>챌린지 설명:</label><br/>
             {{ form.description }}
+            {% if form.description.errors %}
+                <p style="color:red">{{ form.description.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            보상 내용:<br/>
+            <label>보상 내용:</label><br/>
             {{ form.reward_description }}
+            {% if form.reward_description.errors %}
+                <p style="color:red">{{ form.reward_description.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            미션 종류:<br/>
+            <label>챌린지 종류:</label><br/>
             {{ form.mission_type }}
+            {% if form.mission_type.errors %}
+                <p style="color:red">{{ form.mission_type.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            목표치:<br/>
+            <label>목표치:</label><br/>
             {{ form.target_value }}
+            {% if form.target_value.errors %}
+                <p style="color:red">{{ form.target_value.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            시작일:<br/>
+            <label>시작일:</label><br/>
             {{ form.start_date }}
+            {% if form.start_date.errors %}
+                <p style="color:red">{{ form.start_date.errors }}</p>
+            {% endif %}
         </div>
 
         <div>
-            종료일:<br/>
+            <label>종료일:</label><br/>
             {{ form.end_date }}
+            {% if form.end_date.errors %}
+                <p style="color:red">{{ form.end_date.errors }}</p>
+            {% endif %}
         </div>
-        <br/>
 
+        <br/>
         <button type="submit">완료</button>
         <a href="{% url 'stores:owner-store-list' %}">취소</a>
     </form>

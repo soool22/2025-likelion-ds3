@@ -158,7 +158,7 @@ def review_best_list(request):
 def store_detail(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    missions = store.missions.all()  # 모든 미션
+    missions = store.missions.all().order_by('-created_at')  # 모든 미션
     active_missions = [m for m in missions if m.is_active]  # 활성화된 미션
 
     products = store.products.all()  # 상품 목록

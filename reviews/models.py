@@ -19,6 +19,9 @@ class Review(models.Model):
     comment = models.TextField(max_length=300, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # 좋아요
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_reviews', blank=True)
+    
     def __str__(self):
         return f"{self.user} - {self.store.name} ({self.rating}점)"
 

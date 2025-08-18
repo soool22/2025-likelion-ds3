@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from datetime import timedelta
 from .models import *
 from .forms import MissionForm, AmountInputForm
 
@@ -13,10 +12,20 @@ from .forms import MissionForm, AmountInputForm
 @login_required
 def mission_list(request, store_id):
     store = get_object_or_404(request.user.store_set, id=store_id)
-    missions = store.missions.all()  # 점주 가게의 모든 챌린지
+    now = timezone.now()
+    status = request.GET.get('status', 'active')  # 버튼 클릭으로 active/past 선택
+
+    # 지난 챌린지 (기간이 지난 챌린지)
+    if status == 'past':
+        missions = store.missions.filter(end_date__lt=now).order_by('-created_at')
+    # 진행 중 챌린지
+    else:  
+        missions = store.missions.filter(start_date__lte=now, end_date__gte=now).order_by('-created_at')
+
     return render(request, 'missions/mission-list.html', {
         'store': store,
-        'missions': missions
+        'missions': missions,
+        'status': status
     })
 
 # 챌린지 생성
@@ -30,13 +39,14 @@ def mission_create(request, store_id):
             mission = form.save(commit=False)
             mission.store = store
             mission.save()
-            # 참여자 수 갱신 (처음 생성 시 0으로 초기화)
-            mission.update_participants_count()
-            return redirect('missions:mission-list', store_id=mission.store.id)
+            return redirect('missions:mission-list', store_id=store.id)
     else:
         form = MissionForm()
 
-    return render(request, 'missions/mission-create.html', {'form': form, 'store': store})
+    return render(request, 'missions/mission-create.html', {
+        'form': form,
+        'store': store
+    })
 
 # 챌린지 수정
 @login_required
@@ -47,8 +57,6 @@ def mission_update(request, mission_id):
         form = MissionForm(request.POST, instance=mission)
         if form.is_valid():
             form.save()
-            # 수정 후 참여자 수 갱신
-            mission.update_participants_count()
             return redirect('missions:mission-list', store_id=mission.store.id)
     else:
         form = MissionForm(instance=mission)
@@ -71,8 +79,32 @@ def mission_delete(request, mission_id):
 # 참여 중인 챌린지 조회
 @login_required
 def my_mission(request):
-    progresses = MissionProgress.objects.filter(user=request.user).select_related('mission', 'mission__mission_type', 'mission__store')
-    return render(request, "missions/my-mission.html", {"progresses": progresses})
+    now = timezone.now()
+    status = request.GET.get('status', 'active')  # 기본값 active
+    
+    # 지난 챌린지 (완료 or 기간 지난 챌린지)
+    if status == 'past':
+        progresses = MissionProgress.objects.filter(
+            user=request.user
+        ).filter(
+            models.Q(is_completed=True) | models.Q(mission__end_date__lt=now)
+        ).select_related('mission', 'mission__mission_type', 'mission__store') \
+        .order_by('-mission__created_at')
+    
+    # 진행 중 챌린지
+    else:  # active
+        progresses = MissionProgress.objects.filter(
+            user=request.user,
+            is_completed=False,
+            mission__start_date__lte=now,
+            mission__end_date__gte=now
+        ).select_related('mission', 'mission__mission_type', 'mission__store') \
+        .order_by('mission__created_at')
+
+    return render(request, "missions/my-mission.html", {
+        "progresses": progresses,
+        "status": status
+    })
 
 # 진행도 업데이트 (누적 방문/기간 내 방문)
 @login_required
@@ -84,9 +116,6 @@ def update_progress(request, mission_id):
         progress.current_value += 1
         progress.check_completion()
         progress.save()
-
-        # 참여자 수 갱신
-        mission.update_participants_count()
 
     return redirect('missions:my-missions')
 
@@ -109,9 +138,6 @@ def update_amount(request, mission_id):
                 progress.check_completion()
                 progress.save()
 
-                # 참여자 수 갱신
-                mission.update_participants_count()
-
                 messages.success(request, f"{amount}원 누적 완료! 남은 금액: {progress.remaining}원")
                 return redirect('stores:store-detail', store.id)
     else:
@@ -119,7 +145,7 @@ def update_amount(request, mission_id):
 
     return render(request, 'missions/update-amount.html', {'form': form, 'mission': mission})
 
-# 미션 완료
+# 챌린지 완료
 @login_required
 def mission_complete(request, mission_id):
     now = timezone.now()
@@ -130,17 +156,10 @@ def mission_complete(request, mission_id):
     if created:
         mission.store.visit_count += 1
         mission.store.save()
-        message = "챌린지 완료!"
-    else:
-        message = "이미 완료한 챌린지입니다."
-
-    # 참여자 수 갱신
-    mission.update_participants_count()
 
     return render(request, 'missions/mission-complete.html', {
         'mission': mission,
         'completion': completion,
-        'message': message
     })
 
 

@@ -77,14 +77,14 @@
             {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
             <br/>
             보상: {{ mission.reward_description }}<br/>
-            {{ mission.start_date }} ~ {{ mission.end_date }}<br/>
+            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
 
             {% if mission.mission_type.key == 'amount' %}
                 <a href="{% url 'missions:update-amount' mission.id %}">금액 입력 (점주 전용)</a>
             {% endif %}
         </div>
     {% empty %}
-        진행 중인 미션이 없습니다.
+        진행 중인 챌린지가 없습니다.
     {% endfor %}
     <hr/>
     <br/>
