@@ -8,6 +8,7 @@ from django.utils import timezone
 from .forms import StoreForm
 from visit_rewards.models import Visit
 from collections import defaultdict
+from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
 
 ################ 점주 ################
 
@@ -140,9 +141,17 @@ def popular_store_list(request):
 # 리뷰 Best (리뷰 평점 높은 순으로)
 def review_best_list(request):
     category_slug = request.GET.get('category')
+    a, b = 0.7, 0.3
 
-    # 평점 높은 순으로 정렬 → 같은 방문 수면 최신 등록 순
-    stores = Store.objects.all().order_by('-rating', '-id')
+    stores = Store.objects.annotate(
+        review_count=Count('reviews'),
+        avg_rating=Avg('reviews__rating')
+    ).annotate(
+        score=ExpressionWrapper(
+            (F('avg_rating') * a) + (F('review_count') * b),
+            output_field=FloatField()
+        )
+    ).order_by('-score', '-id')
 
     if category_slug:
         stores = stores.filter(category__slug=category_slug)
