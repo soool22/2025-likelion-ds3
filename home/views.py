@@ -1,5 +1,5 @@
 from django.shortcuts import render
+from missions.models import Mission
 
-# main 페이지
 def main(request):
-    return render(request,'home/main.html') 
+    return render(request, 'home/main.html')

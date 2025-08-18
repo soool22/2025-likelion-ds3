@@ -48,6 +48,12 @@ def product_update(request, product_id):
 @login_required
 def product_delete(request, product_id):
     product = get_object_or_404(Product, id=product_id, store__owner=request.user)
-    store_id = product.store.id
-    product.delete()
-    return redirect("products:product-list", store_id=store_id)
+    
+    if request.method == "POST":
+        store_id = product.store.id
+        product.delete()
+        return redirect("products:product-list", store_id=store_id)
+    
+    # 삭제 확인 페이지
+    return render(request, "products/product-delete.html", {"product": product})
+

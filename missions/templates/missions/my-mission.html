@@ -1,0 +1,58 @@
+{% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>내 챌린지(소비자)</title>
+</head>
+<body>
+    <h2>내 챌린지</h2>
+
+    {% for progress in progresses %}
+    <div>
+        <!-- 챌린지 설명 -->
+        <a href="{% url 'stores:store-detail' progress.mission.store.id %}">
+            <h3>{{ progress.mission.store.name }} - {{ progress.mission.title }}</h3>
+        </a>
+        <h4>{{ progress.mission.title }}</h4>
+
+        {{ progress.mission.description }} 
+        <br/>
+
+        {{ progress.mission.mission_type.name }} - {{ progress.mission.target_value|floatformat:0|intcomma }}{{ progress.mission.mission_type.unit }}
+        <br/>
+
+        보상: {{ progress.mission.reward_description }}
+        <br/>
+
+        {{ progress.mission.start_date }} ~ {{ progress.mission.end_date }}
+        <br/>
+        <br/>
+
+        <!-- 챌린지 목표 -->
+        목표: {{ progress.mission.target_value|floatformat:0|intcomma }}{{ progress.mission.mission_type.unit }}
+        <br/>
+        현재: {{ progress.current_value|floatformat:0|intcomma }}{{ progress.mission.mission_type.unit }}
+        <br/>
+        남은: {{ progress.remaining|floatformat:0|intcomma }}{{ progress.mission.mission_type.unit }}
+        <br/>
+        진행률: {{ progress.percent }}%
+        <br/>
+        {% if progress.is_completed %}
+            <a href="{% url 'missions:mission-complete' progress.mission.id %}">
+                완료
+            </a>
+        {% else %}
+            진행 중
+        {% endif %}
+    </div>
+    <hr/>
+{% empty %}
+    참여 중인 챌린지가 없습니다.
+{% endfor %}
+
+</body>
+</html>

@@ -8,43 +8,13 @@ from .models import *
 from stores.models import Store
 from collections import Counter
 
-
-"""
-# 미션 성공    
-@login_required
-def mission_complete(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    
-    # 방문자 수 카운트
-    store.visit_count += 1
-    store.save()
-
-    # 미션 기록
-    MissionComplete.objects.create(store=store, user=request.user)
-
-    messages.success(request, "미션 완료! 리뷰를 작성할 수 있습니다.")
-    return redirect('reviews:review-create', store_id=store.id)
-"""
-    
 # 리뷰 작성 
 @login_required
 def review_create(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    # 1주일 내 미션 완료 여부 확인
-    one_week_ago = timezone.now() - timedelta(days=7)
-    recent_mission = MissionComplete.objects.filter(
-        mission__store=store,
-        user=request.user,
-        completed_at__gte=one_week_ago
-    ).exists()
-
-    if not recent_mission:
-        messages.error(request, "미션 완료 후 1주일 이내에만 리뷰 작성이 가능합니다.")
-        return redirect('stores:public-store-list')
-
     if request.method == 'POST':
-        rating = int(request.POST.get('rating'))
+        rating = int(request.POST.get('rating', 0))
         comment = request.POST.get('comment', '')
         images = request.FILES.getlist('images')  # 다중 이미지 처리
 
@@ -52,7 +22,7 @@ def review_create(request, store_id):
             messages.error(request, "별점은 1~5 사이여야 합니다.")
             return redirect(request.path)
 
-        review=Review.objects.create(
+        review = Review.objects.create(
             store=store,
             user=request.user,
             rating=rating,
@@ -65,7 +35,7 @@ def review_create(request, store_id):
 
         store.update_rating()  # 평균 평점 갱신
         messages.success(request, "리뷰가 등록되었습니다.")
-        return redirect('reviews:review-list',store_id=store.id)
+        return redirect('reviews:review-list', store_id=store.id)
 
     return render(request, 'reviews/review-create.html', {'store': store})
 
