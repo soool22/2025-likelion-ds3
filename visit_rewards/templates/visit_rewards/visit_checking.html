@@ -53,8 +53,10 @@
                 })
                 .then(data => {
                     if (data.status === "ok") {
-                        statusEl.textContent =
-                            `[${data.store_name}] 방문을 환영합니다! (누적 방문 ${data.total_visits}회)`;
+                        statusEl.innerHTML =
+                            `[${data.store_name}] 방문을 환영합니다! (누적 방문 ${data.total_visits}회)<br>` +
+                            `${data.points_earned}포인트가 적립되었습니다! ` +
+                            `<a href="http://127.0.0.1:8000/visit_rewards/rewards/">내 리워드 보기</a>`;
                     } else if (data.status === "already_visited") {
                         statusEl.textContent = "이미 방문한 QR입니다. 내일 다시 시도해주세요.";
                     } else {

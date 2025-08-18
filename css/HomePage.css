@@ -70,3 +70,135 @@ main{
 a {
     text-decoration: none;
 }
+
+p {
+    margin: 0;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+#headerBox{
+    width: 337px;
+    height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#headerSmallBox{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#locationIcon{
+    width: 24px;
+}
+
+#locationName{
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#downSideClick{
+    width: 12px;
+}
+
+#alarmIcon{
+    width: 18px;
+}
+
+#container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#banner{
+    width: 337px;
+    height: 131px;
+    border-radius: 25px;
+    background: linear-gradient(259deg, #FFB635 -3.24%, #FFF3DD 102.42%);
+    margin-top: 27px;
+    padding: 24px 27px;
+    box-sizing: border-box;
+    display: flex;
+    align-content: center;
+    gap: 46px;
+}
+
+#bannerBox{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#bannerTitle{
+    color: #000000;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.18;
+}
+
+#bannerContent{
+    color: #5C5C5C;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.17;
+}
+
+#bannerCharacter{
+    height: 87px;
+}
+
+.tabContainer {
+    width: 369px;
+    display: flex;
+    gap: 48px;
+    align-items: center;
+    box-sizing: border-box;
+    border-bottom: solid 1px #cccccc;
+    margin-top: 30px;
+}
+
+.recommendstoreBox,
+.topBox,
+.reviewbestBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 91px;
+    cursor: pointer;
+    padding-bottom: 8px;
+    margin-bottom: -1px;
+    border-bottom: solid 1px transparent;
+}
+
+.recommendstoreBox.active,
+.topBox.active,
+.reviewbestBox.active {
+    border-bottom: solid 1px #FFB635; /* 선택된 탭만 보임 */
+}
+
+.recommendstoreText,
+.topText,
+.reviewbestText {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.recommendstoreIcon,
+.topIcon,
+.reviewbestIcon {
+    width: 20px;
+    height: 20px;
+}

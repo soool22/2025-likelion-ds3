@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from django.utils import timezone
 from .forms import StoreForm
+from visit_rewards.models import Visit
+from collections import defaultdict
 
 ################ 점주 ################
 
@@ -99,12 +101,34 @@ def public_store_list(request):
 # 인기 가게 (방문자 높은 순으로)
 def popular_store_list(request):
     category_slug = request.GET.get('category')
+    today = timezone.localdate()
 
-    # 방문 수 많은 순 → 같은 방문 수면 최신 등록 순
-    stores = Store.objects.all().order_by('-visit_count', '-id')
-
+    # 카테고리 필터링
+    stores = Store.objects.all()
     if category_slug:
         stores = stores.filter(category__slug=category_slug)
+
+    # 방문자 수 계산: 하루 최대 2회
+    # key = (store_id, user_id), value = 방문 횟수(최대 2)
+    visit_counts = defaultdict(int)
+    visits_today = Visit.objects.filter(visit_time__date=today)
+    for v in visits_today:
+        if category_slug and not v.store.category.filter(slug=category_slug).exists():
+            continue
+        key = (v.store_id, v.user_id)
+        visit_counts[key] = min(visit_counts.get(key, 0) + 1, 2)
+
+    # store별 총 방문수 계산
+    total_counts = defaultdict(int)
+    for (store_id, user_id), count in visit_counts.items():
+        total_counts[store_id] += count
+
+    # Store 객체에 visit_count 속성 추가
+    for store in stores:
+        store.visit_count = total_counts.get(store.id, 0)
+
+    # 방문자 수 높은 순, 같은 방문자 수면 최신 등록 순
+    stores = sorted(stores, key=lambda s: (-s.visit_count, -s.id))
 
     categories = Category.objects.all()
     return render(request, 'stores/popular-store-list.html', {

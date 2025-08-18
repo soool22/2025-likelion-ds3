@@ -10,7 +10,7 @@
 </head>
 <body>
     <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
-    <br/>
+    <br/><br>
 
     <!-- ######### 가게 정보 #########-->
     {% if store.image %}
@@ -23,22 +23,33 @@
 
     <h2>{{ store.name }}</h2>
 
+    <!-- 찜 버튼 -->
+    <button id="favorite-btn" data-store="{{ store.id }}">
+        {% if is_favorite %}
+            ♥ 찜 해제
+        {% else %}
+            ♡ 찜하기
+        {% endif %}
+    </button>
+    <br/><br/>
+
     주소: {{ store.address }} 
     <br/>
 
     <a href="{% url 'reviews:review-list' store.id %}">
-        <!-- 점수 -->
         ★{{ store.rating|floatformat:1 }} 
-        <!-- 리뷰 개수 -->
         ({{ store.reviews.count }})
     </a>
     <br/>
 
     카테고리:
-        {% for category in store.category.all %}
-            {{ category.name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-    <br/>
+    {% for category in store.category.all %}
+        {{ category.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    <br/><br>
+
+    <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
+    <br/><br>
 
     <!-- 영업 -->
         {% if store.open_time and store.close_time %}
@@ -52,8 +63,6 @@
         {% endif %}
     <br/>
 
-    <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
-    <br/>
     <a href="{% url 'reviews:review-create' store.id %}">리뷰 작성</a>
     <hr/>
     <br/>
@@ -100,6 +109,29 @@
     {% empty %}
         등록된 상품이 없습니다.
     {% endfor %}
+
+<script>
+    document.getElementById('favorite-btn').addEventListener('click', function() {
+    const storeId = this.dataset.store;
+    fetch("{% url 'accounts:toggle_favorite' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: `store_id=${storeId}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "added") {
+            this.textContent = "♥ 찜 해제";
+        } else if(data.status === "removed") {
+            this.textContent = "♡ 찜하기";
+        } else {
+            alert("찜 처리에 실패했습니다.");
+        }
+    });
+});
+</script>
 </body>
 </html>
-
