@@ -15,6 +15,8 @@ def review_summary(request, store_id):
     # AI 요약 & 원문 일부
     result = summarize_reviews(reviews_text) if reviews_text else {"summary": [], "keywords": [], "snippet": ""}
     print("views.py에서 요약 결과:", result)  # 요약 결과 로그 확인용
+    
+    
 
     context = {
         'store': store,
