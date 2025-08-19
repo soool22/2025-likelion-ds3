@@ -63,7 +63,17 @@
         {% endif %}
     <br/>
 
-    <a href="{% url 'reviews:review-create' store.id %}">리뷰 작성</a>
+    <a href="{% url 'reviews:review-create' store.id %}" class="btn">리뷰 작성</a>
+
+    {% if messages %}
+    <script>
+    {% for message in messages %}
+        alert('{{ message }}');
+    {% endfor %}
+    </script>
+    {% endif %}
+    
+
     <hr/>
     <br/>
 

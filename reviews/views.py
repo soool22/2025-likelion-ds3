@@ -8,20 +8,59 @@ from .models import *
 from stores.models import Store
 from django.db.models import Count
 from django.http import JsonResponse
+from visit_rewards.models import Visit, Reward
+from django.http import HttpResponse
 
-# 리뷰 작성 
 @login_required
 def review_create(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
+    # 최근 24시간 방문 기록 가져오기
+    time_threshold = timezone.now() - timedelta(hours=24)
+    recent_visits = Visit.objects.filter(
+        user=request.user,
+        store=store,
+        visit_time__gte=time_threshold
+    )
+
+    visit_count = recent_visits.count()
+
+    if visit_count == 0:
+        return HttpResponse("""
+            <script>
+                alert('최근 24시간 내 방문 인증 기록이 있어야 리뷰 작성이 가능합니다.');
+                history.back();
+            </script>
+        """)
+
+    # 이미 작성한 리뷰 수
+    user_review_count = Review.objects.filter(
+        user=request.user,
+        store=store,
+        created_at__gte=time_threshold
+    ).count()
+
+    if user_review_count >= visit_count:
+        return HttpResponse(f"""
+            <script>
+                alert('리뷰는 방문 1회 당 1건만 작성할 수 있습니다.');
+                history.back();
+            </script>
+        """)
+
+    # POST 요청 처리
     if request.method == 'POST':
         rating = int(request.POST.get('rating', 0))
         comment = request.POST.get('comment', '')
-        images = request.FILES.getlist('images')  # 다중 이미지 처리
+        images = request.FILES.getlist('images')
 
         if rating < 1 or rating > 5:
-            messages.error(request, "별점은 1~5 사이여야 합니다.")
-            return redirect(request.path)
+            return HttpResponse("""
+                <script>
+                    alert('별점은 1~5 사이여야 합니다.');
+                    history.back();
+                </script>
+            """)
 
         review = Review.objects.create(
             store=store,
@@ -30,15 +69,33 @@ def review_create(request, store_id):
             comment=comment,
         )
 
-        # 이미지 여러 개 저장
         for image in images:
             ReviewImage.objects.create(review=review, image=image)
 
-        store.update_rating()  # 평균 평점 갱신
-        messages.success(request, "리뷰가 등록되었습니다.")
-        return redirect('reviews:review-list', store_id=store.id)
+        store.update_rating()
+        
+        points_earned = 500
+        Reward.objects.create(
+            user=request.user,
+            store=store,
+            reward_type='point',
+            related_review=review,
+            amount=points_earned,
+            description='리뷰 작성 보상'
+        )
+
+        request.user.points += points_earned
+        request.user.save()
+
+        return HttpResponse("""
+            <script>
+                alert('리뷰가 등록되었습니다.\n 500 point 적립 완료!');
+                window.location.href = '/reviews/{store_id}/';  // 리뷰 목록으로 이동
+            </script>
+        """)
 
     return render(request, 'reviews/review-create.html', {'store': store})
+
 
 # 리뷰 목록
 @login_required
@@ -74,6 +131,23 @@ def review_list(request, store_id):
     # 각 리뷰에 별 표시 추가
     for review in reviews:
         review.stars = "★" * review.rating
+        
+    print("현재 시간:", timezone.now())
+    print("최근 24시간 기준:", timezone.now() - timedelta(hours=24))
+    print("최근 Visit:", Visit.objects.filter(user=request.user, store=store).values_list('visit_time', flat=True))
+
+
+    # 방문 여부 체크 (최근 24시간 내 방문 기록)
+    # 최근 24시간 방문 기록
+    time_threshold = timezone.now() - timedelta(hours=24)
+
+    # UTC 기준으로 DB에 저장된 visit_time과 비교
+    has_recent_visit = Visit.objects.filter(
+        user=request.user,
+        store=store,
+        visit_time__gte=time_threshold
+    ).exists()
+
 
     return render(request, 'reviews/review-list.html', {
         'store': store,
@@ -83,6 +157,7 @@ def review_list(request, store_id):
         'stars_list': stars_list,
         'rating_counts': rating_counts,
         'sort': sort,
+        'has_recent_visit': has_recent_visit,  # ✅ 템플릿으로 전달
     })
 
 # 리뷰 삭제
