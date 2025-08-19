@@ -96,6 +96,16 @@ main{
     z-index: 1;
 }
 
+a{
+    position: absolute;
+    top: 40px;
+    left: 35px;
+}
+
+#backBtn{
+    width: 9px;
+}
+
 #hat{
     position: absolute;
     width: 150px;
@@ -125,7 +135,7 @@ main{
     align-items: center;
     gap: 8px;
     position: absolute;
-    top: 50px;
+    top: 80px;
     left: 35px;
 }
 
