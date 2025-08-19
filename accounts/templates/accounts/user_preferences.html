@@ -5,30 +5,60 @@
     <title>관심 설정</title>
 </head>
 <body>
-<h2>관심 설정</h2>
+
 <a href="{% url 'home:main' %}">홈으로</a>
 <br><br>
-
+<h2>관심 설정</h2>
 <form method="post" action="{% url 'accounts:user_preferences' %}">
     {% csrf_token %}
 
-    <!-- 선호 음식 선택 -->
-    <label for="preferred_food">선호 음식:</label>
-    <select name="preferred_food" id="preferred_food">
-        <option value="">선택</option>
-        <option value="한식" {% if preference.preferred_food == "한식" %}selected{% endif %}>한식</option>
-        <option value="양식" {% if preference.preferred_food == "양식" %}selected{% endif %}>양식</option>
-        <option value="중식" {% if preference.preferred_food == "중식" %}selected{% endif %}>중식</option>
-        <option value="일식" {% if preference.preferred_food == "일식" %}selected{% endif %}>일식</option>
-        <option value="기타" {% if preference.preferred_food == "기타" %}selected{% endif %}>기타</option>
-    </select>
-    <br><br>
+    <!-- 선호 카테고리 -->
+    <label>선호 음식 카테고리:</label><br>
+    {% for option in categories %}
+        <label>
+            <input type="checkbox" name="preferred_categories" value="{{ option }}"
+                {% if option in selected_categories %}checked{% endif %}>
+            {{ option }}
+        </label><br>
+    {% endfor %}
+    <br>
 
-    <!-- 위치 입력 -->
-    <label for="preferred_location">선호 위치:</label>
-    <input type="text" name="preferred_location" id="preferred_location"
-        value="{{ preference.preferred_location }}" placeholder="예: 강남구">
-    <br><br>
+    <!-- 선호 맛 -->
+    <label>선호 맛:</label><br>
+    {% for option in tastes %}
+        <label>
+            <input type="checkbox" name="preferred_tastes" value="{{ option }}"
+                {% if option in selected_tastes %}checked{% endif %}>
+            {{ option }}
+        </label><br>
+    {% endfor %}
+    <br>
+
+    <!-- 가격대 -->
+    <label>선호 가격대:</label><br>
+    {% for option in price_ranges %}
+        <label>
+            <input type="checkbox" name="preferred_price_ranges" value="{{ option }}"
+                {% if option in selected_price_ranges %}checked{% endif %}>
+            {{ option }}
+        </label><br>
+    {% endfor %}
+    <br>
+
+    <!-- 건강 요소 -->
+    <label>선호 건강 요소:</label><br>
+    {% for option in health_options %}
+        <label>
+            <input type="checkbox" name="preferred_health" value="{{ option }}"
+                {% if option in selected_health %}checked{% endif %}>
+            {{ option }}
+        </label><br>
+    {% endfor %}
+    <br>
 
     <button type="submit">저장</button>
 </form>
+
+
+</body>
+</html>

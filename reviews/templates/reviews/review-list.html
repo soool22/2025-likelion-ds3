@@ -56,7 +56,7 @@
     <!-- 리뷰 목록 -->
     {% if reviews %}
         {% for review in reviews %}
-            <div>
+            <div id="review-{{ review.id }}">
                 <h4>{{ review.user.username }}</h4>
                 {{ review.stars }}
                 <br/>
