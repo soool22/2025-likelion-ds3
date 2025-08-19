@@ -233,12 +233,6 @@ header{
     gap: 8px;
 }
 
-.storeBox{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
 .storeName{
     font-size: 24px;
     color: #000000;

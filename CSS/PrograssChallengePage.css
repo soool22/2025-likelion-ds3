@@ -1,0 +1,287 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    min-height: 100dvh;
+    background-color: white;
+    flex-direction:column;
+}
+/* 여기까지 기본틀 */
+
+#container{
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 헤더 시작 */
+header{
+    width: 335px;
+    height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: env(safe-area-inset-top);
+}
+
+#headerBox{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 335px;
+}
+
+#appTitle{
+    margin: 0;
+    color: #000000;
+    font-size: 22px;
+    font-weight: 600;
+}
+/* 헤더 끝 */
+
+p{
+    margin: 0;
+}
+
+#containerBody{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#containerBodyTop{
+    width: 100%;
+    display: flex;
+    padding: 28px 37px;
+    box-sizing: border-box;
+    flex-direction: column;
+    border-bottom: solid 2px #D9D9D9;
+}
+
+.containerBodyTitle{
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7b7b7b;
+    margin-bottom: 12px;
+}
+
+.containerBodyContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+.prograssChallengeBox{
+    width: 340px;
+    border-radius: 22px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    padding: 20px 21px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.challengeTitleBox{
+    width: 277px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.challengeTitle{
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.rightSideClick{
+    width: 6px;
+}
+
+.challengeMiddleBox{
+    width: 277px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.challengeMiddleSmallBox{
+    width: 142px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.state{
+    height: 17px;
+    border-radius: 4px;
+    border: 1px solid #FFCC02;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFCC02;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.yet{
+    color: #cccccc;
+    border: 1px solid #cccccc;
+}
+
+.storeName{
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    white-space: nowrap;
+}
+
+.storeDetail{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: #7b7b7b;
+    white-space: nowrap;
+}
+
+.date{
+    margin: 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #7b7b7b;
+}
+
+.challengeLastBox{
+    width: 277px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.prograssBar{
+    width: 200px;
+    height: 11px;
+    border-radius: 5.5px;
+    background-color: #F5F5F5;
+    position: relative;
+}
+
+.prograss{
+    width: 50%;
+    height: 11px;
+    border-radius: 5.5px;
+    background-color: #FFCC02;
+    transition: width .3s ease;
+}
+
+.circleBox{
+    width: 206px;
+    position: absolute;
+    left: -3px;
+    top: -2px;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.circle{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    transition: background-color .2s ease;
+}
+
+
+.circle.start{
+    left: 0;
+    background-color: #FFB635; 
+}
+
+
+.circle.middle{
+    background-color: #FFB635;
+}
+
+
+.circle.end{
+    background-color: #d9d9d9;
+}
+
+.scoreBigBox{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.scoreBox{
+    display: flex;
+    align-items: center;
+}
+
+.nowScore{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.totalScore{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cccccc;
+}
+
+.stampIcon{
+    width: 10px;
+}
+
+#containerBodyBottom{
+    width: 100%;
+    display: flex;
+    padding: 28px 37px;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.joinChallengeBox{
+    width: 340px;
+    border-radius: 22px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    padding: 20px 21px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.joinBtn{
+    width: 277px;
+    height: 35px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #FFDA9A;
+    color: #000000;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+}

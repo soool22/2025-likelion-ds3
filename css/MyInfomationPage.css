@@ -109,8 +109,83 @@ header{
     width: 335px;
     height: 169px;
     border-radius: 24px;
-    background: #f4f4f4;
+    border: solid 1px #cccccc;
     margin: 22px 0 4px 0;  
+    padding: 26px 38px;
+    box-sizing: border-box;
+    gap: 19px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.achievementBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.achievementSmallBox{
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.achievementSmallBox2{
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.achievementTitle{
+    margin: 0;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sideClick{
+    width: 6px;
+}
+
+.totalAchievement{
+    width: 200px;
+    height: 11px;
+    border-radius: 5.5px;
+    background-color: #F5F5F5;
+}
+
+.achievement{
+    width: 50%;
+    height: 11px;
+    border-radius: 5.5px;
+    background-color: #FFCC02;
+    transition: width .3s ease;
+}
+
+.scoreBox{
+    display: flex;
+    align-items: center;
+}
+
+.nowScore{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.totalScore{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cccccc;
+}
+
+.stampIcon{
+    width: 10px;
 }
 
 .containerBigBox{
