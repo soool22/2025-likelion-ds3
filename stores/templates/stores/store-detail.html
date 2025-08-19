@@ -9,8 +9,8 @@
     <title>가게 정보</title>
 </head>
 <body>
-    <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
-    <br/><br>
+    <a href='{% url "stores:public-store-list" %}'>가게 목록</a>
+    <br/><br/>
 
     <!-- ######### 가게 정보 #########-->
     {% if store.image %}
@@ -46,24 +46,48 @@
     {% for category in store.category.all %}
         {{ category.name }}{% if not forloop.last %}, {% endif %}
     {% endfor %}
-    <br/><br>
+    <br/><br/>
 
     <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
-    <br/><br>
+    <br/><br/>
 
-    <!-- 영업 -->
-        {% if store.open_time and store.close_time %}
-            영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-            {% if store.is_open %}
-                (영업 중)
-            {% else %}
-                (영업 종료)
-            {% endif %}
-            <br/>
+    <!-- 영업 시간 -->
+    {% if store.open_time and store.close_time %}
+        영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+        {% if store.is_open %}
+            (영업 중)
+        {% else %}
+            (영업 종료)
         {% endif %}
-    <br/>
+        <br/><br/>
+    {% endif %}
 
     <a href="{% url 'reviews:review-create' store.id %}" class="btn">리뷰 작성</a>
+    <br/><br/>
+
+    <!-- ######### 리뷰 전체 요약 박스 ######### -->
+    <h3>리뷰 요약</h3>
+    {% if ai_summary %}
+    <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; background-color: #f9f9f9;">
+        <p>
+            <strong>키워드:</strong>
+            {% for kw in review_keywords %}
+                {{ kw }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p>
+            <strong>요약:</strong> {{ ai_summary }}
+        </p>
+        <p>
+            <strong>원문 일부:</strong> {{ snippet }}
+        </p>
+    </div>
+    {% else %}
+    <p>리뷰 요약 정보가 없습니다.</p>
+    {% endif %}
+
+
+
 
     {% if messages %}
     <script>
@@ -72,10 +96,8 @@
     {% endfor %}
     </script>
     {% endif %}
-    
 
-    <hr/>
-    <br/>
+    <hr/><br/>
 
     <!-- ######### 챌린지 ######### -->
     <h3>진행 중인 챌린지</h3>
@@ -96,8 +118,7 @@
     {% empty %}
         진행 중인 챌린지가 없습니다.
     {% endfor %}
-    <hr/>
-    <br/>
+    <hr/><br/>
 
     <!-- ######### 상품/메뉴 ######### -->
     <h3>상품/메뉴</h3>
@@ -115,33 +136,33 @@
         <br/>
         {{ product.description }}
     </div>
-        <hr/>
+    <hr/>
     {% empty %}
         등록된 상품이 없습니다.
     {% endfor %}
 
 <script>
     document.getElementById('favorite-btn').addEventListener('click', function() {
-    const storeId = this.dataset.store;
-    fetch("{% url 'accounts:toggle_favorite' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: `store_id=${storeId}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.status === "added") {
-            this.textContent = "♥ 찜 해제";
-        } else if(data.status === "removed") {
-            this.textContent = "♡ 찜하기";
-        } else {
-            alert("찜 처리에 실패했습니다.");
-        }
+        const storeId = this.dataset.store;
+        fetch("{% url 'accounts:toggle_favorite' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: `store_id=${storeId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === "added") {
+                this.textContent = "♥ 찜 해제";
+            } else if(data.status === "removed") {
+                this.textContent = "♡ 찜하기";
+            } else {
+                alert("찜 처리에 실패했습니다.");
+            }
+        });
     });
-});
 </script>
 </body>
 </html>

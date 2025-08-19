@@ -10,6 +10,8 @@ from django.db.models import Count
 from django.http import JsonResponse
 from visit_rewards.models import Visit, Reward
 from django.http import HttpResponse
+from ai_services.services import summarize_reviews
+
 
 @login_required
 def review_create(request, store_id):
@@ -102,13 +104,12 @@ def review_create(request, store_id):
 def review_list(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    # 기본 QuerySet
     reviews = Review.objects.filter(store=store).prefetch_related('images').annotate(
-        helpful_count=Count('likes')  # 좋아요 수 계산
+        helpful_count=Count('likes')
     )
 
-    # 정렬 파라미터
-    sort = request.GET.get('sort', 'latest')  # 기본값 최신순
+    # 정렬
+    sort = request.GET.get('sort', 'latest')
     if sort == 'latest':
         reviews = reviews.order_by('-created_at')
     elif sort == 'rating_desc':
@@ -118,38 +119,14 @@ def review_list(request, store_id):
     elif sort == 'helpful':
         reviews = reviews.order_by('-helpful_count')
 
-    # 평균 평점 계산
+
+
     avg_rating = store.rating
     avg_star_count = int(round(avg_rating))
-
-    # 별 리스트 1~5
     stars_list = range(1, 6)
-
-    # 별점별 리뷰 개수 (1~5)
     rating_counts = {i: reviews.filter(rating=i).count() for i in range(1, 6)}
 
-    # 각 리뷰에 별 표시 추가
-    for review in reviews:
-        review.stars = "★" * review.rating
-        
-    print("현재 시간:", timezone.now())
-    print("최근 24시간 기준:", timezone.now() - timedelta(hours=24))
-    print("최근 Visit:", Visit.objects.filter(user=request.user, store=store).values_list('visit_time', flat=True))
-
-
-    # 방문 여부 체크 (최근 24시간 내 방문 기록)
-    # 최근 24시간 방문 기록
-    time_threshold = timezone.now() - timedelta(hours=24)
-
-    # UTC 기준으로 DB에 저장된 visit_time과 비교
-    has_recent_visit = Visit.objects.filter(
-        user=request.user,
-        store=store,
-        visit_time__gte=time_threshold
-    ).exists()
-
-
-    return render(request, 'reviews/review-list.html', {
+    context = {
         'store': store,
         'reviews': reviews,
         'avg_rating': avg_rating,
@@ -157,9 +134,9 @@ def review_list(request, store_id):
         'stars_list': stars_list,
         'rating_counts': rating_counts,
         'sort': sort,
-        'has_recent_visit': has_recent_visit,  # ✅ 템플릿으로 전달
-    })
+    }
 
+    return render(request, 'reviews/review-list.html', context)
 # 리뷰 삭제
 @login_required
 def review_delete(request, review_id):
