@@ -89,65 +89,76 @@ def summarize_reviews(store: Store, snippet_length=50):
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def store_recommend(user):
-    preference = UserPreference.objects.get(user=user)
+    preference, _ = UserPreference.objects.get_or_create(user=user)
 
-    # 마지막 추천 갱신 30분 이상 지났는지 확인
-    if preference.last_ai_call_time and timezone.now() - preference.last_ai_call_time < timedelta(minutes=30):
-        # 30분 미만이면 이전 추천 결과 반환
-        return preference.last_ai_recommendation
+    # 캐시가 없거나 30분 이상 지난 경우 새 호출
+    if not preference.last_ai_recommendation or \
+       not preference.last_ai_call_time or \
+       timezone.now() - preference.last_ai_call_time >= timedelta(minutes=30):
 
-    # --- 새 AI 호출 로직 ---
-    categories = preference.preferred_categories.split(",") if preference.preferred_categories else []
-    tastes = preference.preferred_tastes.split(",") if preference.preferred_tastes else []
-    price_ranges = preference.preferred_price_ranges.split(",") if preference.preferred_price_ranges else []
-    health_options = preference.preferred_health.split(",") if preference.preferred_health else []
+        categories = preference.preferred_categories.split(",") if preference.preferred_categories else []
+        tastes = preference.preferred_tastes.split(",") if preference.preferred_tastes else []
+        price_ranges = preference.preferred_price_ranges.split(",") if preference.preferred_price_ranges else []
+        health_options = preference.preferred_health.split(",") if preference.preferred_health else []
 
-    stores = list(Store.objects.values("name", "category", "products", "description"))
+        stores = list(Store.objects.values("id", "name", "category", "products", "description"))
 
-    # 프롬프트 생성
-    prompt =f"""
-    사용자 선호:
-    - 카테고리: {', '.join(categories)}
-    - 맛: {', '.join(tastes)}
-    - 가격대: {', '.join(price_ranges)}
-    - 건강: {', '.join(health_options)}
+        prompt = f"""
+        사용자 선호:
+        - 카테고리: {', '.join(categories) or '없음'}
+        - 맛: {', '.join(tastes) or '없음'}
+        - 가격대: {', '.join(price_ranges) or '없음'}
+        - 건강: {', '.join(health_options) or '없음'}
 
-    아래 가게 정보 중 사용자의 선호에 맞는 가게 5개를 JSON 리스트로 추천해 주세요.
-    반드시 정확한 JSON 형식으로 반환하고, 리스트 안 객체에는 "name"과 "reason"만 포함하세요.
-    매장의 분위기와 메뉴 위주로 설명하세요.
-    직접적인 가격대(중가, 고가)를 언급하지 마세요.
-    만약 추천할 가게가 없으면 빈 리스트 []를 반환하세요.
+        아래 가게 정보 중 사용자의 선호와 최대한 맞는 가게 5개를 JSON 리스트로 추천해 주세요.
+        리스트 안 객체에는 "id"와 "name"만 포함하세요.
+        선호 카테고리가 없으면 모든 가게 중 추천 가능합니다.
+        가게 정보 예시:
+        [{{"id": n, "name": "가게이름"}}]
+        """
 
-    가게 정보 예시:
-    [
-    {{"name": "가게이름", "reason": "추천 이유"}}
-    ]
 
-    """
+        for store in stores:
+            menu = store.get("products") or ""
+            desc = store.get("description") or ""
+            prompt += f"{store['name']} - {store['category']}, 메뉴: {menu}, 설명: {desc}\n"
 
-    for store in stores:
-        menu = store.get("products") or ""
-        desc = store.get("description") or ""
-        prompt += f"{store['name']} - {store['category']}, 메뉴: {menu}, 설명: {desc}\n"
-
-    try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7
-        )
-        response_text = response.choices[0].message.content.strip()
         try:
-            recommended_stores = json.loads(response_text)
-        except json.JSONDecodeError:
-            recommended_stores = [{"name": "추천 실패", "reason": response_text or "AI 응답이 비어있음"}]
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7
+            )
+            response_text = response.choices[0].message.content.strip()
+            print("AI response:", response_text)
 
-    except Exception as e:
-        recommended_stores = [{"name": "추천 실패", "reason": str(e)}]
+            try:
+                recommended_stores = json.loads(response_text)
+            except json.JSONDecodeError:
+                recommended_stores = []
 
-    # 캐시에 저장
-    preference.last_ai_recommendation = recommended_stores
-    preference.last_ai_call_time = timezone.now()
-    preference.save()
+            # DB에서 id 붙이기
+            final_stores = []
+            for s in recommended_stores:
+                try:
+                    store_obj = Store.objects.get(name=s["name"])
+                    final_stores.append({"id": store_obj.id, "name": store_obj.name})
+                except Store.DoesNotExist:
+                    continue
 
-    return recommended_stores
+            # 캐시에 저장
+            preference.last_ai_recommendation = final_stores
+            preference.last_ai_call_time = timezone.now()
+            preference.save()
+
+            return final_stores
+
+        except Exception as e:
+            # AI 호출 실패 시 빈 리스트 반환
+            preference.last_ai_recommendation = []
+            preference.last_ai_call_time = timezone.now()
+            preference.save()
+            return []
+    
+    # 캐시 사용
+    return preference.last_ai_recommendation
