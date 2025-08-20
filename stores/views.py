@@ -104,36 +104,27 @@ def public_store_list(request):
 # 인기 가게 (방문자 높은 순으로)
 def popular_store_list(request):
     category_slug = request.GET.get('category')
-    today = timezone.localdate()
+
+    # 전체 Store 조회
+    stores = Store.objects.all()
 
     # 카테고리 필터링
-    stores = Store.objects.all()
     if category_slug:
         stores = stores.filter(category__slug=category_slug)
 
-    # 방문자 수 계산: 하루 최대 2회
-    # key = (store_id, user_id), value = 방문 횟수(최대 2)
-    visit_counts = defaultdict(int)
-    visits_today = Visit.objects.filter(visit_time__date=today)
-    for v in visits_today:
-        if category_slug and not v.store.category.filter(slug=category_slug).exists():
-            continue
-        key = (v.store_id, v.user_id)
-        visit_counts[key] = min(visit_counts.get(key, 0) + 1, 2)
-
-    # store별 총 방문수 계산
-    total_counts = defaultdict(int)
-    for (store_id, user_id), count in visit_counts.items():
-        total_counts[store_id] += count
+    # 방문 수 계산: 모든 Visit 객체에서 store별 누적 방문수
+    visit_counts = Visit.objects.values('store_id').annotate(count=models.Count('id'))
+    visit_count_dict = {vc['store_id']: vc['count'] for vc in visit_counts}
 
     # Store 객체에 visit_count 속성 추가
     for store in stores:
-        store.visit_count = total_counts.get(store.id, 0)
+        store.visit_count = visit_count_dict.get(store.id, 0)
 
-    # 방문자 수 높은 순, 같은 방문자 수면 최신 등록 순
+    # 방문 수 높은 순, 같은 방문수면 최신 등록 순
     stores = sorted(stores, key=lambda s: (-s.visit_count, -s.id))
 
     categories = Category.objects.all()
+
     return render(request, 'stores/popular-store-list.html', {
         'stores': stores,
         'categories': categories,
