@@ -28,13 +28,59 @@
 
     <h3>관심 설정</h3>
 
-    <p>선호 음식: {{ preference.preferred_food|default:"설정되지 않음" }}</p>
-    <p>선호 위치: {{ preference.preferred_location|default:"설정되지 않음" }}</p>
-
+    <p>선호 음식 카테고리:
+        {% if preferred_categories_list %}
+            {% for cat in preferred_categories_list %}
+                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
+                    {{ cat }}
+                </span>
+            {% endfor %}
+        {% else %}
+            설정되지 않음
+        {% endif %}
+    </p>
+    
+    <p>선호 맛:
+        {% if preferred_tastes_list %}
+            {% for taste in preferred_tastes_list %}
+                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
+                    {{ taste }}
+                </span>
+            {% endfor %}
+        {% else %}
+            설정되지 않음
+        {% endif %}
+    </p>
+    
+    <p>선호 가격대:
+        {% if preferred_price_ranges_list %}
+            {% for pr in preferred_price_ranges_list %}
+                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
+                    {{ pr }}
+                </span>
+            {% endfor %}
+        {% else %}
+            설정되지 않음
+        {% endif %}
+    </p>
+    
+    <p>선호 건강 요소:
+        {% if preferred_health_list %}
+            {% for health in preferred_health_list %}
+                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
+                    {{ health }}
+                </span>
+            {% endfor %}
+        {% else %}
+            설정되지 않음
+        {% endif %}
+    </p>
+    
 
     <a href="{% url 'accounts:user_preferences' %}">
         <button type="button">수정</button>
     </a>
+
 
     <h3>찜한 가게</h3>
     <a href="{% url 'accounts:favorite_stores' %}">찜 목록</a><br><br>
@@ -44,6 +90,12 @@
 
     <h3>내 리워드</h3>
     <a href="{% url 'visit_rewards:my_rewards' %}">리워드 보기</a><br><br>
+
+    <h3>내 챌린지</h3>
+    <a href="{% url 'missions:my-mission' %}">내 챌린지</a><br><br>
+
+    <h3>내가 작성한 리뷰</h3>
+    <a href="{% url 'reviews:my-review' %}">내가 작성한 리뷰</a><br><br>
 
     <section class="setting">
         <h3>설정</h3>

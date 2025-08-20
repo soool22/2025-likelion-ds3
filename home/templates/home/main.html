@@ -23,4 +23,34 @@
     <a href="{% url 'stores:popular-store-list' %}">방문자 랭킹</a>
     <a href="{% url 'stores:review-best-list' %}">리뷰 Best</a>
 
+    <h2>오늘의 추천 가게</h2>
+    <div class="store-cards">
+        {% for store in recommended_stores %}
+            <div class="store-card">
+                <h3>{{ store.name }}</h3>
+                <p>{{ store.reason }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+    .store-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .store-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        width: 220px;
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    }
+    </style>
+
+
+    <!-- 주간 인기 챌린지 -->
+
+</div>
+
 </body>

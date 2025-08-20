@@ -29,9 +29,26 @@ class User(AbstractUser):
 from stores.models import Store
 
 class UserPreference(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='preference')
-    preferred_food = models.CharField(max_length=50, blank=True, null=True)
-    preferred_location = models.CharField(max_length=100, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # 카테고리 (한식, 중식 등)
+    preferred_categories = models.JSONField(default=list, blank=True)
+
+    # 선호 맛 (매운맛, 단맛, 고소한맛 등)
+    preferred_tastes = models.JSONField(default=list, blank=True)
+
+    # 가격대 (저가, 중가, 고가 등)
+    preferred_price_ranges = models.JSONField(default=list, blank=True)
+
+    # 건강 요소 (저염식, 채식, 고단백 등)
+    preferred_health = models.JSONField(default=list, blank=True)
+    
+    # 캐싱용 필드 추가
+    last_ai_recommendation = models.JSONField(default=list, blank=True)
+    last_ai_call_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}의 선호도"
 
 class FavoriteStore(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorites')

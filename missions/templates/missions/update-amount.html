@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>누적 금액 입력(점주용)</title>
+</head>
+<body>
+    <h3>{{ mission.store.name }} - {{ mission.title }} 누적 금액 입력</h3>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.amount.label_tag }} {{ form.amount }}
+        <br/>
+        {{ form.secret_code.label_tag }} {{ form.secret_code }}<br/><br/>
+        <button type="submit">업데이트</button>
+    </form>
+
+    <a href="{% url 'stores:store-detail' mission.store.id %}">취소</a>
+</body>
+</html>

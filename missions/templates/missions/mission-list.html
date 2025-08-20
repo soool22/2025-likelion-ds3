@@ -1,38 +1,58 @@
 {% load static %}
+{% load humanize %}
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>미션 목록(점주)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>챌린지 목록(점주)</title>
 </head>
 <body>
-    <h2>{{ store.name }} - 내 미션 목록</h2>
+    <a href="{% url 'stores:owner-store-list' %}">이전</a>
+    <br/><br/>
 
-    <a href="{% url 'missions:mission-create' store.id %}">새 미션 생성</a>
+    <h2>{{ store.name }} - 챌린지 목록</h2>
+
+    <a href="{% url 'missions:mission-create' store.id %}">새 챌린지 생성</a>
+    <br/><br/>
+
+    <!-- 상태 버튼 -->
+    <a href="?status=active">
+        <button {% if status == "active" %}style="font-weight:bold;"{% endif %}>
+            진행 중 챌린지
+        </button>
+    </a>
+
+    <a href="?status=past">
+        <button {% if status == "past" %}style="font-weight:bold;"{% endif %}>
+            지난 챌린지
+        </button>
+    </a>
+
+    <hr/>
 
     {% for mission in missions %}
         <div>
-        <h3>{{ mission.title }}</h3>
-        {{ mission.description }}
-        <br/>
-        보상: {{ mission.reward_description }}
-        <br/>
-        생성일: {{ mission.created_at|date:"Y-m-d" }}
-        <br/>
-        {{ mission.start_date }} ~ {{ mission.end_date }}
-        <br/>
-        <br/>
+            <h3>{{ mission.title }}</h3>
 
-        <a href="{% url 'missions:mission-update' mission.id %}">수정</a> 
-        <a href="{% url 'missions:mission-delete' mission.id %}">삭제</a>
-        
-    </div>
-{% empty %}
-    <br/>
-    생성한 미션이 없습니다.
-{% endfor %}
+            <p>{{ mission.description }}</p>
+
+            <p>{{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}</p>
+
+            <p>보상: {{ mission.reward_description }}</p>
+
+            <p>생성일: {{ mission.created_at|date:"Y-m-d" }}</p>
+
+            <p>{{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}</p>
+
+            <a href="{% url 'missions:mission-update' mission.id %}">수정</a> 
+            <a href="{% url 'missions:mission-delete' mission.id %}">삭제</a>
+        </div>
+        <hr/>
+    {% empty %}
+        <p>챌린지가 없습니다.</p>
+    {% endfor %}
 
 </body>
 </html>

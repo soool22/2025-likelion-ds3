@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
 
 <!DOCTYPE html>
 <html>
@@ -8,9 +9,10 @@
     <title>가게 정보</title>
 </head>
 <body>
-    <a href='{% url 'stores:public-store-list' %}'>가게 목록</a>
-    <br/><br>
+    <a href='{% url "stores:public-store-list" %}'>가게 목록</a>
+    <br/><br/>
 
+    <!-- ######### 가게 정보 #########-->
     {% if store.image %}
         <a href="{{ store.image.url }}" target="_blank">
             <img src="{{ store.image.url }}" width="200" height="200">
@@ -44,55 +46,123 @@
     {% for category in store.category.all %}
         {{ category.name }}{% if not forloop.last %}, {% endif %}
     {% endfor %}
-    <br/><br>
+    <br/><br/>
 
     <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
-    <br/><br>
+    <br/><br/>
 
+    <!-- 영업 시간 -->
     {% if store.open_time and store.close_time %}
         영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-        {% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}
+        {% if store.is_open %}
+            (영업 중)
+        {% else %}
+            (영업 종료)
+        {% endif %}
+        <br/><br/>
     {% endif %}
-    <hr/>
 
-    <h3>진행 중인 미션</h3>
+    <a href="{% url 'reviews:review-create' store.id %}" class="btn">리뷰 작성</a>
+    <br/><br/>
+
+    <!-- ######### 리뷰 전체 요약 박스 ######### -->
+    <h3>리뷰 요약</h3>
+    {% if ai_summary %}
+    <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; background-color: #f9f9f9;">
+        <p>
+            <strong>키워드:</strong>
+            {% for kw in review_keywords %}
+                {{ kw }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p>
+            <strong>요약:</strong> {{ ai_summary }}
+        </p>
+        <p>
+            <strong>원문 일부:</strong> {{ snippet }}
+        </p>
+    </div>
+    {% else %}
+    <p>리뷰 요약 정보가 없습니다.</p>
+    {% endif %}
+
+
+
+
+    {% if messages %}
+    <script>
+    {% for message in messages %}
+        alert('{{ message }}');
+    {% endfor %}
+    </script>
+    {% endif %}
+
+    <hr/><br/>
+
+    <!-- ######### 챌린지 ######### -->
+    <h3>진행 중인 챌린지</h3>
+    <hr/>
     {% for mission in missions %}
         <div>
             <h4>{{ mission.title }}</h4>
-            {{ mission.description }}
+            {{ mission.description }}<br/>
+            {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
             <br/>
-            보상: {{ mission.reward_description }}
-            <br/>
-            {{ mission.start_date }} ~ {{ mission.end_date }}
-            <br/>
-            <a href='{% url 'missions:mission-complete' mission.id %}'>미션 완료</a>
+            보상: {{ mission.reward_description }}<br/>
+            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
+
+            {% if mission.mission_type.key == 'amount' %}
+                <a href="{% url 'missions:update-amount' mission.id %}">금액 입력 (점주 전용)</a>
+            {% endif %}
         </div>
     {% empty %}
-        진행 중인 미션이 없습니다.
+        진행 중인 챌린지가 없습니다.
+    {% endfor %}
+    <hr/><br/>
+
+    <!-- ######### 상품/메뉴 ######### -->
+    <h3>상품/메뉴</h3>
+    <hr/>
+    {% for product in products %}
+    <div>
+        {% if product.image %}
+        <a href="{{ product.image.url }}" target="_blank">
+            <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
+        </a>
+        {% endif %}
+
+        <h4>{{ product.name }}</h4>
+        {{ product.price|floatformat:0|intcomma }}원
+        <br/>
+        {{ product.description }}
+    </div>
+    <hr/>
+    {% empty %}
+        등록된 상품이 없습니다.
     {% endfor %}
 
 <script>
-document.getElementById('favorite-btn').addEventListener('click', function() {
-    const storeId = this.dataset.store;
-    fetch("{% url 'accounts:toggle_favorite' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: `store_id=${storeId}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.status === "added") {
-            this.textContent = "♥ 찜 해제";
-        } else if(data.status === "removed") {
-            this.textContent = "♡ 찜하기";
-        } else {
-            alert("찜 처리에 실패했습니다.");
-        }
+    document.getElementById('favorite-btn').addEventListener('click', function() {
+        const storeId = this.dataset.store;
+        fetch("{% url 'accounts:toggle_favorite' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: `store_id=${storeId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === "added") {
+                this.textContent = "♥ 찜 해제";
+            } else if(data.status === "removed") {
+                this.textContent = "♡ 찜하기";
+            } else {
+                alert("찜 처리에 실패했습니다.");
+            }
+        });
     });
-});
 </script>
 </body>
 </html>

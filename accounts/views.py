@@ -103,12 +103,23 @@ def my_page_view(request):
     # UserPreference 가져오기 (없으면 생성)
     preference, _ = UserPreference.objects.get_or_create(user=user)
 
+    # 문자열로 저장된 선호 항목들을 리스트로 변환
+    preferred_categories_list = preference.preferred_categories.split(",") if preference.preferred_categories else []
+    preferred_tastes_list = preference.preferred_tastes.split(",") if preference.preferred_tastes else []
+    preferred_price_ranges_list = preference.preferred_price_ranges.split(",") if preference.preferred_price_ranges else []
+    preferred_health_list = preference.preferred_health.split(",") if preference.preferred_health else []
+
     context = {
         'nickname': user.nickname,
         'email': user.email,
-        'preference': preference,  # 마이페이지에서 관심 설정 표시 가능
+        'preference': preference,
+        'preferred_categories_list': preferred_categories_list,
+        'preferred_tastes_list': preferred_tastes_list,
+        'preferred_price_ranges_list': preferred_price_ranges_list,
+        'preferred_health_list': preferred_health_list,
     }
     return render(request, 'accounts/mypage.html', context)
+
 
 
 
@@ -148,15 +159,31 @@ def terms_or_policy_view(request, page_type):
 def user_preferences(request):
     preference, _ = UserPreference.objects.get_or_create(user=request.user)
 
+    categories = ["한식","중식","일식","양식","베이커리","카페","주점","편의점"]
+    tastes = ["매운맛","단맛","짠맛","고소한맛","새콤한맛","담백한맛"]
+    price_ranges = ["저가","중가","고가"]
+    health_options = ["저염식","채식","비건","고단백","저탄수"]
+
     if request.method == "POST":
-        preference.preferred_food = request.POST.get("preferred_food", "")
-        preference.preferred_location = request.POST.get("preferred_location", "")
+        preference.preferred_categories = ",".join(request.POST.getlist("preferred_categories"))
+        preference.preferred_tastes = ",".join(request.POST.getlist("preferred_tastes"))
+        preference.preferred_price_ranges = ",".join(request.POST.getlist("preferred_price_ranges"))
+        preference.preferred_health = ",".join(request.POST.getlist("preferred_health"))
         preference.save()
-        return redirect('accounts:mypage')  # 저장 후 마이페이지 이동
+        return redirect("accounts:mypage")
 
-    return render(request, 'accounts/user_preferences.html', {'preference': preference})
-
-
+    context = {
+        "preference": preference,
+        "categories": categories,
+        "tastes": tastes,
+        "price_ranges": price_ranges,
+        "health_options": health_options,
+        "selected_categories": preference.preferred_categories.split(",") if preference.preferred_categories else [],
+        "selected_tastes": preference.preferred_tastes.split(",") if preference.preferred_tastes else [],
+        "selected_price_ranges": preference.preferred_price_ranges.split(",") if preference.preferred_price_ranges else [],
+        "selected_health": preference.preferred_health.split(",") if preference.preferred_health else [],
+    }
+    return render(request, "accounts/user_preferences.html", context)
 
 
 # -----------------------------

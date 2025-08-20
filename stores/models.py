@@ -40,11 +40,20 @@ class Store(models.Model):
     rating = models.FloatField(default=0) # 평균 평점
     visit_count = models.IntegerField(default=0) # 방문 수
     image = models.ImageField(upload_to='upload_filepath', blank=True)
-    description = models.TextField(blank=True) # 미션 설명
+
+    description = models.TextField(blank=True) # 챌린지 설명
+    secret_code = models.CharField(max_length=10, blank=False, null=False)  # 점주 코드(누적 금액)
 
     # 영업 시간
     open_time = models.TimeField(null=True, blank=True)
     close_time = models.TimeField(null=True, blank=True)
+    
+     # 리뷰 요약 관련 필드 추가
+    review_summary_text = models.TextField(blank=True, default="")
+    review_keywords = models.TextField(blank=True, default="")  # 콤마로 구분
+    review_snippet = models.TextField(blank=True, default="")
+    review_summary_updated = models.DateTimeField(null=True, blank=True)
+    
 
     # 현재 영업 중인지 확인
     @property

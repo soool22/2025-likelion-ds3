@@ -1,5 +1,8 @@
+from ai_services.services import store_recommend
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-# main 페이지
+@login_required
 def main(request):
-    return render(request,'home/main.html') 
+    recommended_stores = store_recommend(request.user)
+    return render(request, "home/main.html", {"recommended_stores": recommended_stores})

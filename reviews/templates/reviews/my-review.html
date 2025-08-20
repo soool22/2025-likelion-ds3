@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가 쓴 리뷰</title>
+</head>
+<body>
+    <a href="{% url 'accounts:main' %}">홈으로</a>
+    <h2>내가 작성한 리뷰</h2>
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review-item">
+                <a href="{% url 'stores:store-detail' review.store.id %}">
+                    <h3>{{ review.store.name }}</h3>
+                </a>
+                {{ review.stars }}
+                <br/>
+                {{ review.comment|linebreaks }}
+                {{ review.created_at|date:"Y-m-d" }}
+                <br/>
+                {% for img in review.images.all %}
+                    {% if img.image %}
+                        <a href="{{ img.image.url }}" target="_blank">
+                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                <br/>
+                <a href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+            </div>
+            <hr/>
+        {% endfor %}
+    {% else %}
+        아직 작성한 리뷰가 없습니다.
+    {% endif %}
+</body>
+</html>

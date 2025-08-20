@@ -8,6 +8,9 @@ from django.utils import timezone
 from .forms import StoreForm
 from visit_rewards.models import Visit
 from collections import defaultdict
+from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
+from ai_services.services import summarize_reviews  # ai_services에서 요약 함수
+from datetime import timedelta
 
 ################ 점주 ################
 
@@ -140,9 +143,17 @@ def popular_store_list(request):
 # 리뷰 Best (리뷰 평점 높은 순으로)
 def review_best_list(request):
     category_slug = request.GET.get('category')
+    a, b = 0.7, 0.3
 
-    # 평점 높은 순으로 정렬 → 같은 방문 수면 최신 등록 순
-    stores = Store.objects.all().order_by('-rating', '-id')
+    stores = Store.objects.annotate(
+        review_count=Count('reviews'),
+        avg_rating=Avg('reviews__rating')
+    ).annotate(
+        score=ExpressionWrapper(
+            (F('avg_rating') * a) + (F('review_count') * b),
+            output_field=FloatField()
+        )
+    ).order_by('-score', '-id')
 
     if category_slug:
         stores = stores.filter(category__slug=category_slug)
@@ -155,13 +166,29 @@ def review_best_list(request):
     })
 
 # 가게 정보
-def store_detail(request,store_id):
+def store_detail(request, store_id):
     store = get_object_or_404(Store, id=store_id)
+    products = store.products.all()
+    missions = store.missions.filter(end_date__gte=timezone.now())
 
-    missions = store.missions.all()  # 모든 미션
-    active_missions = [m for m in missions if m.is_active]  # property 기반 필터링 (활성화)
+    # 마지막 요약 갱신 30분 이상 지났으면 새로 호출
+    if not store.review_summary_updated or timezone.now() - store.review_summary_updated > timedelta(minutes=30):
+        store = summarize_reviews(store)
 
-    return render(request, 'stores/store-detail.html', {
+    # 즐겨찾기 여부
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_favorite = request.user.favorites.filter(id=store.id).exists()
+
+    # DB에서 가져온 값
+    context = {
         'store': store,
-        'missions': active_missions,
-    })
+        'products': products,
+        'missions': missions,
+        'ai_summary': store.review_summary_text,
+        'review_keywords': store.review_keywords.split(",") if store.review_keywords else [],
+        'snippet': store.review_snippet,
+        'is_favorite': is_favorite,
+    }
+
+    return render(request, 'stores/store-detail.html', context)

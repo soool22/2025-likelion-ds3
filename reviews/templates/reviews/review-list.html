@@ -8,7 +8,7 @@
     <title>{{ store.name }} 리뷰 목록</title>
 </head>
 <body>
-    <a href='{% url 'stores:store-detail' store.id %}'>가게 정보</a>
+    <a href="{% url 'stores:store-detail' store.id %}">가게 정보</a>
     <br/>
 
     <h2>{{ store.name }} 리뷰</h2>
@@ -23,13 +23,13 @@
 
     <!-- 평균 평점 -->
     <div>
-    {{ avg_rating|floatformat:1 }}
-    <br/>
-    {% for i in stars_list %}
-        {% if i <= avg_star_count %}
-            ★
-        {% endif %}
-    {% endfor %}
+        {{ avg_rating|floatformat:1 }}
+        <br/>
+        {% for i in stars_list %}
+            {% if i <= avg_star_count %}
+                ★
+            {% endif %}
+        {% endfor %}
     </div>
     <br/>
 
@@ -41,24 +41,50 @@
         2점: {{ rating_counts.2 }}개<br/>
         1점: {{ rating_counts.1 }}개
     </div>
+    <br/>
 
+    <!-- 정렬 버튼 -->
+    <div>
+        <strong>정렬:</strong>
+        <a href="?sort=latest">최신순</a> |
+        <a href="?sort=rating_desc">별점 높은 순</a> |
+        <a href="?sort=rating_asc">별점 낮은 순</a> |
+        <a href="?sort=helpful">도움 많은 순</a>
+    </div>
     <hr/>
 
     <!-- 리뷰 목록 -->
     {% if reviews %}
         {% for review in reviews %}
-            <div class="review-item">
+            <div id="review-{{ review.id }}">
                 <h4>{{ review.user.username }}</h4>
                 {{ review.stars }}
-                {{ review.created_at|date:"Y-m-d" }}
                 <br/>
                 {{ review.comment|linebreaks }}
-                
+                <br/>
                 {% for img in review.images.all %}
-                    <a href="{{ img.image.url }}" target="_blank">
-                        <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
-                    </a>
+                    {% if img.image %}
+                        <a href="{{ img.image.url }}" target="_blank">
+                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                        </a>
+                    {% endif %}
                 {% endfor %}
+                <br/>
+                {{ review.created_at|date:"Y-m-d" }}
+                <br/><br/>
+
+                <!-- 좋아요 버튼 -->
+                {% if review.user != request.user %}
+                    <form method="post" action="{% url 'reviews:review-like-toggle' review.id %}">
+                        {% csrf_token %}
+                        <button type="submit">도움이 돼요</button>
+                    </form>
+                {% endif %}
+
+                <!-- 좋아요 개수 표시 -->
+                {% if review.helpful_count > 0 %}
+                    {{ review.helpful_count }}명에게 도움이 되었습니다
+                {% endif %}
 
                 <!-- 로그인한 작성자만 삭제 -->
                 {% if review.user == request.user %}
