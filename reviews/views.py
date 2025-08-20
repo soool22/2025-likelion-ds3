@@ -8,20 +8,61 @@ from .models import *
 from stores.models import Store
 from django.db.models import Count
 from django.http import JsonResponse
+from visit_rewards.models import Visit, Reward
+from django.http import HttpResponse
+from ai_services.services import summarize_reviews
 
-# 리뷰 작성 
+
 @login_required
 def review_create(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
+    # 최근 24시간 방문 기록 가져오기
+    time_threshold = timezone.now() - timedelta(hours=24)
+    recent_visits = Visit.objects.filter(
+        user=request.user,
+        store=store,
+        visit_time__gte=time_threshold
+    )
+
+    visit_count = recent_visits.count()
+
+    if visit_count == 0:
+        return HttpResponse("""
+            <script>
+                alert('최근 24시간 내 방문 인증 기록이 있어야 리뷰 작성이 가능합니다.');
+                history.back();
+            </script>
+        """)
+
+    # 이미 작성한 리뷰 수
+    user_review_count = Review.objects.filter(
+        user=request.user,
+        store=store,
+        created_at__gte=time_threshold
+    ).count()
+
+    if user_review_count >= visit_count:
+        return HttpResponse(f"""
+            <script>
+                alert('리뷰는 방문 1회 당 1건만 작성할 수 있습니다.');
+                history.back();
+            </script>
+        """)
+
+    # POST 요청 처리
     if request.method == 'POST':
         rating = int(request.POST.get('rating', 0))
         comment = request.POST.get('comment', '')
-        images = request.FILES.getlist('images')  # 다중 이미지 처리
+        images = request.FILES.getlist('images')
 
         if rating < 1 or rating > 5:
-            messages.error(request, "별점은 1~5 사이여야 합니다.")
-            return redirect(request.path)
+            return HttpResponse("""
+                <script>
+                    alert('별점은 1~5 사이여야 합니다.');
+                    history.back();
+                </script>
+            """)
 
         review = Review.objects.create(
             store=store,
@@ -30,28 +71,45 @@ def review_create(request, store_id):
             comment=comment,
         )
 
-        # 이미지 여러 개 저장
         for image in images:
             ReviewImage.objects.create(review=review, image=image)
 
-        store.update_rating()  # 평균 평점 갱신
-        messages.success(request, "리뷰가 등록되었습니다.")
-        return redirect('reviews:review-list', store_id=store.id)
+        store.update_rating()
+        
+        points_earned = 500
+        Reward.objects.create(
+            user=request.user,
+            store=store,
+            reward_type='point',
+            related_review=review,
+            amount=points_earned,
+            description='리뷰 작성 보상'
+        )
+
+        request.user.points += points_earned
+        request.user.save()
+
+        return HttpResponse("""
+            <script>
+                alert('리뷰가 등록되었습니다.\n 500 point 적립 완료!');
+                window.location.href = '/reviews/{store_id}/';  // 리뷰 목록으로 이동
+            </script>
+        """)
 
     return render(request, 'reviews/review-create.html', {'store': store})
+
 
 # 리뷰 목록
 @login_required
 def review_list(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    # 기본 QuerySet
     reviews = Review.objects.filter(store=store).prefetch_related('images').annotate(
-        helpful_count=Count('likes')  # 좋아요 수 계산
+        helpful_count=Count('likes')
     )
 
-    # 정렬 파라미터
-    sort = request.GET.get('sort', 'latest')  # 기본값 최신순
+    # 정렬
+    sort = request.GET.get('sort', 'latest')
     if sort == 'latest':
         reviews = reviews.order_by('-created_at')
     elif sort == 'rating_desc':
@@ -61,14 +119,9 @@ def review_list(request, store_id):
     elif sort == 'helpful':
         reviews = reviews.order_by('-helpful_count')
 
-    # 평균 평점 계산
     avg_rating = store.rating
     avg_star_count = int(round(avg_rating))
-
-    # 별 리스트 1~5
     stars_list = range(1, 6)
-
-    # 별점별 리뷰 개수 (1~5)
     rating_counts = {i: reviews.filter(rating=i).count() for i in range(1, 6)}
 
     now = timezone.now()  # 현재 시간
@@ -82,7 +135,7 @@ def review_list(request, store_id):
         days = delta.days
         review.natural_days = f"{days}일 전" if days > 0 else "오늘"
 
-    return render(request, 'reviews/review-list.html', {
+    context = {
         'store': store,
         'reviews': reviews,
         'avg_rating': avg_rating,
@@ -90,7 +143,10 @@ def review_list(request, store_id):
         'stars_list': stars_list,
         'rating_counts': rating_counts,
         'sort': sort,
-    })
+    }
+
+    return render(request, 'reviews/review-list.html', context)
+
 
 # 리뷰 삭제
 @login_required

@@ -83,3 +83,13 @@
 
   init();
 })();
+
+const starIcon = document.getElementById("starIcon");
+
+  starIcon.addEventListener("click", () => {
+    if (starIcon.src.includes("star.svg")) {
+      starIcon.src = "../img/starpicked.svg"; // 클릭 시 선택된 별로 변경
+    } else {
+      starIcon.src = "../img/star.svg"; // 다시 클릭하면 원래 별로 변경
+    }
+  });

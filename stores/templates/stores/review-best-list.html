@@ -49,7 +49,7 @@
             <br/>
 
             주소: {{ store.address }}<br/>
-            
+
             <!-- 거리 -->
             거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
             <br/>
@@ -73,7 +73,7 @@
     </a>
         <hr/>
     {% empty %}
-        리뷰 Best 가게가 없습니다.
+        <a href="{% url 'accounts:user_preferences' %}">위치 설정하기</a>
     {% endfor %}
 </body>
 </html>

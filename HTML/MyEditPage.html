@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyEditPage</title>
+    <title>DDAL-LANG</title>
     <link rel="stylesheet" href="../CSS/MyEditPage.css" />
 </head>
 <body>
     <main>
         <header>
-            <img src="../IMG/edit-back.png" class="back-img"></img>
+            <a href="./MyInfomationPage.html">
+                <img src="../IMG/edit-back.png" class="back-img" ></img>
+            </a>
             <div class="tittle text"> 내 정보 관리 </div>
         </header>
         <div style="margin-left: 60px;">
@@ -28,34 +30,95 @@
             <div class="edit-tittle">닉네임</div>
             <div class="edit-content">
                 <div class="edit-text">연짱이</div>
-                <img src="../IMG/account-arrow.png" class="account-arrow">
+                <img src="../IMG/account-arrow.png" class="account-arrow1">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">이메일</div>
             <div class="edit-content">
                 <div class="edit-text">djWjrnwjWjrn@duksung.ac.kr</div>
-                <img src="../IMG/account-arrow.png" class="account-arrow">
+                <img src="../IMG/account-arrow.png" class="account-arrow2">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">연락처</div>
             <div class="edit-content">
                 <div class="edit-text">010-1234-4321</div>
-                <img src="../IMG/account-arrow.png" class="account-arrow">
+                <img src="../IMG/account-arrow.png" class="account-arrow3">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">비밀번호</div>
             <div class="edit-content">
                 <div class="edit-text">새로운 비밀번호로 변경 가능</div>
-                <img src="../IMG/account-arrow.png" class="account-arrow">
+                <img src="../IMG/account-arrow.png" class="account-arrow4">
             </div>
         </div>
         <div class="bottom">
             <div class="membership">회원탈퇴</div>
             <div class="logout">로그아웃</div>
         </div>
+        <div class="nick-name hidden">
+            <div class="over-layer"></div>
+            <div class="nick-name-box">
+                <div class="nick-name-tittle">
+                    <div class="text">닉네임 수정</div>
+                    <img src="../IMG/MY-X.png">
+                </div>
+                <div class="separation-box"></div>
+                <textarea class="nick-name-textarea" name="nick-name" placeholder="기존 닉네임"></textarea>
+            </div>
+        </div>
+        <div class="certification hidden">
+            <div class="over-layer"></div>
+            <div class="certification-box">
+                <div class="certification-tittle">
+                    <img src="../IMG/MY-X.png">
+                </div>
+                <div class="text" style="text-align: center;">
+                    <div style="margin-top: 22px; font-size: 22px;">휴대폰 본인인증</div>
+                    <div style="margin-top: 16px; color: #ccc; margin-bottom: 49px;">딸랑의 다양한 서비스를 이용하기 위해서는<br>본인 명의의 휴대폰 번호를 인증해 주세요.</div>
+                    <img src="../IMG/Certification.png">
+                </div>
+                <button class="certification-btn">본인인증 하기</button>
+            </div>
+        </div>
+        <div class="email hidden">
+            <div class="email-box">
+                <img src="../IMG/my-back.png" class="back">
+                <div class="email-tittle">이메일을 입력해주세요.</div>
+                <div class="email-input">
+                    <textarea class="email-textarea" name="email" placeholder="기존이메일"></textarea>
+                    <button class="email-btn">인증하기</button>
+                </div>
+            </div>
+        </div>
+        <div class="password hidden">
+            <div class="password-box">
+                <img src="../IMG/my-back.png" class="back">
+                <div style="margin-left: 58px; margin-top: 36px;">
+                    <div class="password-tittle text">비밀번호 설정</div>
+                    <div class="password-subtittle text">비밀번호가 설정되어 있지 않습니다.<br>비밀번호 설정 시 이메일을 통해 로그인할 수 있습니다.</div>
+                    <div class="password-input">
+                        <div class="password-name">비밀번호</div>
+                        <div class="password-wrapper">
+                            <textarea class="password-textarea" name="password" placeholder="숫자, 영문, 특수문자 8-16자 입력"></textarea>
+                            <button type="button" class="toggle-btn"></button>
+                        </div>
+                    </div>
+                    <div class="password-input">
+                        <div class="password-name">비밀번호 확인</div>
+                        <div class="password-wrapper">
+                            <textarea class="password-textarea" name="passwordcheck" placeholder="비밀번호 확인"></textarea>
+                            <button type="button" class="toggle-btn"></button>
+                        </div>
+                    </div>
+                    <button class="password-btn">인증하기</button>
+                    <button class="password-check-btn">비밀번호 설정 완료</button>
+                </div>
+            </div>
+        </div>
     </main>
+    <script src="../JS/MyEditPage.js"></script>
 </body>
 </html>

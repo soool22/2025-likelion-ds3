@@ -48,6 +48,13 @@ class Store(models.Model):
     # 영업 시간
     open_time = models.TimeField(null=True, blank=True)
     close_time = models.TimeField(null=True, blank=True)
+    
+     # 리뷰 요약 관련 필드 추가
+    review_summary_text = models.TextField(blank=True, default="")
+    review_keywords = models.TextField(blank=True, default="")  # 콤마로 구분
+    review_snippet = models.TextField(blank=True, default="")
+    review_summary_updated = models.DateTimeField(null=True, blank=True)
+    
 
     # 지역구
     gu_name = models.CharField(max_length=50, blank=False, null=False) 

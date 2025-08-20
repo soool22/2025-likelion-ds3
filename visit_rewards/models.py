@@ -74,6 +74,7 @@ class Reward(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)
     reward_type = models.CharField(max_length=20, choices=REWARD_TYPE_CHOICES, default='point')
     related_visit = models.ForeignKey(Visit, null=True, blank=True, on_delete=models.SET_NULL)
+    related_review = models.ForeignKey('reviews.Review', null=True, blank=True, on_delete=models.SET_NULL)  # 추가
     amount = models.PositiveIntegerField(default=0)  # 포인트
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
     gifticon = models.ForeignKey(Gifticon, on_delete=models.SET_NULL, null=True, blank=True)
@@ -87,6 +88,7 @@ class Reward(models.Model):
         if self.gifticon:
             return f"{self.user.username} - {self.gifticon.name}"
         return f"{self.user.username} - {self.reward_type} - {self.amount}"
+
     
 class PurchaseHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

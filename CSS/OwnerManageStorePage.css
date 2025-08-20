@@ -1,0 +1,447 @@
+
+html, body {
+  -ms-overflow-style: none;  /* IE, Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Edge */
+}
+
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    min-height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+
+}
+
+header{
+    display: flex;
+    margin-top: 32px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 183px;
+}
+
+
+.tittle{
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+.text{
+    color: #000;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+.stop-text{
+    margin-top: 29px;
+    margin-left: 27px;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-size: 15px;
+}
+
+.switchBtn{
+    width: 29px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: #d9d9d9;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: background 0.3s;
+    box-sizing: border-box;
+}
+
+.switchBtnCircle{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: solid 0.3px #cccccc;
+}
+
+.switchBtn.picked{
+    width: 29px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: #FFCC02;
+    display: none;
+    padding: 2px;
+    transition: background 0.3s;
+    box-sizing: border-box;
+    flex-direction: row-reverse;
+}
+
+.switchBtnCircle.picked{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: solid 0.3px #E8B900;
+}
+.stop{
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 7px;
+    border-bottom: 1.2px solid #ccc;
+}
+.bar{
+    display: flex;
+    align-items: centers;
+    cursor: pointer;
+}
+.my-review{
+    color: #7B7B7B;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 22px 61px 18px 60px;
+    white-space: nowrap;
+}
+
+.picked{
+    border-bottom: 3px solid #FFB635;
+    color:#FFB635;
+}
+.store-name{
+    font-size: 18px;
+    margin-top: 17px;
+}
+.store-id{
+    font-size: 12px;
+    color: #7B7B7B;
+    margin-bottom: 8px;
+}
+
+.today{
+    width: 341px;
+    height: 161px;
+    flex-shrink: 0;
+    border-radius: 19px;
+    border: 1px solid #B7B7B7;
+    
+}
+.today-tittle,.info-tittle{
+    width: 300px;
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    margin-left: 17px;
+    margin-top: 15px;
+    border-bottom:1px solid #7B7B7B;
+}
+.today-name{
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+.info-name{
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+.today-time{
+    font-size: 11px;
+    color: #7B7B7B;
+    margin-bottom: 7px;
+}
+.info-content-box{
+    display: flex;
+    align-items: first baseline;
+    margin-top: 20px;
+}
+
+.change{
+    margin-left: 186px;
+    display: flex;
+}
+
+button {
+    all: unset;   
+    cursor: pointer;
+    color: #FFB635;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.store-introduce{
+    margin-top: 17px;
+}
+.introduce-box{
+    border-radius: 19px;
+    border: 1px solid #B7B7B7;
+    width: 317px;
+    height: 46px;
+    flex-shrink: 0;
+    margin-top: 6px;
+    margin-bottom: 13px;      
+}
+textarea{
+    resize: none;
+    font-family: Pretendard, sans-serif; /* 글꼴 */
+    font-size: 16px;                     /* 글자 크기 */
+    font-weight: 500;                    /* 굵기 */
+    color: #7B7B7B;                         /* 글자색 */
+
+    padding: 3px 12px;                       /* 안쪽 여백 (텍스트 위치 조정) */
+    line-height: 1.4;                    /* 줄간격 */
+    text-align: left;  
+}
+textarea:focus {
+  outline: none;             /* 포커스 아웃라인 제거 */
+}
+.position-box{
+    border-radius: 19px;
+    border: 1px solid #B7B7B7;
+    width: 317px;
+    height: 96px;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+.file-input {
+    display: none;
+  }
+
+  /* 커스텀 버튼 */
+  .file-label {
+    display: block;
+    width: 320px;   /* 버튼 가로 크기 */
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* 둥근 모서리 */
+    color: #7B7B7B;
+    font-size: 16px;
+    font-family: Pretendard, sans-serif;
+    cursor: pointer;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    margin-bottom: 15px; /* 버튼 간격 */
+  }
+
+  .file-label:hover {
+    border-color: #888;}
+
+
+/* 탭바 시작 */
+#tapBar{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    height: 64px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e5e5;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+    text-decoration: none;
+}
+
+.tapBarBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.tapBarIcon{
+    width: 24px;
+    height: 24px;
+}
+
+.tapBarLabel{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #7b7b7b;
+}
+
+.tapBarLabel.picked{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+/* 탭바 끝 */
+
+.store-statistics,.store-info{
+    margin-left: 47px; 
+}
+
+.info-box{
+    width: 75px;
+    height: 54px;
+    flex-shrink: 0;
+    border: 1px solid #CCC;
+    padding: 2px;
+}
+
+.info-box-tittle{
+    font-size: 12px;
+}
+.info-box-subtittle{
+    font-size: 8px;
+    color: #CCC;
+}
+.info-box-bottom{
+    display: flex;
+    align-items: center;
+    margin-top:18px;
+    margin-left: 29px;
+}
+.num{
+    font-size: 13px;
+    margin-left: 10px;
+}
+.info-box-list{
+    display: flex;
+    align-items: center;
+    gap:7px;
+}
+.separation-box{
+    width: 353px;
+    height: 1px;
+    background-color: #CCC;
+    margin-top: 25px;
+}
+.AI-main{
+    font-size: 16px;
+}
+.AI-subtittle{
+    font-size: 12px;
+    color: #7B7B7B;
+    margin-left: 12px;
+}
+.AI-box-tittle{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 7px;
+    margin-bottom: 6px;
+}
+
+.mission-box-flex{
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.percent{
+    font-size: 12px;
+    margin-left: 5px;
+}
+.gray-range{
+    position: relative;
+    width: 80%;
+    height: 22px;
+    background:#e5e5e5;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-left: 15px;
+    margin-top: 8px;
+}
+.yellow-range1,.yellow-range2,.yellow-range3{
+    position: absolute;
+    inset: 0;
+    width: 50%;                /* 진행률만 바꾸면 됨 */
+    height: 100%;
+    background:#ffd84d;
+}
+.range-text1,.range-text2,.range-text3{
+    color: #000;
+    text-align:right;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    position: absolute;
+    inset: 0;
+    margin-right: 10px;
+}
+.first{
+    text-align: center;
+    margin-top: 7px;
+    font-size: 12px;
+    color: #7B7B7B;
+    margin-right: 45px;
+
+}
+.second{
+    text-align: center;
+    margin-top: 3px;
+    font-size: 13px;
+    margin-right: 45px;
+}
+
+.first, .second{
+    display: flex;
+    align-items: center;
+    margin-left: 17px;
+    margin-top: 23px;
+}
+
+.checkbox{
+    margin-left: 30px;
+}
+
+/* 기본 input 숨기기 */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 라벨 스타일 */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+/* 동그라미 기본 */
+.custom-checkbox .checkmark {
+  height: 20px;
+  width: 20px;
+  border: 2px solid #3f51b5; /* indigo */
+  border-radius: 50%;         /* 동그라미 */
+  margin-right: 8px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* 체크됐을 때 안쪽 원 */
+.custom-checkbox input:checked ~ .checkmark::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3f51b5;  /* indigo */
+}
