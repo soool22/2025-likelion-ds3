@@ -21,10 +21,14 @@ class Review(models.Model):
 
     # 좋아요
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_reviews', blank=True)
-    
+
     def __str__(self):
         return f"{self.user} - {self.store.name} ({self.rating}점)"
 
+    @property
+    def like_count(self):
+        return self.likes.count()
+    
 # 리뷰 이미지 모델 (다중 이미지)
 class ReviewImage(models.Model):
     review = models.ForeignKey(Review, related_name='images', on_delete=models.CASCADE)

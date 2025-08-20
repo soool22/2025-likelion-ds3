@@ -48,6 +48,10 @@
             방문 수: {{ store.visit_count }}
             <br/>
 
+            <!-- 거리 -->
+            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
+            <br/>
+
             <!-- 주소 -->
             주소: {{ store.address }}
             <br/>

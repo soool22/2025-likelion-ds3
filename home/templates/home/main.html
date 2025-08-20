@@ -1,30 +1,107 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>main</title>
+    <title>메인 페이지</title>
 </head>
 <body>
-    <h2>메인 페이지</h2><hr>
-    {%if request.user.is_authenticated%}
-        {{request.user.nickname}}({{request.user.username}})님 환영합니다.   <a href="{% url 'accounts:logout' %}">로그아웃</a><br/><br>
-        <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
+    <h2>메인 페이지</h2>
+    <hr>
 
-    {%else%}
+    <!-- 구 선택 -->
+    {% if user_location and user_location.gu_name %}
+            <div>
+                <a href="{% url 'accounts:user_location' %}">
+                    {{ user_location.gu_name }}▼
+                </a>
+            </div>
+    {% else %}
+        <div>
+            <a href="{% url 'accounts:user_location' %}">위치 설정</a>
+        </div>
+    {% endif %}
+
+    <br>
+
+    <!-- 로그인 상태 -->
+    {% if request.user.is_authenticated %}
+        {{ request.user.nickname }}({{ request.user.username }})님 환영합니다.   
+        <a href="{% url 'accounts:logout' %}">로그아웃</a><br/><br>
+        <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
+    {% else %}
         <a href="{% url 'accounts:login' %}">로그인</a>
         <a href="{% url 'accounts:signup' %}">회원가입</a>
-    {%endif%}
-    <!-- 광고 -->
-    
-    <a href="{% url 'stores:public-store-list' %}">모든 가게</a>
-    <a href="{% url 'stores:popular-store-list' %}">방문자 랭킹</a>
-    <a href="{% url 'stores:review-best-list' %}">리뷰 Best</a>
+    {% endif %}
 
-    <!-- 주간 인기 챌린지 -->
+    <hr>
 
-</div>
+    <!-- 가게 정렬 -->
+    <nav>
+    {% if gu_name %} 
+        <a href="{% url 'stores:public-store-list' %}?gu={{ gu_name }}">모든 가게</a> |
+        <a href="{% url 'stores:popular-store-list' %}?gu={{ gu_name }}">방문자 랭킹</a> |
+        <a href="{% url 'stores:review-best-list' %}?gu={{ gu_name }}">리뷰 Best</a>
+    {% else %}
+        <a href="{% url 'stores:public-store-list' %}">모든 가게</a> |
+        <a href="{% url 'stores:popular-store-list' %}">방문자 랭킹</a> |
+        <a href="{% url 'stores:review-best-list' %}">리뷰 Best</a>
+    {% endif %}
+    </nav>
+
+    <!-- 오늘의 인기 챌린지 -->
+    <h3>오늘의 인기 챌린지</h3>
+    {% if rankings %}
+    <ol>
+        {% for r in rankings %}
+            <li>
+                <a href="{% url 'stores:store-detail' r.mission.store.id %}">
+                    {{ r.mission.store.name }}
+                </a>
+                <br/>
+                {{ r.mission.title }} ▶ 참여자 {{ r.participant_count }}명
+            </li>
+            <br/>
+        {% endfor %}
+    </ol>
+    {% else %}
+        <p>오늘의 인기 챌린지가 없습니다.</p>
+    {% endif %}
+
+
+    <!-- 가게 검색 -->
+    <nav>
+        <a href="{% url 'stores:store-search' %}">가게 검색</a>
+    </nav>
+
+    <!-- ################## JS ################## -->
+<script>
+    // 구 선택 이벤트
+    document.getElementById('gu-select').addEventListener('change', function() {
+        var selectedGu = this.value;
+        window.location.href = '?gu=' + selectedGu;
+    });
+
+    // 현재 위치 버튼
+    document.getElementById('current-location').addEventListener('click', function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                // 단순히 도봉구로 고정 (추후 geocoding으로 실제 구 계산 가능)
+                var detectedGu = '도봉구';
+                window.location.href = '?gu=' + detectedGu;
+            }, function(error) {
+                alert('현재 위치를 가져올 수 없습니다. 위치 권한을 허용해주세요.');
+            });
+        } else {
+            alert('현재 위치를 가져올 수 없는 브라우저입니다.');
+        }
+    });
+</script>
 
 </body>
+</html>

@@ -48,11 +48,11 @@
             </a>
             <br/>
 
-            <!-- 방문 수 -->
-            방문 수: {{ store.visit_count }}
-            <br/>
-
             주소: {{ store.address }}<br/>
+            
+            <!-- 거리 -->
+            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
+            <br/>
             카테고리:
             {% for category in store.category.all %}
             {{ category.name }}{% if not forloop.last %}, {% endif %}
@@ -73,7 +73,7 @@
     </a>
         <hr/>
     {% empty %}
-        인기 가게가 없습니다.
+        리뷰 Best 가게가 없습니다.
     {% endfor %}
 </body>
 </html>

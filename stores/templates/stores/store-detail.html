@@ -34,6 +34,9 @@
     <br/><br/>
 
     주소: {{ store.address }} 
+    {% if store.distance %}
+        ({{ store.distance|floatformat:0 }}m)
+    {% endif %}
     <br/>
 
     <a href="{% url 'reviews:review-list' store.id %}">
@@ -41,6 +44,14 @@
         ({{ store.reviews.count }})
     </a>
     <br/>
+
+    <p>전화번호: 
+        {% if store.number %}
+            <a href="tel:{{ store.number }}">{{ store.number }}</a>
+        {% else %}
+            정보 없음
+        {% endif %}
+    </p>
 
     카테고리:
     {% for category in store.category.all %}

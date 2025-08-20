@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>등록된 가게 정보 수정</title>
+    <!-- 카카오맵 SDK -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services"></script>
+    
+    <!-- ################## CSS ##################-->
+    <style>
+        #map { width: 100%; height: 400px; margin-top: 10px; }
+    </style>
 </head>
 <body>
     <h2>가게 정보 수정</h2>
@@ -18,10 +25,21 @@
         <div>
             주소
             {{ form.address }}
-            {{ form.address.errors }}
+            <button type="button" id="btn-search">주소 검색</button>
+            <button type="button" id="btn-current">현재 위치</button>
         </div>
 
-        <!-- 위도/경도 (지도맵) -->
+        <div>
+            구 이름
+            {{ form.gu_name }}
+        </div>
+
+        <!-- 히든 필드 -->
+        <input type="hidden" name="latitude" id="id_latitude" value="{{ form.latitude.value|default_if_none:'' }}">
+        <input type="hidden" name="longitude" id="id_longitude" value="{{ form.longitude.value|default_if_none:'' }}">
+        
+        <!-- 지도 영역 -->
+        <div id="map"></div>
         
         <div>
             카테고리
@@ -31,6 +49,11 @@
                 </div>
             {% endfor %}
             {{ form.category.errors }}
+        </div>
+
+        <div>
+        전화번호
+        {{ form.number }}
         </div>
 
         <div>
@@ -62,6 +85,92 @@
     
         <button type="submit">완료</button>
     </form>
+
+    <!-- ################## JS ##################-->
+<script>
+var mapContainer = document.getElementById('map');
+var mapOption = { 
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 3
+};
+var map = new kakao.maps.Map(mapContainer, mapOption);
+var marker = new kakao.maps.Marker({ map: map, draggable: true });
+var geocoder = new kakao.maps.services.Geocoder();
+
+// 현재 위치 버튼
+document.getElementById('btn-current').addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var locPosition = new kakao.maps.LatLng(lat, lng);
+            map.setCenter(locPosition);
+            marker.setPosition(locPosition);
+            document.getElementById('id_latitude').value = lat;
+            document.getElementById('id_longitude').value = lng;
+            
+            geocoder.coord2Address(lng, lat, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    document.getElementById('id_address').value = result[0].address.address_name;
+                    var gu = result[0].address.region_2depth_name;
+                    document.getElementById('id_gu_name').value = gu;
+                }
+            });
+        });
+    }
+});
+
+// 지도 클릭 이벤트
+kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+    var latlng = mouseEvent.latLng;
+    marker.setPosition(latlng);
+    document.getElementById('id_latitude').value = latlng.getLat();
+    document.getElementById('id_longitude').value = latlng.getLng();
+
+    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            document.getElementById('id_address').value = result[0].address.address_name;
+            var gu = result[0].address.region_2depth_name;
+            document.getElementById('id_gu_name').value = gu;
+        }
+    });
+});
+
+// 마커 드래그 이벤트
+kakao.maps.event.addListener(marker, 'dragend', function() {
+    var latlng = marker.getPosition();
+    document.getElementById('id_latitude').value = latlng.getLat();
+    document.getElementById('id_longitude').value = latlng.getLng();
+
+    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            document.getElementById('id_address').value = result[0].address.address_name;
+            var gu = result[0].address.region_2depth_name;
+            document.getElementById('id_gu_name').value = gu;
+        }
+    });
+});
+
+// 주소 검색
+document.getElementById('btn-search').addEventListener('click', function() {
+    var address = document.getElementById('id_address').value;
+    if(address){
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var loc = new kakao.maps.LatLng(result[0].y, result[0].x);
+                map.setCenter(loc);
+                marker.setPosition(loc);
+                document.getElementById('id_latitude').value = result[0].y;
+                document.getElementById('id_longitude').value = result[0].x;
+                var gu = result[0].address.region_2depth_name;
+                document.getElementById('id_gu_name').value = gu;
+            } else {
+                alert("주소를 찾을 수 없습니다.");
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
 

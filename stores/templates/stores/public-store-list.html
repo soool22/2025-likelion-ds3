@@ -48,11 +48,12 @@
             </a>
             <br/>
 
-            <!-- 방문 수 -->
-            방문 수: {{ store.visit_count }}
+            주소: {{ store.address }}<br/>
+            
+            <!-- 거리 -->
+            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
             <br/>
 
-            주소: {{ store.address }}<br/>
             카테고리:
             {% for category in store.category.all %}
             {{ category.name }}{% if not forloop.last %}, {% endif %}

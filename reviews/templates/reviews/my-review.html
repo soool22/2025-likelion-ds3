@@ -8,7 +8,7 @@
     <title>내가 쓴 리뷰</title>
 </head>
 <body>
-    <a href="{% url 'accounts:main' %}">홈으로</a>
+    <a href="{% url 'home:main' %}">홈으로</a>
     <h2>내가 작성한 리뷰</h2>
 
     {% if reviews %}
@@ -20,7 +20,7 @@
                 {{ review.stars }}
                 <br/>
                 {{ review.comment|linebreaks }}
-                {{ review.created_at|date:"Y-m-d" }}
+                {{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})
                 <br/>
                 {% for img in review.images.all %}
                     {% if img.image %}
@@ -28,7 +28,11 @@
                             <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
                         </a>
                     {% endif %}
+                <br/>
                 {% endfor %}
+                {% if review.likes.count > 0 %}
+                    <p>{{ review.likes.count }}명이 이 리뷰를 추천해요</p>
+                {% endif %}
                 <br/>
                 <a href="{% url 'reviews:review-delete' review.id %}">삭제</a>
             </div>

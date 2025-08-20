@@ -88,3 +88,13 @@ class MissionComplete(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.mission.title} ({self.completed_at})"
+
+# 오늘의 인기 챌린지
+class DailyMissionRanking(models.Model):
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
+    date = models.DateField()  # 오늘 날짜
+    participant_count = models.PositiveIntegerField(default=0)
+    rank = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("mission", "date")

@@ -71,9 +71,16 @@ def review_list(request, store_id):
     # 별점별 리뷰 개수 (1~5)
     rating_counts = {i: reviews.filter(rating=i).count() for i in range(1, 6)}
 
+    now = timezone.now()  # 현재 시간
+
     # 각 리뷰에 별 표시 추가
     for review in reviews:
         review.stars = "★" * review.rating
+
+        # 날짜 차이 계산
+        delta = now - review.created_at
+        days = delta.days
+        review.natural_days = f"{days}일 전" if days > 0 else "오늘"
 
     return render(request, 'reviews/review-list.html', {
         'store': store,
@@ -131,11 +138,17 @@ def review_like_toggle(request, review_id):
 # 내가 작성한 리뷰
 @login_required
 def my_review(request):
-    reviews = Review.objects.filter(user=request.user).prefetch_related('images').order_by('-created_at')
-
+    reviews = Review.objects.filter(user=request.user).prefetch_related('images', 'likes').order_by('-created_at')
+    now = timezone.now()
     # 별점 표시용
     for review in reviews:
         review.stars = "★" * review.rating
+
+        # 날짜 차이 계산
+        delta = now - review.created_at
+        days = delta.days
+        review.natural_days = f"{days}일 전" if days > 0 else "오늘"
+
 
     return render(request, 'reviews/my-review.html', {
         'reviews': reviews,

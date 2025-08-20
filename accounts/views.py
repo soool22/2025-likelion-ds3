@@ -12,7 +12,7 @@ import os
 
 from visit_rewards import *
 
-
+from .models import UserLocation
 # ========== 기능 API 뷰 ==========
 
 def signup(request):
@@ -36,14 +36,14 @@ def login(request):
     form = AuthenticationForm(request, request.POST)
     if form.is_valid():
         auth_login(request, form.get_user())
-        return redirect('accounts:main')
+        return redirect('accounts:start-page')
 
     return render(request, "accounts/login.html", {'form': form})
 
 def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
-    return redirect('accounts:main')  # 메인 페이지로 이동
+    return redirect('accounts:login')  # 로그인으로 이동
 
 @login_required
 def delete_account(request):
@@ -51,7 +51,7 @@ def delete_account(request):
         request.user.delete()
         auth_logout(request)  
         messages.success(request, "회원 탈퇴가 완료되었습니다.")
-        return redirect('accounts:main')  # 메인 페이지로 이동
+        return redirect('accounts:login')  # 메인 페이지로 이동
     # GET 요청 등 예외 처리 (선택)
     return redirect('accounts:mypage')
 
@@ -82,9 +82,9 @@ def user_info_view(request):
 
 # ========== 페이지 렌더링 뷰 ==========
 
-
-def main_page_view(request):
-    return render(request, 'home/main.html')
+# 메인 화면 (소비자/점주로 시작)
+def start_page(request):
+    return render(request, "accounts/start-page.html")
 
 
 def signup_page_view(request):
@@ -184,3 +184,32 @@ def toggle_favorite(request):
         favorite.delete()
         return JsonResponse({"status": "removed"})
     return JsonResponse({"status": "added"})
+
+# -----------------------------
+# 사용자 위치 설정
+# -----------------------------
+@login_required
+def user_location(request):
+    """
+    사용자 위치 설정 페이지 + 저장 처리
+    """
+    loc, _ = UserLocation.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        loc.gu_name = request.POST.get("gu_name")
+        loc.address = request.POST.get("address")
+        loc.latitude = request.POST.get("latitude")
+        loc.longitude = request.POST.get("longitude")
+        loc.save()
+        messages.success(request, "위치가 저장되었습니다.")
+        # 저장 후 홈 페이지로 리다이렉트
+        return redirect('home:main')  # home 앱의 main 뷰
+
+    context = {
+        'saved_address': loc.address,
+        'saved_lat': loc.latitude,
+        'saved_lng': loc.longitude,
+        'saved_gu': loc.gu_name,
+    }
+    return render(request, 'accounts/user_location.html', context)
+
