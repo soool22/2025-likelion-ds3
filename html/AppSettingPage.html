@@ -1,10 +1,11 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/AppSettingPage.css" />
+        <link rel="stylesheet" href="{% static 'css/AppSettingPage.css'%}" />
     </head>
     <body>
         <main>
@@ -12,7 +13,7 @@
                 <header>
                     <div id="headerBox">
                         <a id="sideClickBox" href="../html/MyInfomationPage.html">
-                            <img id="sideClick" src="../img/leftside.svg" alt="사이드클릭" />
+                            <img id="sideClick" src="{% static 'img/leftside.svg'%}" alt="사이드클릭" />
                         </a>
                         <p id="appTitle">앱 설정</p>
                         <p> </p>
@@ -25,7 +26,7 @@
                             <p class="containerContent">알림 권한 설정</p>
                             <div class="containerLittleBox">
                                 <p class="agree">허용</p>
-                                <img class="containerSideClick" src="../img/rightside.svg" />
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}" />
                             </div>
                         </div>
                         <p id="containerWarning">
@@ -35,7 +36,7 @@
                         <div class="containerSmallBox">
                             <p class="containerContent">마케팅 알림 수신 동의</p>
                             <div class="containerLittleBox">
-                                <img class="containerSideClick" src="../img/rightside.svg" />
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}" />
                             </div>
                         </div>
                     </div>
@@ -46,13 +47,13 @@
                             <p class="containerContent">위치기반 서비스 이용약관 설정</p>
                             <div class="containerLittleBox">
                                 <p class="agree">동의</p>
-                                <img class="containerSideClick" src="../img/rightside.svg" />
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}" />
                             </div>
                         </div>
                         <div class="containerSmallBox">
                             <p class="containerContent">접근 권한 설정</p>
                             <div class="containerLittleBox">
-                                <img class="containerSideClick" src="../img/rightside.svg" />
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}" />
                             </div>
                         </div>
                     </div>
