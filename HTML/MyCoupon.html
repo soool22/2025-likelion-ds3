@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="../CSS/MyCoupon.css" />
+</head>
+<body>
+    <main>
+        <header>
+            <a href="./MyInfomationPage.html" style="text-decoration: none;">
+                <img src="../IMG/my-back.png" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 내 쿠폰 </div>
+        </header>
+        <div class="list">
+            <div class=" box">
+                <div class="B text"> 가게 이름</div>
+                <div class="mission-box">
+                    <div class="mission1 text">미션달성률</div>
+                    <div class="mission-box-flex">
+                        <div class="gray-range">
+                            <div class="yellow-range"></div>
+                        </div>
+                        <div class="percent text">50%</div>
+                        <img src="../IMG/my-trophy.png" class="trophy-img"></img>
+                    </div>
+                    <div class="mission-btn">
+                        <div class="mission-QR">
+                            <img src="../IMG/my-qr.png" class="qr-img">
+                            <div class="text" style="font-size: 14px;margin-left: 11px;">QR코드로 방문 인증하기</div>
+                        </div>
+                        <div class="other-btn-box">
+                            <div class="other-btn">
+                                <img src="../IMG/my-coupon.png" class="coupon-img">
+                                <div class="text" style="font-size: 14px;margin-left: 5px;">쿠폰 사용하기</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay hidden">
+            <div class="modal-box able hidden">
+                <img src="../IMG/modal-Character.png" class="modal-icon"></img>
+                <div class="modal-title">이 쿠폰은 사용이 가능합니다</div>
+                <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
+                <div class="modal-desc">이용 일시 2025.7.30<br>인증은 2025.8.1 점포 내 직원에게 주세요</div>
+                <button class="modal-btn">확인</button>
+            </div>
+            <div class="modal-box disable hidden">
+                <img src="../IMG/modal-Character.png" class="modal-icon"></img>
+                <div class="modal-title">이 쿠폰은 사용할 수 없습니다</div>
+                <div class="modal-error">QR 인증 후 다시 시도해주세요</div>
+                <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
+                <div class="modal-desc">이용 일시 2025.7.30<br>인증은 2025.8.1 점포 내 직원에게 주세요</div>
+                <button class="modal-btn">확인</button>
+            </div>
+            <div class="modal-box confirmation hidden">
+                <img src="../IMG/modal-Character.png" class="modal-icon"></img>
+                <div class="modal-title">쿠폰 사용은 방문 인증 후<br>사용 가능합니다</div>
+                <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
+                <div class="modal-desc">방문 인증 유효 기간:<br>이용 당일~ 이용 2일 후</div>
+                <button class="modal-btn">방문 인증 여부 확인하기</button>
+            </div>
+        </div>
+    </main>
+    <script src="../JS/MyCoupon.js"></script>
+</body>
+</html>
