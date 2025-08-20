@@ -14,12 +14,11 @@ main{
 }
 
 header{
-    display: flex;
-    margin-top: 81px;
+        display: flex;
+    margin-top: 32px;
     gap: 101px;
     align-items: center;
-    height: 29px;
-    margin-left: 156px;
+    margin-left: 174px;
 }
 
 .tittle{
