@@ -103,6 +103,7 @@ header{
     align-items: center;
     margin-left: 22px;
     margin-top: 9px;
+    cursor: pointer;
 }
 
 .qr-img{
@@ -117,6 +118,7 @@ header{
     align-items: center;
     margin-top: 8px;
     margin-left: 22px;
+    cursor: pointer;
 }
 
 .other-btn{
@@ -127,7 +129,7 @@ border-radius: 11px;
 background: #F5F5F5;
 display: flex;
 align-items: center;
-
+text-decoration: none;
 }
 
 .benefit-img{
