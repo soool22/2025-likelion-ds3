@@ -1,16 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="../CSS/WriteReview.css" />
+    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
 </head>
 <body>
     <main>
         <header>
             <a href="./MyReviewWrite.html" style="text-decoration: none;">
-            <img src="../IMG/my-back.png" class="back-img"></img>
+            <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text" > 평가 및 리뷰 작성 </div>
         </header>
@@ -20,35 +21,35 @@
                 <div class="evaluation-food">
                     <div class="evaluation-food-text">음식은 어떠셨나요?</div>
                     <div class="evaluation-food-star">
-                        <img src="../IMG/my-star.png" class="star1">
-                        <img src="../IMG/star-yellow.png" class="y-star1"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png" class="star2">
-                        <img src="../IMG/star-yellow.png" class="y-star2"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="star3">
-                        <img src="../IMG/star-yellow.png" class="y-star3"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="star4">
-                        <img src="../IMG/star-yellow.png" class="y-star4"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="star5">
-                        <img src="../IMG/star-yellow.png" class="y-star5"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}" class="star1">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star1"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}" class="star2">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star2"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="star3">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star3"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="star4">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star4"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="star5">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star5"style="width: 22px; display: none;">
                     </div>
                 </div>
                 <div class="evaluation-service">
                     <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
                     <div class="evaluation-service-star">
-                        <img src="../IMG/my-star.png" class="s-star1">
-                        <img src="../IMG/star-yellow.png"  class="s-y-star1" style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="s-star2">
-                        <img src="../IMG/star-yellow.png" class="s-y-star2"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="s-star3">
-                        <img src="../IMG/star-yellow.png"  class="s-y-star3"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="s-star4">
-                        <img src="../IMG/star-yellow.png"  class="s-y-star4"style="width: 22px; display: none;">
-                        <img src="../IMG/my-star.png"class="s-star5">
-                        <img src="../IMG/star-yellow.png"  class="s-y-star5"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
+                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
+                        <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
+                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
+                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
+                        <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
+                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
                     </div>
                 </div>
             </div>
-            <img src="../IMG/store-img.png" class="store-img" ></img>
+            <img src="{% static 'IMG/store-img.png'%}" class="store-img" ></img>
         </div>
         <div class="separation-box"></div>
         <div class="write-review">
@@ -59,17 +60,17 @@
             ></textarea>
             <div class="input-area">
                 <div class="upload-content">
-                    <img src="../IMG/camera.png" alt="업로드" class="upload-icon">
+                    <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
                     <span class="upload-text">사진 추가</span>
                 </div>
                 <input type="file" class="file-input" accept="image/*">
             </div>
             <div class="stemp-area">
-                <img src="../IMG/my-qr.png" class="stemp-img">
+                <img src="{% static 'IMG/my-qr.png'%}" class="stemp-img">
                 <div class="stemp-area-text">방문 인증 후 스템프 적립</div>
             </div>
         </div>
     </main>
-    <script src="../JS/WriteReview.js"></script>
+    <script src="{% static 'JS/WriteReview.js'%}"></script>
 </body>
 </html>

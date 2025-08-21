@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/MyInfomationPage.css" />
+        <link rel="stylesheet" href="{% static 'css/MyInfomationPage.css'%}" />
     </head>
     <body>
         <main>
@@ -12,10 +12,10 @@
                 <header>
                     <a id="headerBox" href="./MyEditPage.html">
                         <p id="userName">로그인해주세요.</p>
-                        <img id="sideClick" src="../img/rightsidegray.svg" alt="사이드클릭" />
+                        <img id="sideClick" src="{% static 'img/rightsidegray.svg'%}" alt="사이드클릭" />
                     </a>
                     <a id="settingClick" href="../html/AppSettingPage.html">
-                        <img id="setting" src="../img/settings.svg" alt="설정 아이콘" />
+                        <img id="setting" src="{% static 'img/settings.svg'%}" alt="설정 아이콘" />
                     </a>
                 </header>
                 <div id="containerBody">
@@ -24,7 +24,7 @@
                             <div class="achievementSmallBox">
                                 <p class="achievementTitle">같은 음료 3번 먹기</p>
                                 <a href="../html/PrograssChallengePage.html">
-                                    <img class="sideClick" src="../img/rightside.svg"/>
+                                    <img class="sideClick" src="{% static 'img/rightside.svg'%}"/>
                                 </a>
                             </div>
                             <div class="achievementSmallBox2">
@@ -35,14 +35,14 @@
                                     <p class="nowScore">2</p>
                                     <p class="totalScore">/3</p>
                                 </div>
-                                <img class="stampIcon" src="../img/stamp.svg"/>
+                                <img class="stampIcon" src="{% static 'img/stamp.svg'%}"/>
                             </div>
                         </div>
                         <div class="achievementBox">
                             <div class="achievementSmallBox">
                                 <p class="achievementTitle">골목 3코스 완주</p>
                                 <a href="../html/PrograssChallengePage.html">
-                                    <img class="sideClick" src="../img/rightside.svg"/>
+                                    <img class="sideClick" src="{% static 'img/rightside.svg'%}"/>
                                 </a>
                             </div>
                             <div class="achievementSmallBox2">
@@ -53,7 +53,7 @@
                                     <p class="nowScore">1</p>
                                     <p class="totalScore">/3</p>
                                 </div>
-                                <img class="stampIcon" src="../img/stamp.svg"/>
+                                <img class="stampIcon" src="{% static 'img/stamp.svg'%}"/>
                             </div>
                         </div>
                     </div>
@@ -62,24 +62,24 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="./MyReview.html">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/myreview.svg"/>
+                                    <img class="icon" src="{% static 'img/myreview.svg'%}"/>
                                     <p class="containerContent">내 리뷰</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/visithistory.svg"/>
+                                    <img class="icon" src="{% static 'img/visithistory.svg'%}"/>
                                     <p class="containerContent">방문 기록</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="./RecentView.html">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/recentstore.svg"/>
+                                    <img class="icon" src="{% static 'img/recentstore.svg'%}"/>
                                     <p class="containerContent">최근 본 매장</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -88,17 +88,17 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="./MyPoint.html">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/mystamp.svg"/>
+                                    <img class="icon" src="{% static 'img/mystamp.svg'%}"/>
                                     <p class="containerContent">내 포인트</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="./MyCoupon.html">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/mycoupon.svg"/>
+                                    <img class="icon" src="{% static 'img/mycoupon.svg'%}"/>
                                     <p class="containerContent">내 쿠폰</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -107,31 +107,31 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/notice.svg"/>
+                                    <img class="icon" src="{% static 'img/notice.svg'%}"/>
                                     <p class="containerContent">공지사항</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/notification.svg"/>
+                                    <img class="icon" src="{% static 'img/notification.svg'%}"/>
                                     <p class="containerContent">변경사항 안내</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/customer.svg"/>
+                                    <img class="icon" src="{% static 'img/customer.svg'%}"/>
                                     <p class="containerContent">고객센터</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/policy.svg"/>
+                                    <img class="icon" src="{% static 'img/policy.svg'%}"/>
                                     <p class="containerContent">약관 및 정책</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -140,10 +140,10 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="../img/payment.svg"/>
+                                    <img class="icon" src="{% static 'img/payment.svg'%}"/>
                                     <p class="containerContent">결제 내역</p>
                                 </div>
-                                <img class="containerSideClick" src="../img/rightside.svg"/>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -152,23 +152,23 @@
             
             <div id="tapBar">
                 <a class="tapBarBox" href="../html/HomePage.html">
-                    <img class="tapBarIcon" src="../img/home.svg" alt="홈 선택 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
                     <p class="tapBarLabel">홈</p>
                 </a>
                 <a class="tapBarBox" href="../html/StoreSearchPage.html">
-                    <img class="tapBarIcon" src="../img/search.svg" alt="가게 검색 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
                     <p class="tapBarLabel">가게 검색</p>
                 </a>
                 <a class="tapBarBox" href="./InterestingStore.html">
-                    <img class="tapBarIcon" src="../img/intereststore.svg" alt="관심 매장 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
                 <a class="tapBarBox">
-                    <img class="tapBarIcon" src="../img/myinfopicked.svg" alt="내 정보 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/myinfopicked.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel picked">내 정보</p>
                 </a>
             </div>
         </main>
     </body>
-    <script src="../js/MyInfomationPage.js"></script>
+    <script src="{% static 'js/MyInfomationPage.js'%}"></script>
 </html>
