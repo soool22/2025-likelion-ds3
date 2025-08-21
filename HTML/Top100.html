@@ -1,16 +1,16 @@
-{% load static %}
+    {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/Top100&ReviewBest.css'%}" />    
+    <link rel="stylesheet" href="{% static 'css/Top100&ReviewBest.css'%}" />    
 </head>
 <body>
     <main>
         <header>
-            <a href="./HomePage.html" style="text-decoration: none;">
+            <a href="{% url 'home:main' %}" style="text-decoration: none;">
                 <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-box">
@@ -23,43 +23,37 @@
         <div class="store-info-box" id="storeList"></div>
     </main>
 
-    <script>
-        // 1) 배열 데이터 (최대 7개)
-        const stores = [
-            { location: "도봉구, 양식", name: "미뇨리", distance: "300m", status: "영업중" },
-            { location: "강남구, 카페", name: "스타커피", distance: "120m", status: "영업중" },
-            { location: "서초구, 한식", name: "김밥천국", distance: "450m", status: "영업종료" },
-            { location: "송파구, 일식", name: "스시야", distance: "200m", status: "영업중" },
-            { location: "마포구, 중식", name: "짬뽕타임", distance: "350m", status: "영업중" },
-            { location: "용산구, 양식", name: "피자스토리", distance: "500m", status: "영업종료" },
-            { location: "종로구, 분식", name: "떡볶이집", distance: "180m", status: "영업중" }
-        ];
-
-        // 2) DOM에 출력
-        const storeList = document.getElementById("storeList");
-
-        stores.forEach((store, index) => {
-            const storeBox = `
-                <div class="box">
+            {% for store in stores %}
+                <a href="{% url 'stores:store-detail' store.id %}" class="box">
                     <div class="left-box">
-                        <div class="first-line text">${store.location}</div>
+                        <div class="first-line text">{{ store.address }} 
+                            {% for category in store.category.all %}
+                                {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
                         <div class="second-line">
-                            <div class="num text">${index + 1}</div>
-                            <div class="store-name text">${store.name}</div>
+                            <div class="num text">{{ forloop.counter }}</div>
+                            <div class="store-name text">{{ store.name }}</div>
                         </div>
                         <div class="third-line">
-                            <div class="position text">📍 ${store.distance}</div>
+                            <div class="position text">📍{{ store.distance|default_if_none:"-"|floatformat:0 }} m</div> 
                             <div class="operation">
-                                <img src="{% static 'IMG/Time.svg'%}">
-                                <div class="time text">${store.status}</div>
+                                <img src="{% static '../static/IMG/Time.svg'%}">
+                                <!-- 영업 시간 -->
+                                {% if store.is_open %}
+                                    <div class="time text">영업중</div>
+                                {% else %}
+                                    <div class="time text">영업종료</div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="store-img"></div>
-                </div>
-            `;
-            storeList.insertAdjacentHTML("beforeend", storeBox);
-        });
-    </script>
+                    {% if store.image %}
+                        <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="store-img">
+                    {% else %}
+                        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" class="store-img">
+                    {% endif %}
+                </a>
+            {% endfor %}
 </body>
 </html>
