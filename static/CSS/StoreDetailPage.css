@@ -1,0 +1,290 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    min-height: 100dvh;
+    /* margin-bottom: 65px; */
+    background-color: white;
+    flex-direction:column;
+
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+/* 여기까지 기본틀 */
+/* 탭바 시작 */
+#tapBar{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    height: 64px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e5e5;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+}
+
+.tapBarBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.tapBarIcon{
+    width: 24px;
+    height: 24px;
+}
+
+.tapBarLabel{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cccccc;
+}
+
+.tapBarLabel.picked{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+/* 탭바 끝 */
+
+p{
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+#container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#headerBox{
+    width: 345px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+#sideClick{
+    width: 8px;
+}
+
+#star{
+    width: 16px;
+}
+
+#keep{
+    display: none;
+}
+
+#containerBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 17px;
+    margin-top: 20px;
+}
+
+#storeImg{
+width: 275px;
+height: 157px;
+/* background-color: #cccccc; */
+border-radius: 12px;
+}
+
+#storeInfoBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#category{
+    color: #7B7B7B;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+#storeName{
+    color: #000;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+#scoreBox{
+    width: 73px;
+    height: 23px;
+    border-radius: 15px;
+    border: 1px solid #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 5px;
+}
+
+#realScore{
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#scoreCount{
+    color: #B7B7B7;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+#address{
+color: #7B7B7B;
+font-size: 11px;
+font-weight: 500;
+margin-top: 13px;
+}
+
+#buttonBox{
+width: 275px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+}
+
+#certificationBtn,#reviewBtn{
+    width: 275px;
+    height: 35px;
+    border-radius: 11px;
+    background-color: #FFB635;
+    outline: none;
+    box-shadow: none;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#reviewBtn{
+    display: none;
+}
+
+#aiBtn{
+    width: 275px;
+    height: 35px;
+    border-radius: 11px;
+    background-color: #f5f5f5;
+    outline: none;
+    box-shadow: none;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnInnerBox{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btnIcon{
+    width: 18px;
+}
+
+.btnText1{
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.btnText2{
+    color: #7B7B7B;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.containerContent{
+width: 100%;
+display: flex;
+flex-direction: column;
+}
+
+.containerTitle{
+    width: 100%;
+    padding: 7px 40px;
+    border-bottom: solid 1.5px #cccccc;
+    box-sizing: border-box;
+    margin-top: 47px;
+    color: #000;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.containerSmallContentBox{
+    width: 100%;
+    padding: 7px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.containerTinyContentBox{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.containerSmallContent{
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.menuSmallBox{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mainMenu{
+    width: 24px;
+    height: 12px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    color: #CCC;
+    font-size: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.price{
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+}

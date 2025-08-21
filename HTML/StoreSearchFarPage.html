@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/StoreSearchFarPage.css" />
+        <link rel="stylesheet" href="{% static 'css/StoreSearchFarPage.css'%}" />
     </head>
     <body>
         <main>
@@ -12,7 +13,7 @@
                 <form>
                     <div id="searchBox">
                         <div id="search">
-                            <img id="searchIcon" src="../img/searchpicked.svg" alt="검색 아이콘"/>
+                            <img id="searchIcon" src="{% static 'img/searchpicked.svg'%}" alt="검색 아이콘"/>
                             <button id="searchBtn"></button> 
                             <!-- 검색 아이콘 누르면 버튼 눌리게 js -->
                             <input id="searchInput" type="text" placeholder="매장, 메뉴로 검색해 보세요." />
@@ -71,7 +72,7 @@
                             <p class="storeComment">방문 인증 후 리뷰 남기면 음료 한 캔 무료!</p>
                             <div class="aiBox"></div>
                             <div class="aiReviewBox">
-                                <img class="aiReviewIcon" src="../img/ai.svg" alt="ai 아이콘"/>
+                                <img class="aiReviewIcon" src="{% static 'img/ai.svg'%}" alt="ai 아이콘"/>
                                 <div class="aiReview">AI 리뷰 요약</div>
                             </div>
                             <div style="height: 180px;"></div>
@@ -82,23 +83,23 @@
             </div>
             <div id="tapBar">
                 <a class="tapBarBox" href="../html/HomePage.html">
-                    <img class="tapBarIcon" src="../img/home.svg" alt="홈 선택 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
                     <p class="tapBarLabel">홈</p>
                 </a>
                 <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="../img/searchpicked.svg" alt="가게 검색 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
                     <p class="tapBarLabel picked">가게 검색</p>
                 </a>
                 <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="../img/intereststore.svg" alt="관심 매장 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
                 <a class="tapBarBox" href="../html/MyInfomationPage.html">
-                    <img class="tapBarIcon" src="../img/myinfo.svg" alt="내 정보 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel">내 정보</p>
                 </a>
             </div>
         </main>
     </body>
-    <script src="../js/StoreSearchFarPage.js"></script>
+    <script src="{% static 'js/StoreSearchFarPage.js'%}"></script>
 </html>

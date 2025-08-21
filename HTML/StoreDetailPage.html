@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/StoreDetailPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <div id="headerBox">
+                        <a href="">
+                            <img id="sideClick" src="{% static 'img/leftside.svg'%}"/>
+                        </a>
+                        <img id="star" src="{% static 'img/star.svg'%}"/>
+                        <button id="keep" type="button">찜하기</button>
+                    </div>
+                </header>
+                <div id="containerBox">
+                    <img id="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
+                    <div id="storeInfoBox">
+                        <p id="category">음식점·분식</p>
+                        <p id="storeName">산책</p>
+                        <a href="">
+                            <div id="scoreBox">
+                                <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>
+                                <p id="realScore">4.8</p>
+                                <p id="scoreCount">(20)</p>
+                            </div>
+                        </a>
+                        <p id="address">주소: 서울 도봉구 쌍문동 422-80</p>
+                    </div>
+                    <div id="buttonBox">
+                        <button id="certificationBtn" type="button">
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/qrwhite.svg'%}"/>
+                                <p class="btnText1">QR 코드로 방문 인증하기</p>
+                            </div>
+                        </button>
+                        <button id="reviewBtn" type="button">
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/reviewwhite.svg'%}"/>
+                                <p class="btnText1">리뷰 작성하기</p>
+                            </div>
+                        </button>
+                        <button id="aiBtn" type="button">
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/aigray.svg'%}"/>
+                                <p class="btnText2">AI 리뷰 요약 보기</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="containerContent">
+                    <div class="containerTitle">진행중인 챌린지</div>
+                    <div class="containerSmallContentBox">
+                        <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
+                        <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
+                    </div>
+                </div>
+                <div class="containerContent">
+                    <div class="containerTitle">상품/메뉴</div>
+                    <div class="containerSmallContentBox">
+                        <div class="containerTinyContentBox">
+                            <div class="menuSmallBox">
+                                <div class="mainMenu">대표</div>
+                                <p class="containerSmallContent">치즈알밥</p>
+                            </div>
+                            <p class="price">6000원</p>
+                        </div>
+                        <div class="containerTinyContentBox">
+                            <div class="menuSmallBox">
+                                <p class="containerSmallContent">김치알밥</p>
+                            </div>
+                            <p class="price">6000원</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tapBar">
+                <a class="tapBarBox" href="../html/HomePage.html">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
+                </a>
+                <a class="tapBarBox" href="">
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel picked">가게 검색</p>
+                </a>
+                <a class="tapBarBox" href="./InterestingStore.html">
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
+                    <p class="tapBarLabel">관심 매장</p>
+                </a>
+                <a class="tapBarBox" href="../html/MyInfomationPage.html">
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
+                    <p class="tapBarLabel">내 정보</p>
+                </a>
+            </div>
+        </main>
+    </body>
+    <script src="{% static 'js/StoreDetailPage.js'%}"></script>
+</html>

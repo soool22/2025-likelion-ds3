@@ -1,0 +1,160 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    min-height: 100dvh;
+    background-color: white;
+    flex-direction:column;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+
+}
+/* 여기까지 기본틀 */
+
+#container{
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 헤더 시작 */
+header{
+    width: 335px;
+    height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: env(safe-area-inset-top);
+}
+
+#headerBox{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 335px;
+}
+
+#appTitle{
+    margin: 0;
+    color: #000000;
+    font-size: 22px;
+    font-weight: 600;
+}
+/* 헤더 끝 */
+
+p{
+    margin: 0;
+}
+
+#containerBody{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#alarmChoose{
+    display: flex;
+    margin: 23px 0;
+    width: 310px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#alarmChooseBox{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#chooseIcon{
+    width: 18px;
+}
+
+#alarmChooseContent{
+    font-size: 13px;
+    color: #000000;
+    font-weight: 600;
+}
+
+.switchBtn{
+    width: 29px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: #d9d9d9;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: background 0.3s;
+    box-sizing: border-box;
+}
+
+.switchBtnCircle{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: solid 0.3px #cccccc;
+}
+
+.switchBtn.picked{
+    width: 29px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: #FFCC02;
+    display: none;
+    padding: 2px;
+    transition: background 0.3s;
+    box-sizing: border-box;
+    flex-direction: row-reverse;
+}
+
+.switchBtnCircle.picked{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: solid 0.3px #E8B900;
+}
+
+.alarmBox{
+    height: 58px;
+    width: 430px;
+    border: 1px solid #CCCCCC;
+    margin-top: -1px;
+    padding: 9px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.alarmSmallBox{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.alarmTitle{
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.alarmDate{
+    color: #7B7B7B;
+    font-size: 14px;
+    font-weight: 600;
+}
