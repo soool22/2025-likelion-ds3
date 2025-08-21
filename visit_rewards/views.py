@@ -167,11 +167,11 @@ def my_rewards(request):
 
 
 @login_required
-def shop_items(request):
+def my_character(request):
     """구매 가능한 꾸미기 아이템 목록"""
     items = Item.objects.all()
     user_points = Reward.objects.filter(user=request.user, amount__gt=0, used=False).aggregate(total=Sum('amount'))['total'] or 0
-    return render(request, 'visit_rewards/item_shop.html', {'items': items, 'user_points': user_points})
+    return render(request, 'visit_rewards/my_character.html', {'items': items, 'user_points': user_points})
 
 
 @login_required
@@ -182,7 +182,7 @@ def buy_item(request, item_id):
 
     if user_points < item.point_cost:
         messages.error(request, f"포인트가 부족합니다. 현재 {user_points}점, 아이템 비용 {item.point_cost}점")
-        return redirect('visit_rewards:shop_items')
+        return redirect('visit_rewards:my_character')
 
     # 포인트 차감
     remaining_cost = item.point_cost

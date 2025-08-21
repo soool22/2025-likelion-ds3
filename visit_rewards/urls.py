@@ -12,7 +12,7 @@ urlpatterns = [
     path('rewards/', views.my_rewards, name='my_rewards'),
 
     # 꾸미기 아이템 관련
-    path('shop/items/', views.shop_items, name='shop_items'),                     # 아이템 샵
+    path('shop/items/', views.my_character, name='my_character'),                     # 아이템 샵
     path('shop/items/buy/<int:item_id>/', views.buy_item, name='buy_item'),      # 아이템 구매
 
     # 기프티콘 관련
