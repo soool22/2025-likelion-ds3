@@ -6,8 +6,7 @@ from visit_rewards import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),  # 루트 경로 처리
-    path('accounts/', include('accounts.full_urls')),  # 커스텀 + 소셜 로그인 통합
+    path('', include('accounts.full_urls')),  # 커스텀 + 소셜 로그인 통합(루트 경로 처리)
     path('visit_rewards/', include('visit_rewards.urls')),
     path('home/',include('home.urls')), # home url
     path('stores/',include('stores.urls')), # stores url

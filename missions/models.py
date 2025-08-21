@@ -3,6 +3,7 @@ from django.conf import settings
 from stores.models import Store
 from django.utils import timezone
 from datetime import timedelta
+from visit_rewards.models import Visit
 
 # 챌린지 종류
 class MissionType(models.Model):
@@ -88,3 +89,24 @@ class MissionComplete(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.mission.title} ({self.completed_at})"
+
+# 오늘의 인기 챌린지
+class DailyMissionRanking(models.Model):
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
+    date = models.DateField()  # 오늘 날짜
+    participant_count = models.PositiveIntegerField(default=0)
+    rank = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("mission", "date")
+
+# 방문 1회당 누적금액 입력 1회
+class VisitAmountAccess(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    visit = models.ForeignKey(Visit, on_delete=models.CASCADE)
+    used = models.BooleanField(default=False)  # 금액 입력 완료 여부
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'store', 'created_at')  

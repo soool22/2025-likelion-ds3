@@ -10,6 +10,8 @@ from django.db.models import Sum
 from django.views.decorators.http import require_POST
 import json
 from django.db.models import Count
+from django.utils import timezone
+from missions.models import Mission, MissionProgress
 
 # 방문 인증 페이지 + QR 생성
 def visit_check(request, store_id):
@@ -55,6 +57,32 @@ def visit_store(request):
 
     # 방문 인증 생성
     visit = Visit.objects.create(store=store, test=is_test, user=request.user)
+    
+    # ##### 챌린지 인증 추가(누적 방문, 기간 내 방문) #####
+    now = timezone.now()
+    missions = Mission.objects.filter(
+        store=store,
+        start_date__lte=now,
+        end_date__gte=now,
+        mission_type__key__in=['visit_count', 'visit_period']
+    )
+
+    for mission in missions:
+        progress, _ = MissionProgress.objects.get_or_create(mission=mission, user=request.user)
+        if mission.mission_type.key == 'visit_count':
+            progress.current_value += 1
+        elif mission.mission_type.key == 'visit_period':
+            # Visit 테이블에서 DB 반영 후 카운트
+            visit_count = Visit.objects.filter(
+                store=store,
+                user=request.user,
+                visit_time__gte=mission.start_date,
+                visit_time__lte=mission.end_date
+            ).count()
+            progress.current_value = visit_count
+        progress.check_completion()
+        progress.save()
+    # ###############################
 
     # 포인트 적립 (예: 방문 인증 1000포인트)
     points_earned = 1000
