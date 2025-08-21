@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelector(".account-arrow3")?.addEventListener("click", () => {
-    document.querySelector(".certification")?.classList.remove("hidden");
+    document.querySelector(".num")?.classList.remove("hidden");
   });
 
   document.querySelector(".account-arrow4")?.addEventListener("click", () => {
@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔹 닫기 버튼들 (X, back)
   // 1) 모든 팝업 안에 있는 X 이미지
-  document.querySelectorAll(".nick-name .nick-name-tittle img, .certification .certification-tittle img").forEach(btn => {
+  document.querySelectorAll(".nick-name .nick-name-tittle img, .num .num-tittle img").forEach(btn => {
     btn.addEventListener("click", () => {
-      btn.closest(".nick-name, .certification")?.classList.add("hidden");
+      btn.closest(".nick-name, .num")?.classList.add("hidden");
     });
   });
 
@@ -33,26 +33,50 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
 document.addEventListener("DOMContentLoaded", () => {
-  // ✅ 인증하기 버튼 클릭 이벤트
-  const passwordBtn = document.querySelector(".password-btn");
+  const passwordInput = document.querySelector('input[name="password"]');
+  const passwordCheckInput = document.querySelector('input[name="passwordcheck"]');
   const passwordCheckBtn = document.querySelector(".password-check-btn");
 
-  if (passwordBtn && passwordCheckBtn) {
-    passwordBtn.addEventListener("click", () => {
-      // 🔹 여기에 실제 인증 성공 로직이 들어가야 함
-      const isSuccess = true; // 지금은 테스트용으로 무조건 성공
-
-      if (isSuccess) {
-        // 클래스 추가해서 색상 변경
-        passwordCheckBtn.classList.add("active");
+  function validatePasswordMatch() {
+    if (passwordInput && passwordCheckInput && passwordCheckBtn) {
+      if (passwordInput.value && passwordInput.value === passwordCheckInput.value) {
+        passwordCheckBtn.style.display = "block"; // 버튼 보이기
+      } else {
+        passwordCheckBtn.style.display = "none";  // 버튼 숨기기
       }
-    });
+    }
   }
+
+  if (passwordInput && passwordCheckInput) {
+    passwordInput.addEventListener("input", validatePasswordMatch);
+    passwordCheckInput.addEventListener("input", validatePasswordMatch);
+  }
+
+  // ✅ "비밀번호 설정 완료" 버튼 클릭 시 팝업 닫기
   document.querySelectorAll(".password-check-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       btn.closest(".password")?.classList.add("hidden");
     });
+  });
+
+  // 시작할 때 버튼 숨겨두기
+  if (passwordCheckBtn) {
+    passwordCheckBtn.style.display = "none";
+  }
+});
+
+
+// 모든 toggle-btn에 이벤트 달기 (비밀번호 보이기/숨기기)
+document.querySelectorAll(".toggle-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const input = this.parentElement.querySelector("input");
+    if (input) {
+      if (input.type === "password") {
+        input.type = "text";   // 보이게
+      } else {
+        input.type = "password"; // 숨기기
+      }
+    }
   });
 });
