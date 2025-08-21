@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
 from django.http import JsonResponse
 from collections import defaultdict
+from django.db import models
 
 from .models import Store, Category
 from .forms import StoreForm
@@ -12,6 +13,9 @@ from .utils import haversine, get_user_location, annotate_distance, calculate_vi
 from visit_rewards.models import Visit
 from ai_services.services import summarize_reviews  # ai_services에서 요약 함수
 from datetime import timedelta
+
+from missions.models import VisitAmountAccess
+from visit_rewards.models import Visit
 
 ################ 점주 ################
 
@@ -99,7 +103,7 @@ def store_update(request, store_id):
 
 ################ 소비자용 ################
 
-# 공통 필터 함수
+# 공통 필터 함수 (카테고리 + 지역구 + 거리)
 def filter_stores(request, stores):
     category_slug = request.GET.get('category')
     gu = request.GET.get('gu')
@@ -133,14 +137,23 @@ def public_store_list(request):
 
 # 인기 가게 (방문자 수)
 def popular_store_list(request):
+    # 전체 Store 조회
     stores = Store.objects.all()
+
     stores, categories, user_lat, user_lng, selected_gu, selected_category = filter_stores(request, stores)
 
-    today = timezone.localdate()
-    visits_today = Visit.objects.filter(visit_time__date=today)
-    stores = calculate_visit_counts(stores, visits_today, request.GET.get('category'))
+    # 방문 수 계산: 모든 Visit 객체에서 store별 누적 방문수
+    visit_counts = Visit.objects.values('store_id').annotate(count=models.Count('id'))
+    visit_count_dict = {vc['store_id']: vc['count'] for vc in visit_counts}
 
-    stores = sorted(stores, key=lambda s: (-getattr(s, 'visit_count', 0), -s.id))
+    # Store 객체에 visit_count 속성 추가
+    for store in stores:
+        store.visit_count = visit_count_dict.get(store.id, 0)
+
+    # 방문 수 높은 순, 같은 방문수면 최신 등록 순
+    stores = sorted(stores, key=lambda s: (-s.visit_count, -s.id))
+
+    categories = Category.objects.all()
 
     return render(request, 'stores/popular-store-list.html', {
         'stores': stores,
@@ -242,7 +255,15 @@ def store_detail(request, store_id):
     if request.user.is_authenticated:
         is_favorite = request.user.favorites.filter(id=store.id).exists()
 
-    # DB에서 가져온 값
+    time_threshold = timezone.now() - timedelta(hours=24)
+    recent_visit = Visit.objects.filter(user=request.user, store=store, visit_time__gte=time_threshold).order_by('-visit_time').first()
+
+    user_can_access_amount = False
+    if recent_visit:
+        access_record = VisitAmountAccess.objects.filter(user=request.user, store=store, visit=recent_visit).first()
+        if not access_record or not access_record.used:
+            user_can_access_amount = True
+
     context = {
         'store': store,
         'products': products,
@@ -251,6 +272,7 @@ def store_detail(request, store_id):
         'review_keywords': store.review_keywords.split(",") if store.review_keywords else [],
         'snippet': store.review_snippet,
         'is_favorite': is_favorite,
+        'user_can_access_amount': user_can_access_amount,
     }
 
     return render(request, 'stores/store-detail.html', context)

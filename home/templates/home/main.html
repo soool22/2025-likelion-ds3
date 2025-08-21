@@ -6,30 +6,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 페이지</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 16px;
+        background: #f9f9f9;
+    }
+    h2 {
+        margin-top: 32px;
+        margin-bottom: 8px;
+    }
+    .store-section {
+        margin-bottom: 32px;
+    }
+    .store-cards {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+    .store-card {
+        flex: 0 0 180px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+        text-align: center;
+        background: #fff;
+    }
+    .store-card h3 {
+        font-size: 1em;
+        margin: 8px 0;
+    }
+    .store-cards::-webkit-scrollbar {
+        height: 6px;
+    }
+    .store-cards::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+    }
+    a {
+        text-decoration: none;
+        color: #007BFF;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    </style>
 </head>
 <body>
+
     <h2>메인 페이지</h2>
     <hr>
 
-    <!-- 구 선택 -->
-    {% if user_location and user_location.gu_name %}
-            <div>
-                <a href="{% url 'accounts:user_location' %}">
-                    {{ user_location.gu_name }}▼
-                </a>
-            </div>
-    {% else %}
-        <div>
-            <a href="{% url 'accounts:user_location' %}">위치 설정</a>
-        </div>
-    {% endif %}
-
-    <br>
-
-    <!-- 로그인 상태 -->
     {% if request.user.is_authenticated %}
-        {{ request.user.nickname }}({{ request.user.username }})님 환영합니다.   
-        <a href="{% url 'accounts:logout' %}">로그아웃</a><br/><br>
+        {{ request.user.nickname }}({{ request.user.username }})님 환영합니다.  
+        <a href="{% url 'accounts:logout' %}">로그아웃</a><br><br>
         <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
     {% else %}
         <a href="{% url 'accounts:login' %}">로그인</a>
@@ -37,50 +69,65 @@
     {% endif %}
 
     <hr>
-
-    <!-- 가게 정렬 -->
-    <nav>
-    {% if gu_name %} 
-        <a href="{% url 'stores:public-store-list' %}?gu={{ gu_name }}">모든 가게</a> |
-        <a href="{% url 'stores:popular-store-list' %}?gu={{ gu_name }}">방문자 랭킹</a> |
-        <a href="{% url 'stores:review-best-list' %}?gu={{ gu_name }}">리뷰 Best</a>
-    {% else %}
-        <a href="{% url 'stores:public-store-list' %}">모든 가게</a> |
-        <a href="{% url 'stores:popular-store-list' %}">방문자 랭킹</a> |
-        <a href="{% url 'stores:review-best-list' %}">리뷰 Best</a>
-
-    <h2>오늘의 추천 가게</h2>
-    <div class="store-cards">
-        {% for store in recommended_stores %}
-            <div class="store-card">
-                <h3>{{ store.name }}</h3>
-                <p>{{ store.reason }}</p>
-            </div>
-        {% endfor %}
+    <!-- 구 선택 -->
+    <div>
+        <a href="{% url 'accounts:user_location' %}">
+            {% if user_location and user_location.gu_name %}
+                {{ user_location.gu_name }}▼
+            {% else %}
+                위치 설정
+            {% endif %}
+        </a>
     </div>
 
-    <style>
-    .store-cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-    .store-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 12px;
-        width: 220px;
-        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-    }
-    </style>
 
-    {% endif %}
-    </nav>
+    <!-- 방문자 랭킹 -->
+    <div class="store-section">
+        <h2>방문자 랭킹</h2>
+        <div class="store-cards">
+            {% for store in top_visits %}
+                <div class="store-card">
+                    <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'stores:popular-store-list' %}">더보기</a>
+    </div>
+
+    <!-- 리뷰 베스트 -->
+    <div class="store-section">
+        <h2>리뷰 베스트</h2>
+        <div class="store-cards">
+            {% for store in review_best %}
+                <div class="store-card">
+                    <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'stores:review-best-list' %}">더보기</a>
+    </div>
+
+    <!-- AI 추천 가게 -->
+    <div class="store-section">
+        <h2>AI 추천 가게</h2>
+        <div class="store-cards">
+            {% if recommended_stores %}
+                {% for store in recommended_stores %}
+                    <div class="store-card">
+                        <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>추천 가게를 불러오는 중입니다...</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'stores:public-store-list' %}">더보기</a>
+    </div>
 
     <!-- 오늘의 인기 챌린지 -->
     {% if gu_name %} <!-- 위치 설정해야 오늘의 인기 챌린지 나타남 -->
-    <h3>오늘의 인기 챌린지</h3>
-    {% if rankings %}
+        <h3>오늘의 인기 챌린지</h3>
+        {% if rankings %}
         <ol>
             {% for r in rankings %}
                 <li>
@@ -93,11 +140,10 @@
                 <br/>
             {% endfor %}
         </ol>
-    {% else %}
-        <p>오늘의 인기 챌린지가 없습니다.</p>
+        {% else %}
+            <p>오늘의 인기 챌린지가 없습니다.</p>
+        {% endif %}
     {% endif %}
-{% endif %}
-
 
     <!-- 가게 검색 -->
     <nav>
@@ -105,7 +151,7 @@
     </nav>
 
     <!-- ################## JS ################## -->
-<script>
+    <script>
     // 구 선택 이벤트
     document.getElementById('gu-select').addEventListener('change', function() {
         var selectedGu = this.value;
@@ -129,7 +175,9 @@
             alert('현재 위치를 가져올 수 없는 브라우저입니다.');
         }
     });
-</script>
+    </script>
+
 
 </body>
+</html>
 </html>

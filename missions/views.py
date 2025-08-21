@@ -106,16 +106,18 @@ def my_mission(request):
     # 추천 챌린지 계산
     user_lat, user_lon, _ = get_user_location(request.user)
 
-    # 이미 참여한 챌린지 ID
-    participated_ids = progresses.values_list('mission_id', flat=True)
+    # 이미 진행 중이거나 완료한 챌린지 ID
+    excluded_ids = MissionProgress.objects.filter(
+        user=request.user
+    ).values_list('mission_id', flat=True)
 
-    # 참여하지 않은 진행 중 챌린지
+    # 추천 후보
     candidate_missions = Mission.objects.filter(
         start_date__lte=now,
         end_date__gte=now
-    ).exclude(id__in=participated_ids).select_related('store')
+    ).exclude(id__in=excluded_ids).select_related('store')
 
-    # Store 리스트 뽑아서 거리 계산
+    # 거리 계산
     stores = [m.store for m in candidate_missions]
     stores_with_distance = annotate_distance(stores, user_lat, user_lon)
 
@@ -164,7 +166,30 @@ def update_progress(request, mission_id):
 def update_amount(request, mission_id):
     mission = get_object_or_404(Mission, id=mission_id, mission_type__key='amount')
     store = mission.store
+    
+    # 최근 24시간 방문 기록 가져오기
+    time_threshold = timezone.now() - timedelta(hours=24)
+    recent_visit = Visit.objects.filter(
+        user=request.user,
+        store=store,
+        visit_time__gte=time_threshold
+    ).order_by('-visit_time').first()
 
+    if not recent_visit:
+        messages.error(request, "최근 24시간 내 방문 인증이 필요합니다.")
+        return redirect('stores:store-detail', store.id)
+
+    # 금액 입력 중복 방지
+    access_record, _ = VisitAmountAccess.objects.get_or_create(
+        user=request.user,
+        store=store,
+        visit=recent_visit
+    )
+
+    if access_record.used:
+        messages.error(request, "이미 누적 금액을 입력했습니다.")
+        return redirect('stores:store-detail', store.id)
+    
     if request.method == 'POST':
         form = AmountInputForm(request.POST)
         if form.is_valid():
@@ -177,6 +202,10 @@ def update_amount(request, mission_id):
                 progress.current_value += amount
                 progress.check_completion()
                 progress.save()
+
+                # 입력 완료 표시
+                access_record.used = True
+                access_record.save()   # <--- 반드시 저장해야 함
 
                 messages.success(request, f"{amount}원 누적 완료! 남은 금액: {progress.remaining}원")
                 return redirect('stores:store-detail', store.id)

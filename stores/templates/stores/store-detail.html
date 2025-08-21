@@ -123,7 +123,9 @@
             {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
 
             {% if mission.mission_type.key == 'amount' %}
-                <a href="{% url 'missions:update-amount' mission.id %}">금액 입력 (점주 전용)</a>
+                {% if user_can_access_amount %}
+                    <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
+                {% endif %}
             {% endif %}
         </div>
     {% empty %}
