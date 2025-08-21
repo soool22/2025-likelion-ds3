@@ -55,5 +55,33 @@
                     {% endif %}
                 </a>
             {% endfor %}
+<<<<<<< HEAD
+            <br/>
+
+            <!-- 영업 시간 -->
+            {% if store.open_time and store.close_time %}
+                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                {% if store.is_open %}
+                    (영업 중)
+                {% else %}
+                    (영업 종료)
+                {% endif %}
+            {% endif %}
+        </div>
+    </a>
+    <hr/>
+    {% empty %}
+    <div>
+        <a href="{% url 'accounts:user_location' %}">
+            {% if user_location and user_location.gu_name %}
+                {{ user_location.gu_name }}▼
+            {% else %}
+                위치 설정
+            {% endif %}
+        </a>
+    </div>
+    {% endfor %}
+=======
+>>>>>>> origin/develop
 </body>
 </html>

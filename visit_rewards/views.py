@@ -9,9 +9,10 @@ from .models import *
 from django.db.models import Sum
 from django.views.decorators.http import require_POST
 import json
-from django.db.models import Count
+from django.db.models import Count,Q
 from django.utils import timezone
 from missions.models import Mission, MissionProgress
+from coupons.models import UserCoupon
 
 # 방문 인증 페이지 + QR 생성
 def visit_check(request, store_id):
@@ -166,11 +167,11 @@ def my_rewards(request):
 
 
 @login_required
-def shop_items(request):
+def my_character(request):
     """구매 가능한 꾸미기 아이템 목록"""
     items = Item.objects.all()
     user_points = Reward.objects.filter(user=request.user, amount__gt=0, used=False).aggregate(total=Sum('amount'))['total'] or 0
-    return render(request, 'visit_rewards/item_shop.html', {'items': items, 'user_points': user_points})
+    return render(request, 'visit_rewards/my_character.html', {'items': items, 'user_points': user_points})
 
 
 @login_required
@@ -181,7 +182,7 @@ def buy_item(request, item_id):
 
     if user_points < item.point_cost:
         messages.error(request, f"포인트가 부족합니다. 현재 {user_points}점, 아이템 비용 {item.point_cost}점")
-        return redirect('visit_rewards:shop_items')
+        return redirect('visit_rewards:my_character')
 
     # 포인트 차감
     remaining_cost = item.point_cost
@@ -267,16 +268,62 @@ def buy_gifticon(request, gifticon_id):
     return redirect('visit_rewards:my_rewards')
 
 
+from django.utils import timezone
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from coupons.models import UserCoupon
+from visit_rewards.models import Reward
+
+
 @login_required
 def my_gifticons(request):
-    """유저가 보유한 기프티콘 확인"""
+    now = timezone.localtime(timezone.now())
+
+    # 사용하지 않은, 만료되지 않은 쿠폰
+    user_coupons_qs = UserCoupon.objects.filter(
+        user=request.user,
+        used=False
+    ).filter(
+        Q(coupon__expire_at__gte=now) | Q(coupon__expire_at__isnull=True)
+    ).select_related('coupon', 'coupon__store').order_by('-assigned_at')
+
+    coupons = []
+    for uc in user_coupons_qs:
+        coupon = uc.coupon
+        remaining = None
+        if coupon.expire_at:
+            delta = coupon.expire_at - now
+            if delta.total_seconds() > 0:
+                days = delta.days
+                hours, rem = divmod(delta.seconds, 3600)
+                minutes, _ = divmod(rem, 60)
+                remaining = f"{days}일 {hours}시간 {minutes}분 남음"
+        coupons.append({
+            'id': coupon.id,
+            'name': coupon.name,
+            'type': coupon.get_coupon_type_display(),
+            'discount_amount': coupon.discount_amount,
+            'discount_percent': coupon.discount_percent,
+            'gift_item': coupon.gift_item,
+            'custom_text': coupon.custom_text,
+            'expire_at': coupon.expire_at,
+            'store': coupon.store,
+            'user_count': uc.coupon.usercoupon_set.count(),
+            'remaining': remaining,
+        })
+
+    # 기프티콘
     gifticons = Reward.objects.filter(
         user=request.user,
         gifticon__isnull=False,
         used=False
     ).select_related('gifticon')
 
-    return render(request, 'visit_rewards/my_gifticons.html', {'gifticons': gifticons})
+    return render(request, 'visit_rewards/my_gifticons.html', {
+        'coupons': coupons,
+        'gifticons': gifticons,
+    })
 
 @login_required
 @require_POST
@@ -297,6 +344,28 @@ def use_gifticon(request):
     reward.save()
 
     return JsonResponse({"success": True})
+
+@login_required
+def use_coupon(request):
+    """사용자가 점주 시크릿 코드 입력 후 쿠폰 사용 처리"""
+    if request.method == "POST":
+        data = json.loads(request.body)
+        coupon_id = data.get("coupon_id")
+        secret_code = data.get("secret_code")
+
+        try:
+            user_coupon = UserCoupon.objects.get(user=request.user, coupon_id=coupon_id, used=False)
+        except UserCoupon.DoesNotExist:
+            return JsonResponse({"success": False, "error": "쿠폰이 존재하지 않거나 이미 사용됨."})
+
+        if secret_code != user_coupon.coupon.store.secret_code:
+            return JsonResponse({"success": False, "error": "시크릿 코드가 올바르지 않습니다."})
+
+        user_coupon.mark_used()
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False, "error": "POST 요청이 필요합니다."})
+
 
 @login_required
 def purchase_history(request):

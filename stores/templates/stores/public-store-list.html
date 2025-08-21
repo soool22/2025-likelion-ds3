@@ -74,7 +74,15 @@
     </a>
         <hr/>
     {% empty %}
-        <a href="{% url 'accounts:user_preferences' %}">위치 설정하기</a>
+    <div>
+        <a href="{% url 'accounts:user_location' %}">
+            {% if user_location and user_location.gu_name %}
+                {{ user_location.gu_name }}▼
+            {% else %}
+                위치 설정
+            {% endif %}
+        </a>
+    </div>
     {% endfor %}
 </body>
 </html>

@@ -8,9 +8,11 @@
     <title>내 가게 목록(점주용)</title>
 </head>
 <body>
-    <h2>내 가게 목록</h2>
-
+    <h2>내 가게 목록</h2><br>
+    <a href='{% url 'home:main' %}'>소비자 화면으로 전환</a><br>
     <a href="{% url 'stores:store-create' %}">새 가게 등록하기</a>
+    <hr>
+
 
     {% for store in stores %}
         <div>
@@ -65,6 +67,7 @@
             <!-- 챌린지 -->
             <a href="{% url 'missions:mission-list' store.id %}">챌린지</a>
             <br/>
+            <a href="{% url 'coupons:coupon_list' store.id %}">쿠폰</a><br>
 
             <!-- 상품/메뉴 -->
             <a href="{% url 'products:product-list' store.id %}">상품/메뉴</a>

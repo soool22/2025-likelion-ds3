@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰 발급</title>
+</head>
+<body>
+    <a href="{% url 'coupons:coupon_list' selected_store.id %}">쿠폰 목록으로 돌아가기</a>
+    <h2>쿠폰 발급</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>가게 선택</label>
+        <select name="store" required>
+            <option value="">선택</option>
+            {% for store in stores %}
+                <option value="{{ store.id }}" {% if selected_store and selected_store.id == store.id %}selected{% endif %}>
+                    {{ store.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <br/><br/>
+
+        <label>쿠폰 이름</label>
+        <input type="text" name="name" required><br/><br/>
+
+        <label>쿠폰 타입</label>
+        <select name="type" required>
+            <option value="amount">금액 할인</option>
+            <option value="percent">비율 할인</option>
+            <option value="gift">증정 이벤트</option>
+            <option value="custom">직접 입력</option>
+        </select>
+        <br/><br/>
+
+        <div>
+            <label>금액 할인</label>
+            <input type="number" name="discount_amount"><br/>
+            <label>비율 할인</label>
+            <input type="number" name="discount_percent"><br/>
+            <label>증정 아이템</label>
+            <input type="text" name="gift_item"><br/>
+            <label>직접 입력 설명</label>
+            <input type="text" name="custom_text"><br/>
+        </div>
+        <br/>
+
+        <label>만료일 (선택)</label>
+        <input type="datetime-local" name="expire_at"><br/><br/>
+
+        <button type="submit">발급</button>
+    </form>
+</body>
+</html>

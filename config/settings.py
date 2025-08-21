@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'missions',
     'products',
     'ai_services',
+    'coupons',
 ]
 
 MIDDLEWARE = [

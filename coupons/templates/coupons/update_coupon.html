@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>쿠폰 수정</title>
+</head>
+<body>
+    <a href="{% url 'coupons:coupon_list' coupon.store.id %}">쿠폰 목록으로 돌아가기</a>
+    <h2>{{ coupon.name }} - 쿠폰 수정</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>가게 선택</label>
+        <select name="store" required>
+            {% for store in stores %}
+                <option value="{{ store.id }}" {% if coupon.store.id == store.id %}selected{% endif %}>{{ store.name }}</option>
+            {% endfor %}
+        </select>
+        <br/><br/>
+
+        <label>쿠폰 이름</label>
+        <input type="text" name="name" value="{{ coupon.name }}" required><br/><br/>
+
+        <label>쿠폰 타입</label>
+        <select name="type" required>
+            <option value="amount" {% if coupon.coupon_type == "amount" %}selected{% endif %}>금액 할인</option>
+            <option value="percent" {% if coupon.coupon_type == "percent" %}selected{% endif %}>비율 할인</option>
+            <option value="gift" {% if coupon.coupon_type == "gift" %}selected{% endif %}>증정 이벤트</option>
+            <option value="custom" {% if coupon.coupon_type == "custom" %}selected{% endif %}>직접 입력</option>
+        </select>
+        <br/><br/>
+
+        <div>
+            <label>금액 할인</label>
+            <input type="number" name="discount_amount" value="{{ coupon.discount_amount }}"><br/>
+            <label>비율 할인</label>
+            <input type="number" name="discount_percent" value="{{ coupon.discount_percent }}"><br/>
+            <label>증정 아이템</label>
+            <input type="text" name="gift_item" value="{{ coupon.gift_item }}"><br/>
+            <label>직접 입력 설명</label>
+            <input type="text" name="custom_text" value="{{ coupon.custom_text }}"><br/>
+        </div>
+        <br/>
+
+        <label>만료일 (선택)</label>
+        <input type="datetime-local" name="expire_at" value="{{ coupon.expire_at|date:'Y-m-d\\TH:i' }}"><br/><br/>
+
+        <button type="submit">수정</button>
+    </form>
+</body>
+</html>
