@@ -1,15 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/SignupPage.css" />
+        <link rel="stylesheet" href="{% static 'css/SignupPage.css'%}" />
     </head>
     <body>
         <main>
             <div id="container">
-                <img id="logo" src="../img/logo.svg"/>
+                <img id="logo" src="{% static 'img/logo.svg'%}"/>
                 <div id="containerBox">
                     <p id="title">회원가입</p>
                     <form>
@@ -24,5 +25,5 @@
             </div>
         </main>
     </body>
-    <script src="../js/SignupPage.js"></script>
+    <script src="{% static 'js/SignupPage.js'%}"></script>
 </html>

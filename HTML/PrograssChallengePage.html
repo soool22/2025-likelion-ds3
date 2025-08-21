@@ -1,11 +1,11 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/PrograssChallengePage.css" />
+        <link rel="stylesheet" href="{% static 'css/PrograssChallengePage.css'%}" />
     </head>
     <body>
         <main>
@@ -13,7 +13,7 @@
                 <header>
                     <div id="headerBox" href="">
                         <a id="sideClickBox" href="../html/MyInfomationPage.html">
-                            <img id="sideClick" src="../img/leftside.svg" alt="사이드클릭" />
+                            <img id="sideClick" src="{% static 'img/leftside.svg'%}" alt="사이드클릭" />
                         </a>
                         <p id="appTitle">진행 중인 챌린지</p>
                         <p> </p>
@@ -27,7 +27,7 @@
                                 <div class="challengeTitleBox">
                                     <p class="challengeTitle">같은 음료 3번 먹기</p>
                                     <a>
-                                        <img class="rightSideClick" src="../img/rightside.svg"/>
+                                        <img class="rightSideClick" src="{% static 'img/rightside.svg'%}"/>
                                     </a>
                                 </div>
                                 <div class="challengeMiddleBox">
@@ -58,7 +58,7 @@
                                 <div class="challengeTitleBox">
                                     <p class="challengeTitle">골목 3코스 완주!</p>
                                     <a>
-                                        <img class="rightSideClick" src="../img/rightside.svg"/>
+                                        <img class="rightSideClick" src="{% static 'img/rightside.svg'%}"/>
                                     </a>
                                 </div>
                                 <div class="challengeMiddleBox">
@@ -79,7 +79,7 @@
                                 <div class="challengeTitleBox">
                                     <p class="challengeTitle">사진 리뷰 2번 남기기</p>
                                     <a>
-                                        <img class="rightSideClick" src="../img/rightside.svg"/>
+                                        <img class="rightSideClick" src="{% static 'img/rightside.svg'%}"/>
                                     </a>
                                 </div>
                                 <div class="challengeMiddleBox">
@@ -100,7 +100,7 @@
                                 <div class="challengeTitleBox">
                                     <p class="challengeTitle">신규 입점 가게 도전하기</p>
                                     <a>
-                                        <img class="rightSideClick" src="../img/rightside.svg"/>
+                                        <img class="rightSideClick" src="{% static 'img/rightside.svg'%}"/>
                                     </a>
                                 </div>
                                 <div class="challengeMiddleBox">
@@ -123,5 +123,5 @@
             </div>   
         </main>
     </body>
-    <script src="../js/PrograssChallengePage.js"></script>
+    <script src="{% static 'js/PrograssChallengePage.js'%}"></script>
 </html>

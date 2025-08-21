@@ -1,19 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="../CSS/Top100&ReviewBest.css" />    
+    <link rel="stylesheet" href="{% static 'CSS/Top100&ReviewBest.css'%}" />    
 </head>
 <body>
     <main>
         <header>
             <a href="./HomePage.html" style="text-decoration: none;">
-                <img src="../IMG/edit-back.png" class="back-img"></img>
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-box">
-                <img src="../IMG/top100-tittle.svg">
+                <img src="{% static 'IMG/top100-tittle.svg'%}">
                 <div class="tittle text">TOP 100</div>
             </div>
         </header>
@@ -49,7 +50,7 @@
                         <div class="third-line">
                             <div class="position text">📍 ${store.distance}</div>
                             <div class="operation">
-                                <img src="../IMG/Time.svg">
+                                <img src="{% static 'IMG/Time.svg'%}">
                                 <div class="time text">${store.status}</div>
                             </div>
                         </div>

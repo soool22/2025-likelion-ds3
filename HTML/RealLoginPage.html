@@ -1,15 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/RealLoginPage.css" />
+        <link rel="stylesheet" href="{% static 'css/RealLoginPage.css'%}" />
     </head>
     <body>
         <main>
             <div id="container">
-                <img id="logo" src="../img/logo.svg"/>
+                <img id="logo" src="{% static 'img/logo.svg'%}"/>
                 <div id="containerBox">
                     <p id="title">아이디로 로그인</p>
                     <form>
@@ -32,5 +33,5 @@
             </div>
         </main>
     </body>
-    <script src="../js/RealLoginPage.js"></script>
+    <script src="{% static 'js/RealLoginPage.js'%}"></script>
 </html>
