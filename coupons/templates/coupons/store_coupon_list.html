@@ -1,0 +1,62 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>{{ store.name }} - 쿠폰 목록(점주)</title>
+</head>
+<body>
+    <a href="{% url 'stores:owner-store-list' %}">이전</a>
+    <br/><br/>
+
+    <h2>{{ store.name }} - 쿠폰 목록</h2>
+
+    <a href="{% url 'coupons:create_coupon_store' store.id %}">새 쿠폰 발급</a>
+    <br/><br/>
+
+    <!-- 상태 필터 버튼 -->
+    <a href="?status=active">
+        <button {% if status == "active" %}style="font-weight:bold;"{% endif %}>발급된 쿠폰</button>
+    </a>
+    <a href="?status=past">
+        <button {% if status == "past" %}style="font-weight:bold;"{% endif %}>만료된 쿠폰</button>
+    </a>
+
+    <hr/>
+
+    {% for coupon in coupons %}
+        <div>
+            <h3>{{ coupon.name }}</h3>
+            <p>타입: {{ coupon.get_coupon_type_display }}</p>
+
+            {% if coupon.coupon_type == "amount" %}
+                <p>금액 할인: {{ coupon.discount_amount|floatformat:0|intcomma }}원</p>
+            {% elif coupon.coupon_type == "percent" %}
+                <p>비율 할인: {{ coupon.discount_percent|floatformat:1 }}%</p>
+            {% elif coupon.coupon_type == "gift" %}
+                <p>증정 이벤트: {{ coupon.gift_item }}</p>
+            {% elif coupon.coupon_type == "custom" %}
+                <p>설명: {{ coupon.custom_text }}</p>
+            {% endif %}
+
+            <p>코드: {{ coupon.code }}</p>
+            <p>발급일: {{ coupon.created_at|date:"Y-m-d" }}</p>
+            {% if coupon.expire_at %}
+                <p>만료일: {{ coupon.expire_at|date:"Y-m-d H:i" }}</p>
+            {% endif %}
+
+            {% if status != "past" %}
+                <a href="{% url 'coupons:update_coupon' coupon.id %}">수정</a>
+            {% endif %}
+            <a href="{% url 'coupons:delete_coupon' coupon.id %}">삭제</a>
+        </div>
+        <hr/>
+    {% empty %}
+        <p>쿠폰이 없습니다.</p>
+    {% endfor %}
+
+</body>
+</html>

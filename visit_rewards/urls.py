@@ -25,4 +25,8 @@ urlpatterns = [
     path('gifticons/purchase-history/', views.purchase_history, name='purchase_history'),
     # 방문 내역
     path('visit_history/', views.visit_history, name='visit_history'),
+    
+    #발급된 쿠폰 사용
+    path('use-coupon/', views.use_coupon, name='use_coupon'),
+
 ]

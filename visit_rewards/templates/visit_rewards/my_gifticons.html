@@ -1,94 +1,157 @@
+{% load humanize %}
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>내 기프티콘</title>
+    <title>내 쿠폰 & 기프티콘</title>
     <style>
       .gifticon-img {
           cursor: pointer;
           transition: transform 0.3s ease;
       }
       .gifticon-img.enlarged {
-          transform: scale(2); /* 2배 확대 */
+          transform: scale(2);
           z-index: 1000;
           position: relative;
+      }
+      .coupon-section, .gifticon-section {
+          margin-bottom: 30px;
       }
     </style>
 </head>
 <body>
-  <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
-  <h3>내 기프티콘</h3>
-  <ul id="gifticon-list">
-      {% for reward in gifticons %}
-          <li id="gift-{{ reward.id }}">
-              {% if reward.gifticon.image %}
-                  <img src="{{ reward.gifticon.image.url }}" 
-                       alt="{{ reward.gifticon.name }}" 
-                       class="gifticon-img"
-                       width="100">
-              {% endif %}
-              사용처 [{{ reward.gifticon.name }}] 유효기간 [~2025.12.31]
-  
-              {% if reward.used %}
-                  (사용 완료)
-              {% else %}
-                  <input type="checkbox" 
-                         class="use-gifticon" 
-                         data-id="{{ reward.id }}">
-                  <label>사용 완료</label>
-              {% endif %}
-          </li>
-      {% empty %}
-          <li>보유한 기프티콘이 없습니다.</li>
-      {% endfor %}
-  </ul>
-  
-  <a href="{% url 'visit_rewards:shop_gifticons' %}">기프티콘 샵으로 돌아가기</a>
-  
-  <script>
-  // 이미지 클릭 시 확대/축소
-  document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll(".gifticon-img").forEach(img => {
-          img.addEventListener("click", function() {
-              this.classList.toggle("enlarged");
-          });
-      });
-  });
-  </script>
+    <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
 
-  <script>
-  // 체크박스로 기프티콘 사용 처리
-  document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll(".use-gifticon").forEach(function(checkbox) {
-          checkbox.addEventListener("change", function() {
-              const gifticonId = this.dataset.id;
-  
-              if (this.checked) {
-                  if (confirm("정말로 이 기프티콘을 사용하시겠습니까?")) {
-                      fetch("{% url 'visit_rewards:use_gifticon' %}", {
-                          method: "POST",
-                          headers: {
-                              "Content-Type": "application/json",
-                              "X-CSRFToken": "{{ csrf_token }}"
-                          },
-                          body: JSON.stringify({ id: gifticonId })
-                      })
-                      .then(res => {
-                          if (res.ok) {
-                              // 성공 시 화면에서 제거
-                              document.getElementById("gift-" + gifticonId).remove();
-                          } else {
-                              alert("사용 처리에 실패했습니다.");
-                              this.checked = false;
-                          }
-                      });
-                  } else {
-                      this.checked = false; // 취소 시 원상 복구
-                  }
-              }
-          });
-      });
-  });
-  </script>
+    <!-- 쿠폰 섹션 -->
+    <div class="coupon-section">
+        <h3>발급된 쿠폰</h3>
+        {% for coupon in coupons %}
+        <div>
+            <p>쿠폰명: {{ coupon.name }}</p>
+            <p>타입: {{ coupon.type }}</p>
+
+            {% if coupon.discount_amount %}<p>금액 할인: {{ coupon.discount_amount|floatformat:0 }}원</p>{% endif %}
+            {% if coupon.discount_percent %}<p>비율 할인: {{ coupon.discount_percent|floatformat:1 }}%</p>{% endif %}
+            {% if coupon.gift_item %}<p>증정 이벤트: {{ coupon.gift_item }}</p>{% endif %}
+            {% if coupon.custom_text %}<p>설명: {{ coupon.custom_text }}</p>{% endif %}
+
+            <!-- 사용처 링크 -->
+            <p>사용처: <a href="{% url 'stores:store-detail' coupon.store.id %}">{{ coupon.store.name }}</a></p>
+
+            {% if coupon.expire_at %}
+            <p>만료일: {{ coupon.expire_at|date:"Y-m-d H:i" }} 
+                {% if coupon.remaining %}<small>({{ coupon.remaining }})</small>{% endif %}
+            </p>
+            {% endif %}
+
+            <button class="use-coupon-btn" data-id="{{ coupon.id }}">사용하기</button>
+            <hr>
+        </div>
+        {% empty %}
+        <p>발급된 쿠폰이 없습니다.</p>
+        {% endfor %}
+    </div>
+
+    <!-- JS: 쿠폰 사용 처리 -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".use-coupon-btn").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                const couponId = this.dataset.id;
+                const secretCode = prompt("점주 시크릿 코드를 입력하세요:");
+
+                if (secretCode) {
+                    fetch("{% url 'coupons:use_coupon' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({ coupon_id: couponId, secret_code: secretCode })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("쿠폰 사용 처리 완료!");
+                            btn.parentElement.remove();
+                        } else {
+                            alert("사용 처리 실패: " + data.error);
+                        }
+                    });
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- 기프티콘 섹션 -->
+    <div class="gifticon-section">
+        <h3>내 기프티콘</h3>
+        <ul id="gifticon-list">
+            {% for reward in gifticons %}
+            <li id="gift-{{ reward.id }}">
+                {% if reward.gifticon.image %}
+                    <img src="{{ reward.gifticon.image.url }}" 
+                         alt="{{ reward.gifticon.name }}" 
+                         class="gifticon-img"
+                         width="100">
+                {% endif %}
+                사용처 [{{ reward.gifticon.name }}] 유효기간 [~2025.12.31]
+
+                {% if reward.used %}
+                    (사용 완료)
+                {% else %}
+                    <input type="checkbox" class="use-gifticon" data-id="{{ reward.id }}">
+                    <label>사용 완료</label>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li>보유한 기프티콘이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="{% url 'visit_rewards:shop_gifticons' %}">기프티콘 샵</a>
+
+    <script>
+    // 이미지 클릭 확대
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".gifticon-img").forEach(img => {
+            img.addEventListener("click", function() {
+                this.classList.toggle("enlarged");
+            });
+        });
+
+        // 기프티콘 사용 체크박스 처리
+        document.querySelectorAll(".use-gifticon").forEach(function(checkbox) {
+            checkbox.addEventListener("change", function() {
+                const gifticonId = this.dataset.id;
+                if (this.checked) {
+                    if (confirm("사용 처리 후에는 복구가 불가합니다. 쿠폰을 삭제하시겠습니까?")) {
+                        fetch("{% url 'visit_rewards:use_gifticon' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token }}"
+                            },
+                            body: JSON.stringify({ id: gifticonId })
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                document.getElementById("gift-" + gifticonId).remove();
+                            } else {
+                                alert("사용 처리에 실패했습니다.");
+                                this.checked = false;
+                            }
+                        });
+                    } else {
+                        this.checked = false;
+                    }
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

@@ -14,5 +14,6 @@ urlpatterns = [
     path('missions/',include('missions.urls')), # missions url
     path('products/',include('products.urls')), # products url
     path('ai/', include('ai_services.urls', namespace='ai_services')),
+    path('coupons/', include('coupons.urls', namespace='coupons')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
