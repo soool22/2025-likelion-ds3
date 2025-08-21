@@ -1,16 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/GrowCharacter.css" />
+        <link rel="stylesheet" href="{% static 'css/GrowCharacter.css'%}" />
     </head>
     <body>
         <main>
             <div id="container">
                 <a href="../html/HomePage.html">
-                    <img id="backBtn" src="../img/leftside.svg"/>
+                    <img id="backBtn" src="{% static 'img/leftside.svg'%}"/>
                 </a>
                 <div id="achievementBox">
                     <div id="achievementSmallBox">
@@ -21,31 +22,31 @@
                         <div id="achievement"></div>
                     </div>
                 </div>
-                <img id="character" src="../img/character1.svg"/>
-                <img id="hat" src="../img/hat.svg"/>
-                <img id="pot" src="../img/pot.svg" />
-                <img id="chair" src="../img/chair.svg" />
+                <img id="character" src="{% static 'img/character1.svg'%}"/>
+                <img id="hat" src="{% static 'img/hat.svg'%}"/>
+                <img id="pot" src="{% static 'img/pot.svg'%}" />
+                <img id="chair" src="{% static 'img/chair.svg'%}" />
                 <div id="ground">
                     <div id="bar">
                         <div class="card">
                             <div class="itemBigBox">
-                                <img class="item" src="../img/hat.svg"/>
+                                <img class="item" src="{% static 'img/hat.svg'%}"/>
                                 <div class="itemValue">무료</div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="itemBigBox">
-                                <img class="item" src="../img/pot.svg"/>
+                                <img class="item" src="{% static 'img/pot.svg'%}"/>
                                 <div class="itemBox">
-                                    <img class="medal" src="../img/medal.svg"/>
+                                    <img class="medal" src="{% static 'img/medal.svg'%}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="itemBigBox">
-                                <img class="item" src="../img/chair.svg"/>
+                                <img class="item" src="{% static 'img/chair.svg'%}"/>
                                 <div class="itemBox">
-                                    <img class="medal" src="../img/medal.svg"/>
+                                    <img class="medal" src="{% static 'img/medal.svg'%}"/>
                                 </div>
                             </div>
                         </div>
@@ -55,5 +56,5 @@
             </div>
         </main>
     </body>
-    <script src="../js/GrowCharacter.js"></script>
+    <script src="{% static 'js/GrowCharacter.js'%}"></script>
 </html>
