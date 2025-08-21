@@ -13,13 +13,19 @@
                 <img id="logo" src="{% static 'img/logo.svg'%}"/>
                 <div id="containerBox">
                     <p id="title">회원가입</p>
-                    <form>
-                        <input type="text" placeholder="아이디 입력" class="inputBox" id="id"/>
-                        <input type="email" placeholder="이메일 입력" class="inputBox" id="email"/>
-                        <input type="text" placeholder="닉네임 입력" class="inputBox" id="nickname"/>
-                        <input type="password" placeholder="비밀번호 입력" class="inputBox" id="repassword"/>
-                        <input type="password" placeholder="비밀번호 확인" class="inputBox" id="password"/>
-                        <button type="button" class="btn" id="btn">로그인</button>
+                    <form method="POST" action="{% url 'accounts:signup'%}">
+                        {%csrf_token%}
+                        <input type="text" placeholder="아이디 입력" name="username" class="inputBox" id="id"/>
+                        {{form.username.errors}}
+                        <input type="email" placeholder="이메일 입력" name="email" class="inputBox" id="email"/>
+                        {{form.email.errors}}
+                        <input type="text" placeholder="닉네임 입력" name="nickname" class="inputBox" id="nickname"/>
+                        {{form.nickname.errors}}
+                        <input type="password" placeholder="비밀번호 입력" name="password1" class="inputBox" id="repassword"/>
+                        {{form.password1.errors}}
+                        <input type="password" placeholder="비밀번호 확인" name="password2" class="inputBox" id="password"/>
+                        {{form.password2.errors}}
+                        <button type="submit" class="btn" id="btn">회원가입</button>
                     </form>
                 </div>
             </div>
