@@ -13,12 +13,20 @@
                 <img id="logo" src="{% static 'img/logo.svg'%}" alt="로고" />
                 <img id="character" src="{% static 'img/ddallangcharacter.svg'%}" alt="딸랑 캐릭터"/>
                 <form>
-                    <button class="startBtn1">소비자로 시작하기</button>
-                    <button class="startBtn2">점주로 시작하기</button>
+                    <a href='{% url 'home:main' %}'>
+                        <div class="startBtn1">
+                            <p class="btnText">소비자로 시작하기</p>
+                        </div>
+                    </a>
+                    <a href='{% url 'stores:owner-store-list' %}'>
+                        <div class="startBtn2">
+                            <p class="btnText">점주로 시작하기</p>
+                        </div>
+                    </a>
                 </form>
                 <div id="loginBox">
                     <p id="already">이미 계정이 있으신가요?</p>
-                    <a id="login">로그인하기</a>
+                    <a href='{% url 'accounts:login' %}' id="login">로그인하기</a>
                 </div>
             </div>
         </main>

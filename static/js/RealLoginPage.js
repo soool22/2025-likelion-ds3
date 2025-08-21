@@ -1,6 +1,6 @@
 // 안전한 변수명으로 변경
-const usernameInput = document.getElementById("id");
-const passwordInput = document.getElementById("password");
+const usernameInput = document.getElementById("id_username");
+const passwordInput = document.getElementById("id_password");
 const btn = document.getElementById("btn");
 
 function check_idpw() {

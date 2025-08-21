@@ -67,8 +67,8 @@
         <a href="{% url 'accounts:login' %}">로그인</a>
         <a href="{% url 'accounts:signup' %}">회원가입</a>
     {% endif %}
-
     <hr>
+
     <!-- 구 선택 -->
     <div>
         <a href="{% url 'accounts:user_location' %}">
@@ -80,6 +80,8 @@
         </a>
     </div>
 
+    <!-- 위치 설정 후에 나타남 -->
+    {% if gu_name %}
 
     <!-- 방문자 랭킹 -->
     <div class="store-section">
@@ -124,8 +126,7 @@
         <a href="{% url 'stores:public-store-list' %}">더보기</a>
     </div>
 
-    <!-- 오늘의 인기 챌린지 -->
-    {% if gu_name %} <!-- 위치 설정해야 오늘의 인기 챌린지 나타남 -->
+    <!--오늘의 인기 챌린지-->
         <h3>오늘의 인기 챌린지</h3>
         {% if rankings %}
         <ol>
@@ -143,12 +144,12 @@
         {% else %}
             <p>오늘의 인기 챌린지가 없습니다.</p>
         {% endif %}
-    {% endif %}
 
-    <!-- 가게 검색 -->
-    <nav>
-        <a href="{% url 'stores:store-search' %}">가게 검색</a>
-    </nav>
+        <!-- 가게 검색 -->
+        <nav>
+            <a href="{% url 'stores:store-search' %}">가게 검색</a>
+        </nav>
+    {% endif %}
 
     <!-- ################## JS ################## -->
     <script>

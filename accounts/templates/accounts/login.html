@@ -1,18 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>로그인</h2>
-    <form method="POST" action="{% url 'accounts:login' %}">
-        {% csrf_token %} {{form.as_p}}
-        <button type="submit">로그인</button>
-    </form>
-
-    <p><a href="{% url 'accounts:signup' %}">
-    아직 회원이 아니신가요? 회원가입 하러 가기</a></p>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/RealLoginPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <img id="logo" src="{% static 'img/logo.svg'%}"/>
+                <div id="containerBox">
+                    <p id="title">아이디로 로그인</p>
+                    <form method="POST" action="{% url 'accounts:login' %}">
+                        {% csrf_token %} 
+                        {% comment %} {{form.as_p}} {% endcomment %}
+                        <input type="text" placeholder="아이디 입력" class="inputBox" id="id_username" name="username"/>
+                        <input type="password" placeholder="비밀번호 입력" class="inputBox" id="id_password" name="password"/>
+                        <button type="submit" class="btn" id="btn">로그인</button>
+                    </form>
+                    <div id="containerLastBox">
+                        <div id="lastBox">
+                            <p>아이디 찾기</p>
+                            <p>|</p>
+                            <p>비밀번호 찾기</p>
+                            <p>|</p>
+                            <a href="{% url 'accounts:signup' %}">
+                                <p style="color: #7B7B7B">회원가입하기 </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="{% static 'js/RealLoginPage.js'%}"></script>
 </html>
