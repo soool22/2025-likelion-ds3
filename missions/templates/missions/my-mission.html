@@ -9,7 +9,7 @@
     <title>내 챌린지(소비자)</title>
 </head>
 <body>
-    <a href="{% url 'accounts:main' %}">홈으로</a><br><br>
+    <a href="{% url 'home:main' %}">홈으로</a><br><br>
 
     <h2>내 챌린지</h2>
 
@@ -57,5 +57,23 @@
     <p>챌린지가 없습니다.</p>
     {% endfor %}
 
+    <!-- 오늘의 추천 챌린지 -->
+    <h3>오늘의 추천 챌린지</h3>
+    {% if recommended %}
+        {% for mission in recommended %}
+            <div>
+                    {{ mission.title }} <br/>
+                    {{ mission.description }} <br/>
+                    {{ mission.store.name }} <br/>
+                    {{ mission.start_date|date:"Y-m-d H:i" }}~{{ mission.end_date|date:"Y-m-d H:i" }} <br/>
+                    <a href="{% url 'stores:store-detail' mission.store.id %}">
+                        참여하기
+                    </a>
+            </div>  
+            <hr/>
+        {% endfor %}
+    {% else %}
+        <p>추천 챌린지가 없습니다.</p>
+    {% endif %}
 </body>
 </html>

@@ -7,10 +7,10 @@ app_name="accounts"
 urlpatterns = [
 # 계정 API
 
-path('', main_page_view, name='main'),  # 루트 경로 처리
+path('start-page', start_page, name='start-page'), 
 
-path('signup/', signup, name='signup'),
-path('login/', login, name='login'),
+path('signup', signup, name='signup'),  
+path('', login, name='login'), # 루트 경로 처리
 path('logout/', logout, name="logout"),
 path('delete/', delete_account, name='delete_account'),
 path('edit/', profile_edit, name='profile_edit'),
@@ -31,4 +31,5 @@ path('preferences/', views.user_preferences, name='user_preferences'),
 path('favorites/', views.favorite_stores, name='favorite_stores'),
 path('favorites/toggle/', views.toggle_favorite, name='toggle_favorite'),
 
+path('user_location/',user_location, name='user_location'),
 ]

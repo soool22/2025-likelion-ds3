@@ -7,7 +7,7 @@
     <title>상품/메뉴 삭제</title>
 </head>
 <body>
-    <a href="{% url 'products:product-list' store.id %}">이전</a>
+    <a href="{% url 'products:product-list' product.store.id %}">이전</a>
     <br/>
 
     <h2>{{ product.name }} - 상품 삭제</h2>

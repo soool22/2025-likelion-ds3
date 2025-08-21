@@ -23,6 +23,13 @@
             ({{ store.reviews.count }})
             <br/>
             주소 : {{ store.address }} <br/>
+            전화번호: 
+                {% if store.number %}
+                    <a href="tel:{{ store.number }}">{{ store.number }}</a>
+                {% else %}
+                    정보 없음
+                {% endif %} 
+            <br/>
             카테고리 : 
             {% for category in store.category.all %}
                 {{ category.name }}

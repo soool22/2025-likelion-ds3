@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="../CSS/Top100&ReviewBest.css" />    
+</head>
+<body>
+    <main>
+        <header>
+            <a href="./HomePage.html">
+                <img src="../IMG/edit-back.png" class="back-img"></img>
+            </a>
+            <div class="tittle-box">
+                <img src="../IMG/reviewbest-tittle.svg">
+                <div class="tittle text">리뷰 BEST</div>
+            </div>
+        </header>
+
+        <!-- 가게 리스트가 들어갈 영역 -->
+        <div class="store-info-box" id="storeList"></div>
+    </main>
+
+    <script>
+        // 1) 배열 데이터 (최대 7개)
+        const stores = [
+            { location: "도봉구, 양식", name: "미뇨리", distance: "300m", status: "영업중" },
+            { location: "강남구, 카페", name: "스타커피", distance: "120m", status: "영업중" },
+            { location: "서초구, 한식", name: "김밥천국", distance: "450m", status: "영업종료" },
+            { location: "송파구, 일식", name: "스시야", distance: "200m", status: "영업중" },
+            { location: "마포구, 중식", name: "짬뽕타임", distance: "350m", status: "영업중" },
+            { location: "용산구, 양식", name: "피자스토리", distance: "500m", status: "영업종료" },
+            { location: "종로구, 분식", name: "떡볶이집", distance: "180m", status: "영업중" }
+        ];
+
+        // 2) DOM에 출력
+        const storeList = document.getElementById("storeList");
+
+        stores.forEach((store, index) => {
+            const storeBox = `
+                <div class="box">
+                    <div class="left-box">
+                        <div class="first-line text">${store.location}</div>
+                        <div class="second-line">
+                            <div class="num text">${index + 1}</div>
+                            <div class="store-name text">${store.name}</div>
+                        </div>
+                        <div class="third-line">
+                            <div class="position text">📍 ${store.distance}</div>
+                            <div class="operation">
+                                <img src="../IMG/Time.svg">
+                                <div class="time text">${store.status}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="store-img"></div>
+                </div>
+            `;
+            storeList.insertAdjacentHTML("beforeend", storeBox);
+        });
+    </script>
+</body>
+</html>

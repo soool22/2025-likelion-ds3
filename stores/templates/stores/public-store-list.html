@@ -48,8 +48,12 @@
             </a>
             <br/>
 
-
             주소: {{ store.address }}<br/>
+            
+            <!-- 거리 -->
+            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
+            <br/>
+
             카테고리:
             {% for category in store.category.all %}
             {{ category.name }}{% if not forloop.last %}, {% endif %}
@@ -70,7 +74,7 @@
     </a>
         <hr/>
     {% empty %}
-        등록된 가게가 없습니다.
+        <a href="{% url 'accounts:user_preferences' %}">위치 설정하기</a>
     {% endfor %}
 </body>
 </html>
