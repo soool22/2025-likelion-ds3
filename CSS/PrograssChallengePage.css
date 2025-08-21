@@ -10,6 +10,13 @@ main{
     background-color: white;
     flex-direction:column;
 }
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
 /* 여기까지 기본틀 */
 
 #container{
@@ -188,44 +195,12 @@ p{
     transition: width .3s ease;
 }
 
-.circleBox{
-    width: 206px;
-    position: absolute;
-    left: -3px;
-    top: -2px;
-    z-index: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.circle{
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    transition: background-color .2s ease;
-}
-
-
-.circle.start{
-    left: 0;
-    background-color: #FFB635; 
-}
-
-
-.circle.middle{
-    background-color: #FFB635;
-}
-
-
-.circle.end{
-    background-color: #d9d9d9;
-}
 
 .scoreBigBox{
     display: flex;
     align-items: center;
-    gap: 7px;
+    width: 60px;
+    justify-content: center;
 }
 
 .scoreBox{
@@ -238,17 +213,6 @@ p{
     font-size: 12px;
     font-weight: 600;
     color: #000000;
-}
-
-.totalScore{
-    margin: 0;
-    font-size: 12px;
-    font-weight: 600;
-    color: #cccccc;
-}
-
-.stampIcon{
-    width: 10px;
 }
 
 #containerBodyBottom{
