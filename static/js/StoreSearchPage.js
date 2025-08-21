@@ -93,3 +93,14 @@ const starIcon = document.getElementById("starIcon");
       starIcon.src = "../img/star.svg"; // 다시 클릭하면 원래 별로 변경
     }
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+  const searchIcon = document.getElementById('searchIcon');
+  const searchBtn = document.getElementById('searchBtn');
+
+  if (searchIcon && searchBtn) {
+    searchIcon.addEventListener('click', () => {
+      searchBtn.click();   // 아이콘 누르면 버튼 클릭 이벤트 실행
+    });
+  }
+});
