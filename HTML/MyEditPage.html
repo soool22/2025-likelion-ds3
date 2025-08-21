@@ -63,53 +63,62 @@
             <div class="nick-name-box">
                 <div class="nick-name-tittle">
                     <div class="text">닉네임 수정</div>
-                    <img src="../IMG/MY-X.png">
+                    <img src="../IMG/MY-X.png" style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
-                <textarea class="nick-name-textarea" name="nick-name" placeholder="기존 닉네임"></textarea>
-            </div>
+                <form action="/edit-phone" method="post">
+                    <textarea class="nick-name-textarea" name="nick-name" placeholder="기존 닉네임"></textarea>
+                </form>
+                </div>
         </div>
-        <div class="nick-name hidden">
+        <div class="num hidden">
             <div class="over-layer"></div>
             <div class="nick-name-box">
-                <div class="nick-name-tittle">
+                <div class="num-tittle">
                     <div class="text">전화번호 수정</div>
-                    <img src="../IMG/MY-X.png">
+                    <img src="../IMG/MY-X.png"style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
-                <textarea class="nick-name-textarea" name="num" placeholder="010-1234-5678"></textarea>
+                <form action="/edit-phone" method="post">
+                    <textarea class="nick-name-textarea" name="num" placeholder="010-1234-5678"></textarea>
+                </form>
             </div>
         </div>
         <div class="email hidden">
             <div class="email-box">
-                <img src="../IMG/my-back.png" class="back">
+                <img src="../IMG/my-back.png" class="back"style="cursor: pointer;">
                 <div class="email-tittle">이메일을 입력해주세요.</div>
                 <div class="email-input">
-                    <textarea class="email-textarea" name="email" placeholder="기존이메일"></textarea>
+                    <form action="/edit-email" method="post">
+                        <textarea class="email-textarea" name="email" placeholder="기존이메일"></textarea>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="password hidden">
             <div class="password-box">
-                <img src="../IMG/my-back.png" class="back">
+                <img src="../IMG/my-back.png" class="back"style="cursor: pointer;">
                 <div style="margin-left: 58px; margin-top: 36px;">
                     <div class="password-tittle text">비밀번호 설정</div>
                     <div class="password-subtittle text">비밀번호가 설정되어 있지 않습니다.<br>비밀번호 설정 시 이메일을 통해 로그인할 수 있습니다.</div>
                     <div class="password-input">
                         <div class="password-name">비밀번호</div>
                         <div class="password-wrapper">
-                            <textarea class="password-textarea" name="password" placeholder="숫자, 영문, 특수문자 8-16자 입력"></textarea>
+                            <form action="/edit-password" method="post">
+                                <input type="password" class="password-textarea" name="password" placeholder="비밀번호 확인" required>
+                            </form>
                             <button type="button" class="toggle-btn"></button>
                         </div>
                     </div>
                     <div class="password-input">
                         <div class="password-name">비밀번호 확인</div>
                         <div class="password-wrapper">
-                            <textarea class="password-textarea" name="passwordcheck" placeholder="비밀번호 확인"></textarea>
+                            <form action="/edit-password-check" method="post">
+                                <input type="password" class="password-textarea" name="passwordcheck" placeholder="비밀번호 확인" required>
+                            </form>
                             <button type="button" class="toggle-btn"></button>
                         </div>
                     </div>
-                    <button class="password-btn">인증하기</button>
                     <button class="password-check-btn">비밀번호 설정 완료</button>
                 </div>
             </div>
