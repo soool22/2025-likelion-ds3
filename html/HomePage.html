@@ -9,15 +9,22 @@
     </head>
     <body>
         <main>
+            {% if request.user.is_authenticated %}
             <header>
                 <div id="headerBox">
-                    <div id="headerSmallBox">
-                        <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
-                        <p id="locationName">도봉구 전체</p>
-                        <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
-                    </div>
+                    <a href="{% url 'accounts:user_location' %}">
+                        <div id="headerSmallBox">
+                            <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
+                            {% if user_location and user_location.gu_name %}
+                                <p id="locationName">{{ user_location.gu_name }}</p>
+                            {% else %}
+                                <p id="locationName">위치 설정</p>
+                            {% endif %}
+                            <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
+                        </div>
+                    </a>
                     <div id="headerLastBox">
-                        <a href="../html/GrowCharacter.html">
+                        <a href="{% url 'visit_rewards:my_character' %}">
                             <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
                         </a>
                         <a href="../html/AlarmCenterPage.html">
@@ -26,6 +33,7 @@
                     </div>
                 </div>
             </header>
+            {% if gu_name %}
             <div id="container">
                 <div id="banner">
                     <div id="bannerBox">
@@ -203,7 +211,9 @@
                             </a>
                         </div>
                         <div id="challengeBox">
-                            <p id="challengeTitle">🔥 주간 인기 챌린지</p>
+                            <a href="{% url 'missions:my-mission' %}">
+                                <p id="challengeTitle">🔥 주간 인기 챌린지</p>
+                            </a>
                             <div id="challengeRanking">
                                 <p class="challenge">🥇 같은 음료 3번 먹기 ▶️ 참여자 432명</p>
                                 <p class="challenge">🥈 골목 3코스 완주 ▶️ 참여자 289명</p>
@@ -213,24 +223,29 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
             <div id="tapBar">
-                <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="{% static 'img/homepicked.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel picked">홈</p>
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
                 </a>
-                <a class="tapBarBox" href="../html/StoreSearchPage.html">
-                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel">가게 검색</p>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel picked">가게 검색</p>
                 </a>
-                <a class="tapBarBox" href="">
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
                     <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
-                <a class="tapBarBox" href="../html/MyInfomationPage.html">
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
                     <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel">내 정보</p>
                 </a>
             </div>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">로그인</a>
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+            {% endif %}
         </main>
     </body>
     <script src="{% static 'js/HomePage.js'%}"></script>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,7 @@
     <main>
         <header>
             <a href="./MyInfomationPage.html">
-                <img src="../IMG/my-back.png" class="back-img"></img>
+                <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 포인트 </div>
         </header>
@@ -32,12 +33,12 @@
                     </div>
                     <div class="mission-btn">
                         <div class="mission-QR">
-                            <img src="../IMG/my-qr.png" class="qr-img">
+                            <img src="{% static 'IMG/my-qr.png'%}" class="qr-img">
                             <div class="text" style="font-size: 14px;margin-left: 11px;">QR코드로 방문 인증하기</div>
                         </div>
                         <div class="other-btn-box">
                             <a class="other-btn" href="./GifticonShop.html">
-                                <img src="../IMG/home-y.svg" class="benefit-img">
+                                <img src="{% static 'IMG/home-y.svg'%}" class="benefit-img">
                                 <div class="text" style="font-size: 14px;margin-left: 11px;">포인트 샵</div>
                             </a>
                         </div>
@@ -46,6 +47,6 @@
             </div>
         </div>
     </main>
-    <script src="../JS/MyPoint.js"></script>
+    <script src="{% static 'JS/MyPoint.js'%}"></script>
 </body>
 </html>

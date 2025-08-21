@@ -3,29 +3,46 @@
     '.recommendstoreBox, .topBox, .reviewbestBox'
   );
 
+  // 더보기 <a> 요소 (버튼을 감싸고 있는 앵커를 잡음)
+  const plusLink = document.getElementById('plusBtn')?.closest('a');
+
+  // 탭 → 이동할 페이지 매핑(파일명은 네 프로젝트에 맞게 바꿔줘)
+  const ROUTES = {
+    recommend: '../html/RecommendStorePage.html',
+    top: '../html/Top100Page.html',
+    review: '../html/ReviewBestPage.html',
+  };
+
+  function tabKey(el) {
+    if (el.classList.contains('recommendstoreBox')) return 'recommend';
+    if (el.classList.contains('topBox'))           return 'top';
+    return 'review'; // reviewbestBox
+  }
+
   function setActiveTab(selected) {
     tabs.forEach(tab => {
-      // active 제거
       tab.classList.remove('active');
-
-      // 아이콘 src 원상복구
       const img = tab.querySelector('img');
       const originalSrc = img.getAttribute('src').replace('picked', '');
       img.setAttribute('src', originalSrc);
     });
 
-    // 클릭된 탭만 active
     selected.classList.add('active');
 
-    // 아이콘 src를 picked 버전으로 교체
     const icon = selected.querySelector('img');
     if (!icon.getAttribute('src').includes('picked')) {
       const pickedSrc = icon.getAttribute('src').replace('.svg', 'picked.svg');
       icon.setAttribute('src', pickedSrc);
     }
+
+    // 여기서 더보기 링크 갱신!
+    if (plusLink) {
+      const key = tabKey(selected);
+      plusLink.href = ROUTES[key] || '#';
+    }
   }
 
-  // 초기값: 첫 번째 탭 선택
+  // 초기값: 첫 번째 탭 선택 + 더보기 링크 세팅
   setActiveTab(tabs[0]);
 
   // 클릭 이벤트 등록
@@ -33,4 +50,3 @@
     tab.addEventListener('click', () => setActiveTab(tab));
   });
 })();
-    

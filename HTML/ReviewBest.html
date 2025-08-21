@@ -1,19 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="../CSS/Top100&ReviewBest.css" />    
+    <link rel="stylesheet" href="{% static 'CSS/Top100&ReviewBest.css'%}" />    
 </head>
 <body>
     <main>
         <header>
             <a href="./HomePage.html">
-                <img src="../IMG/edit-back.png" class="back-img"></img>
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-box">
-                <img src="../IMG/reviewbest-tittle.svg">
+                <img src="{% static 'IMG/reviewbest-tittle.svg'%}">
                 <div class="tittle text">리뷰 BEST</div>
             </div>
         </header>
