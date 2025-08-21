@@ -111,7 +111,7 @@ a{
 #storeImg{
 width: 275px;
 height: 157px;
-background-color: #cccccc;
+/* background-color: #cccccc; */
 border-radius: 12px;
 }
 

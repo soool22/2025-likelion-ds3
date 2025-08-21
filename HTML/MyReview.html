@@ -1,16 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="../CSS/MyReview.css" />    
+    <link rel="stylesheet" href="{% static 'CSS/MyReview.css'%}" />    
 </head>
 <body>
     <main>
         <header>
             <a href="./MyInfomationPage.html">
-                <img src="../IMG/edit-back.png" class="back-img"></img>
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 리뷰 관리 </div>
         </header>
@@ -19,10 +20,10 @@
             <div class="store-name text">미뇨리</div>
             <div class="second-line">
                 <div class="review-star">
-                    <img src="../IMG/star-yellow.png">
-                    <img src="../IMG/star-yellow.png">
-                    <img src="../IMG/star-yellow.png">
-                    <img src="../IMG/star-yellow.png">
+                    <img src="{% static 'IMG/star-yellow.png'%}">
+                    <img src="{% static 'IMG/star-yellow.png'%}">
+                    <img src="{% static 'IMG/star-yellow.png'%}">
+                    <img src="{% static 'IMG/star-yellow.png'%}">
                 </div>
                 <div class="date text">지난 주</div>
             </div>
@@ -31,7 +32,7 @@
                 <div class="recommend-num">2명이 추천해요</div>
                 <div style="display: flex; align-items: center;">
                     <div class="delete-box">
-                    <img src="../IMG/delete.png">
+                    <img src="{% static 'IMG/delete.png'%}">
                     <div class="delete text">삭제</div>
                     </div>
                 </div>

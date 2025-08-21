@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/StoreDetailPage.css" />
+        <link rel="stylesheet" href="{% static 'css/StoreDetailPage.css'%}" />
     </head>
     <body>
         <main>
@@ -12,20 +13,20 @@
                 <header>
                     <div id="headerBox">
                         <a href="">
-                            <img id="sideClick" src="../img/leftside.svg"/>
+                            <img id="sideClick" src="{% static 'img/leftside.svg'%}"/>
                         </a>
-                        <img id="star" src="../img/star.svg"/>
+                        <img id="star" src="{% static 'img/star.svg'%}"/>
                         <button id="keep" type="button">찜하기</button>
                     </div>
                 </header>
                 <div id="containerBox">
-                    <img id="storeImg" src=""/>
+                    <img id="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
                     <div id="storeInfoBox">
                         <p id="category">음식점·분식</p>
                         <p id="storeName">산책</p>
                         <a href="">
                             <div id="scoreBox">
-                                <img id="starScore" src="../img/starpicked.svg"/>
+                                <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>
                                 <p id="realScore">4.8</p>
                                 <p id="scoreCount">(20)</p>
                             </div>
@@ -35,19 +36,19 @@
                     <div id="buttonBox">
                         <button id="certificationBtn" type="button">
                             <div class="btnInnerBox">
-                                <img class="btnIcon" src="../img/qrwhite.svg"/>
+                                <img class="btnIcon" src="{% static 'img/qrwhite.svg'%}"/>
                                 <p class="btnText1">QR 코드로 방문 인증하기</p>
                             </div>
                         </button>
                         <button id="reviewBtn" type="button">
                             <div class="btnInnerBox">
-                                <img class="btnIcon" src="../img/reviewwhite.svg"/>
+                                <img class="btnIcon" src="{% static 'img/reviewwhite.svg'%}"/>
                                 <p class="btnText1">리뷰 작성하기</p>
                             </div>
                         </button>
                         <button id="aiBtn" type="button">
                             <div class="btnInnerBox">
-                                <img class="btnIcon" src="../img/aigray.svg"/>
+                                <img class="btnIcon" src="{% static 'img/aigray.svg'%}"/>
                                 <p class="btnText2">AI 리뷰 요약 보기</p>
                             </div>
                         </button>
@@ -81,23 +82,23 @@
             </div>
             <div id="tapBar">
                 <a class="tapBarBox" href="../html/HomePage.html">
-                    <img class="tapBarIcon" src="../img/home.svg" alt="홈 선택 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
                     <p class="tapBarLabel">홈</p>
                 </a>
                 <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="../img/searchpicked.svg" alt="가게 검색 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
                     <p class="tapBarLabel picked">가게 검색</p>
                 </a>
                 <a class="tapBarBox" href="./InterestingStore.html">
-                    <img class="tapBarIcon" src="../img/intereststore.svg" alt="관심 매장 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
                 <a class="tapBarBox" href="../html/MyInfomationPage.html">
-                    <img class="tapBarIcon" src="../img/myinfo.svg" alt="내 정보 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel">내 정보</p>
                 </a>
             </div>
         </main>
     </body>
-    <script src="../js/StoreDetailPage.js"></script>
+    <script src="{% static 'js/StoreDetailPage.js'%}"></script>
 </html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +64,7 @@
             <div class="nick-name-box">
                 <div class="nick-name-tittle">
                     <div class="text">닉네임 수정</div>
-                    <img src="../IMG/MY-X.png" style="cursor: pointer;">
+                    <img src="{% static 'IMG/MY-X.png" style="cursor: pointer;'%}">
                 </div>
                 <div class="separation-box"></div>
                 <form action="/edit-phone" method="post">
@@ -76,7 +77,7 @@
             <div class="nick-name-box">
                 <div class="num-tittle">
                     <div class="text">전화번호 수정</div>
-                    <img src="../IMG/MY-X.png"style="cursor: pointer;">
+                    <img src="{% static 'IMG/MY-X.png'%}"style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
                 <form action="/edit-phone" method="post">
@@ -86,7 +87,7 @@
         </div>
         <div class="email hidden">
             <div class="email-box">
-                <img src="../IMG/my-back.png" class="back"style="cursor: pointer;">
+                <img src="{% static 'IMG/my-back.png'%}" class="back"style="cursor: pointer;">
                 <div class="email-tittle">이메일을 입력해주세요.</div>
                 <div class="email-input">
                     <form action="/edit-email" method="post">
@@ -97,7 +98,7 @@
         </div>
         <div class="password hidden">
             <div class="password-box">
-                <img src="../IMG/my-back.png" class="back"style="cursor: pointer;">
+                <img src="{% static 'IMG/my-back.png'%}" class="back"style="cursor: pointer;">
                 <div style="margin-left: 58px; margin-top: 36px;">
                     <div class="password-tittle text">비밀번호 설정</div>
                     <div class="password-subtittle text">비밀번호가 설정되어 있지 않습니다.<br>비밀번호 설정 시 이메일을 통해 로그인할 수 있습니다.</div>
