@@ -36,14 +36,20 @@
                             <div class="store-name text">{{ store.name }}</div>
                         </div>
                         <div class="third-line">
-                            <div class="position text">📍{{ store.distance|default_if_none:"-"|floatformat:0 }} m</div> 
+                            <div class="position text">
+                                {% if store.distance %}
+                                    📍{{ store.distance }}
+                                {% endif %}
+                                <br/>
                             <div class="operation">
                                 <img src="{% static 'IMG/Time.svg'%}">
                                 <!-- 영업 시간 -->
-                                {% if store.is_open %}
-                                    <div class="time text">영업중</div>
-                                {% else %}
-                                    <div class="time text">영업종료</div>
+                                {% if store.open_time and store.close_time %}
+                                    {% if store.is_open %}
+                                        <div class="time text">영업중</div>
+                                    {% else %}
+                                        <div class="time text">영업종료</div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -55,7 +61,6 @@
                     {% endif %}
                 </a>
             {% endfor %}
-<<<<<<< HEAD
             <br/>
 
             <!-- 영업 시간 -->
@@ -70,18 +75,5 @@
         </div>
     </a>
     <hr/>
-    {% empty %}
-    <div>
-        <a href="{% url 'accounts:user_location' %}">
-            {% if user_location and user_location.gu_name %}
-                {{ user_location.gu_name }}▼
-            {% else %}
-                위치 설정
-            {% endif %}
-        </a>
-    </div>
-    {% endfor %}
-=======
->>>>>>> origin/develop
 </body>
 </html>

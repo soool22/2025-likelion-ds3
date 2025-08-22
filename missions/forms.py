@@ -31,7 +31,9 @@ class MissionForm(forms.ModelForm):
         model = Mission
         fields = [
             'title', 
-            'description', 
+            'description',
+            'reward_type',
+            'reward_points',
             'reward_description', 
             'mission_type',
             'target_value',

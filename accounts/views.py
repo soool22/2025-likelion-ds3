@@ -231,7 +231,6 @@ def user_location(request):
         loc.latitude = request.POST.get("latitude")
         loc.longitude = request.POST.get("longitude")
         loc.save()
-        messages.success(request, "위치가 저장되었습니다.")
         # 저장 후 홈 페이지로 리다이렉트
         return redirect('home:main')  # home 앱의 main 뷰
 

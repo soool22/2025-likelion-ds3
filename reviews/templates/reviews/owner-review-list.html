@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ store.name }} 리뷰 목록</title>
+</head>
+<body>
+    <a href="{% url 'stores:self-service' store.id %}">이전</a>
+    <br/>
+
+    <h2>{{ store.name }} 리뷰</h2>
+
+    {% if store.image %}
+        <a href="{{ store.image.url }}" target="_blank">
+            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="250" height="250">
+        </a>
+    {% else %}
+        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지">
+    {% endif %}
+
+    <!-- 평균 평점 -->
+    <div>
+        {{ avg_rating|floatformat:1 }}
+        <br/>
+        {% for i in stars_list %}
+            {% if i <= avg_star_count %}
+                ★
+            {% endif %}
+        {% endfor %}
+    </div>
+    <br/>
+
+    <!-- 별점별 리뷰 개수 -->
+    <div>
+        5점: {{ rating_counts.5 }}개<br/>
+        4점: {{ rating_counts.4 }}개<br/>
+        3점: {{ rating_counts.3 }}개<br/>
+        2점: {{ rating_counts.2 }}개<br/>
+        1점: {{ rating_counts.1 }}개
+    </div>
+    <br/>
+
+    <!-- 정렬 버튼 -->
+    <div>
+        <strong>정렬:</strong>
+        <a href="?sort=latest">최신순</a> |
+        <a href="?sort=rating_desc">별점 높은 순</a> |
+        <a href="?sort=rating_asc">별점 낮은 순</a> |
+        <a href="?sort=helpful">도움 많은 순</a>
+    </div>
+    <hr/>
+
+    <!-- 리뷰 목록 -->
+    {% if reviews %}
+        {% for review in reviews %}
+            <div id="review-{{ review.id }}">
+                <h4>{{ review.user.username }}</h4>
+                {{ review.stars }}
+                <br/>
+                {{ review.comment|linebreaks }}
+                <br/>
+                {% for img in review.images.all %}
+                    {% if img.image %}
+                        <a href="{{ img.image.url }}" target="_blank">
+                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                <br/>
+                {{ review.created_at|date:"Y-m-d" }} ({{ review.natural_days }})
+                <br/><br/>
+
+                <!-- 좋아요 버튼 -->
+                {% if review.user != request.user %}
+                    <form method="post" action="{% url 'reviews:review-like-toggle' review.id %}">
+                        {% csrf_token %}
+                        <button type="submit">도움이 돼요</button>
+                    </form>
+                {% endif %}
+
+                <!-- 좋아요 개수 표시 -->
+                {% if review.helpful_count > 0 %}
+                    {{ review.helpful_count }}명에게 도움이 되었습니다
+                {% endif %}
+
+                <!-- 로그인한 작성자만 삭제 -->
+                {% if review.user == request.user %}
+                    <br/>
+                    <a href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
+    {% else %}
+        아직 작성된 리뷰가 없습니다.
+    {% endif %}
+</body>
+</html>

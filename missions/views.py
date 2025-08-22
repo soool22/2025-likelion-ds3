@@ -6,8 +6,7 @@ from .models import *
 from .forms import MissionForm, AmountInputForm
 from django.db.models import Q
 from stores.utils import haversine, get_user_location, annotate_distance
-
-
+from visit_rewards.models import Reward
 ################ 점주용 ################
 
 # 챌린지 목록
@@ -214,7 +213,7 @@ def update_amount(request, mission_id):
 
     return render(request, 'missions/update-amount.html', {'form': form, 'mission': mission})
 
-# 챌린지 완료
+# 챌린지 완료 안내 페이지
 @login_required
 def mission_complete(request, mission_id):
     now = timezone.now()
@@ -222,14 +221,11 @@ def mission_complete(request, mission_id):
 
     completion, created = MissionComplete.objects.get_or_create(mission=mission, user=request.user)
 
-    if created:
-        mission.store.visit_count += 1
-        mission.store.save()
+    messages.success(request, f"🎉 '{mission.title}' 챌린지를 완료했습니다!")
 
     return render(request, 'missions/mission-complete.html', {
         'mission': mission,
         'completion': completion,
     })
-
 
 

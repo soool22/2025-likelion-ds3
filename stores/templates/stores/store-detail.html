@@ -60,7 +60,7 @@
                         </a>
                         <p id="address">{{ store.address }} 
                             {% if store.distance %}
-                                ({{ store.distance|floatformat:0 }}m)
+                                    📍{{ store.distance }}
                             {% endif %}
                         </p>
                         <p id="call">
@@ -139,8 +139,22 @@
                             {{ mission.title }}
                             {% comment %} {{ mission.description }}<br/>
                             {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}<br/>
+<<<<<<< HEAD
                             보상: {{ mission.reward_description }}<br/>
                             {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/> {% endcomment %}
+=======
+                            
+                            <!--################보상################-->
+                            {% if mission.reward_type == "POINT" %}
+                                포인트: {{ mission.reward_points }}점 
+                            {% elif mission.reward_type == "CUSTOM" %}
+                                직접 입력 보상: {{ mission.reward_description }}
+                            {% endif %}
+                            <br/>
+                            <!---####################################-->
+
+                            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
+>>>>>>> d86a2cf7061cc5da3c1e6c7b553c159275c2e03d
 
                             {% comment %} {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
                             <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
@@ -157,7 +171,15 @@
                         {% for product in products %}
                         <div class="containerTinyContentBox">
                             <div class="menuSmallBox">
+<<<<<<< HEAD
                             {% comment %} <div class="mainMenu">대표</div> {% endcomment %}
+=======
+                            <div class="mainMenu">
+                                {% if product.is_main %}
+                                    대표
+                                {% endif %}
+                            </div>
+>>>>>>> d86a2cf7061cc5da3c1e6c7b553c159275c2e03d
                             <p class="containerSmallContent">{{ product.name }}</p>
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}</p>

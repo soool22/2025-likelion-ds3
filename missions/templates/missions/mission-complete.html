@@ -8,8 +8,14 @@
 <body>
     <a href="{% url 'missions:my-mission' %}">이전</a>
     <h2>"{{ mission.title }}" 챌린지 완료!</h2>
-    보상: {{ mission.reward_description }}
-    <br/>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <!-- 리뷰 작성 버튼 -->
     <a href="{% url 'reviews:review-create' mission.store.id %}">리뷰 작성</a>

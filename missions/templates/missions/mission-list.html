@@ -9,7 +9,7 @@
     <title>챌린지 목록(점주)</title>
 </head>
 <body>
-    <a href="{% url 'stores:owner-store-list' %}">이전</a>
+    <a href="{% url 'stores:self-service' store.id %}">이전</a>
     <br/><br/>
 
     <h2>{{ store.name }} - 챌린지 목록</h2>
@@ -41,7 +41,18 @@
 
             <p>{{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}</p>
 
-            <p>보상: {{ mission.reward_description }}</p>
+            <!--################보상################-->
+            
+            {% if mission.reward_type == "POINT" %}
+            <div>
+                <label>포인트:</label> {{ mission.reward_points }}점
+            </div>
+            {% elif mission.reward_type == "CUSTOM" %}
+            <div>
+                <label>직접 입력 보상:</label> {{ mission.reward_description }}
+            </div>
+            {% endif %}
+            <!---####################################-->
 
             <p>생성일: {{ mission.created_at|date:"Y-m-d" }}</p>
 

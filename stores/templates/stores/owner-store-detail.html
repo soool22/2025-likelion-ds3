@@ -1,0 +1,126 @@
+{% load static %}
+{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가게 정보</title>
+</head>
+<body>
+    <a href='{% url "stores:owner-store-list" %}'>홈</a>
+    <br/><br/>
+
+    <!-- ######### 가게 정보 #########-->
+    {% if store.image %}
+        <a href="{{ store.image.url }}" target="_blank">
+            <img src="{{ store.image.url }}" width="200" height="200">
+        </a>
+    {% else %}
+        <img src="{% static 'img/default_store.png' %}" width="200" height="200">
+    {% endif %}
+
+    <h2>{{ store.name }}</h2>
+
+    주소: {{ store.address }} 
+    {% if store.distance %}
+        ({{ store.distance|floatformat:0 }}m)
+    {% endif %}
+    <br/>
+
+    <a href="{% url 'reviews:owner-review-list' store.id %}">
+        ★{{ store.rating|floatformat:1 }} 
+        ({{ store.reviews.count }})
+    </a>
+    <br/>
+
+    <p>전화번호: 
+        {% if store.number %}
+            <a href="tel:{{ store.number }}">{{ store.number }}</a>
+        {% else %}
+            정보 없음
+        {% endif %}
+    </p>
+
+    카테고리:
+    {% for category in store.category.all %}
+        {{ category.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    <br/><br/>
+
+    <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
+    <br/><br/>
+
+    <!-- 영업 시간 -->
+    {% if store.open_time and store.close_time %}
+        영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+        {% if store.is_open %}
+            (영업 중)
+        {% else %}
+            (영업 종료)
+        {% endif %}
+        <br/><br/>
+    {% endif %}
+
+    <!-- ######### 챌린지 ######### -->
+    <h3>진행 중인 챌린지</h3>
+    <hr/>
+    {% for mission in missions %}
+        <div>
+            <h4>{{ mission.title }}</h4>
+            {{ mission.description }}<br/>
+            {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
+            <br/>
+
+            <!--################보상################-->
+            {% if mission.reward_type == "POINT" %}
+            <div>
+                <label>포인트:</label> {{ mission.reward_points }}점
+            </div>
+            {% elif mission.reward_type == "CUSTOM" %}
+            <div>
+                <label>직접 입력 보상:</label> {{ mission.reward_description }}
+            </div>
+            {% endif %}
+            <!---####################################-->
+            
+            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
+
+            {% if mission.mission_type.key == 'amount' %}
+                {% if user_can_access_amount %}
+                    <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% empty %}
+        진행 중인 챌린지가 없습니다.
+    {% endfor %}
+    <hr/><br/>
+
+    <!-- ######### 상품/메뉴 ######### -->
+    <h3>상품/메뉴</h3>
+    <hr/>
+    {% for product in products %}
+    <div>
+        {% if product.image %}
+        <a href="{{ product.image.url }}" target="_blank">
+            <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
+        </a>
+        {% endif %}
+
+        <h4>{{ product.name }}</h4>
+        {% if product.is_main %}
+                대표 메뉴 <br/>
+        {% endif %}
+        {{ product.price|floatformat:0|intcomma }}원
+        <br/>
+        {{ product.description }}
+    </div>
+    <hr/>
+    {% empty %}
+        등록된 상품이 없습니다.
+    {% endfor %}
+
+</body>
+</html>

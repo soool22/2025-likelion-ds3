@@ -5,43 +5,56 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 가게 목록(점주용)</title>
+    <title>가게 Home(점주용)</title>
 </head>
 <body>
-    <h2>내 가게 목록</h2><br>
-    <a href='{% url 'home:main' %}'>소비자 화면으로 전환</a><br>
+    <a href="{% url 'accounts:start-page' %}">소비자/점주 전환</a>
+    <h2>Home</h2>
+
     <a href="{% url 'stores:store-create' %}">새 가게 등록하기</a>
-    <hr>
+    <br/>
+    <br/>
 
-
-    {% for store in stores %}
+    <!-- 매장 상세 정보 -->
+    {% for data in store_data %}
         <div>
-            <a href="{% url 'stores:store-detail' store.id %}">
-                <h3>{{ store.name }}</h3>
+            <!-- 기본적인 정보-->
+            <a href="{% url 'stores:owner-store-detail' data.store.id %}">
+                <h2>{{ data.store.name }}</h2>
             </a>
-            <!-- 점수 -->
-            ★{{ store.rating|floatformat:1 }} 
-            <!-- 리뷰 개수 -->
-            ({{ store.reviews.count }})
+
+            {% if data.store.image %}
+                <a href="{{ data.store.image.url }}" target="_blank">
+                    <img src="{{ data.store.image.url }}" alt="{{ data.store.name }} 이미지" width="200" height="200">
+                </a>
+            {% else %}
+                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="200" height="200">
+            {% endif %}
             <br/>
-            주소 : {{ store.address }} <br/>
+
+            매장 ID: {{ data.store.id }} <br/>
+
+            ★{{ data.store.rating|floatformat:1 }} ({{ data.store.reviews.count }})<br/>
+
+            주소 : {{ data.store.address }} <br/>
+
             전화번호: 
-                {% if store.number %}
-                    <a href="tel:{{ store.number }}">{{ store.number }}</a>
+                {% if data.store.number %}
+                    <a href="tel:{{ data.store.number }}">{{ data.store.number }}</a>
                 {% else %}
                     정보 없음
                 {% endif %} 
             <br/>
+
             카테고리 : 
-            {% for category in store.category.all %}
-                {{ category.name }}
-                {% if not forloop.last %}, {% endif %} <!-- 쉼표 붙이기 -->
+            {% for category in data.store.category.all %}
+                {{ category.name }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
             <br/>
-            <!-- 영업 -->
-            {% if store.open_time and store.close_time %}
-                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-                {% if store.is_open %}
+
+            {% if data.store.open_time and data.store.close_time %}
+                영업 시간: {{ data.store.open_time|time:"H:i" }} ~ {{ data.store.close_time|time:"H:i" }}
+                {% if data.store.is_open %}
                     (영업 중)
                 {% else %}
                     (영업 종료)
@@ -49,33 +62,50 @@
             {% endif %}
             <br/>
 
-            {% if store.image %}
-            <a href="{{ store.image.url }}" target="_blank">
-                <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="200" height="200">
-            </a>  
+            <!-- 오늘 현황 -->
+            <div>
+                <h3>오늘 현황</h3>
+                오늘 방문: {{ data.today_visits }}명 <br/>
+                오늘 챌린지 참여: {{ data.today_challenges }}명 <br/>
+            <div/>
             <br/>
-            {% else %}
-                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="200" height="200">
+
+            <!-- 통계 -->
+            <div>
+                <h3>통계( {{ data.store.created_at|date:"Y-m-d" }} ~ )</h3>
+                </h3>
+                누적 방문: {{ data.total_visits }}명 <br/>
+                누적 챌린지 : {{ data.total_challenges }}명 
                 <br/>
-            {% endif %}
+                <br/>
+            
+                가장 인기 챌린지: 
+                {% if data.most_participated_type %}
+                {% if data.most_participated_type == 'amount' %}누적 금액{% endif %}
+                {% if data.most_participated_type == 'visit_count' %}누적 방문{% endif %}
+                {% if data.most_participated_type == 'visit_period' %}기간 내 방문{% endif %}
+                ({{ data.most_participated_count }}명)
+                {% else %}
+                    없음
+                {% endif %}
+                <br/>
+                <br/>
 
-            <!-- 가게 수정/삭제 -->
-            <a href="{% url 'stores:store-update' store.id %}">정보 수정</a>
-            <a href="{% url 'stores:store-delete' store.id %}">가게 삭제</a>
-            <br/>
+                챌린지별 누적 참여
+                <ul>
+                    <li>누적 금액: {{ data.challenge_participation.amount }}명</li>
+                    <li>누적 방문: {{ data.challenge_participation.visit_count }}명</li>
+                    <li>기간 내 방문: {{ data.challenge_participation.visit_period }}명</li>
+                </ul>
+            <div/>
+            
+            <!--셀프 서비스-->
+            <a href="{% url 'stores:self-service' data.store.id %}">셀프 서비스</a><br/>
 
-            <!-- 챌린지 -->
-            <a href="{% url 'missions:mission-list' store.id %}">챌린지</a>
-            <br/>
-            <a href="{% url 'coupons:coupon_list' store.id %}">쿠폰</a><br>
-
-            <!-- 상품/메뉴 -->
-            <a href="{% url 'products:product-list' store.id %}">상품/메뉴</a>
-            <br/>
         </div>
-
         <hr/>
     {% empty %}
+    <br/>
         등록된 가게가 없습니다.
     {% endfor %}
 </body>
