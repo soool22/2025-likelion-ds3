@@ -7,51 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 페이지</title>
     <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 16px;
-        background: #f9f9f9;
-    }
-    h2 {
-        margin-top: 32px;
-        margin-bottom: 8px;
-    }
-    .store-section {
-        margin-bottom: 32px;
-    }
-    .store-cards {
-        display: flex;
-        gap: 16px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-    }
-    .store-card {
-        flex: 0 0 180px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-        text-align: center;
-        background: #fff;
-    }
-    .store-card h3 {
-        font-size: 1em;
-        margin: 8px 0;
-    }
-    .store-cards::-webkit-scrollbar {
-        height: 6px;
-    }
-    .store-cards::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 3px;
-    }
-    a {
-        text-decoration: none;
-        color: #007BFF;
-    }
-    a:hover {
-        text-decoration: underline;
-    }
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f9f9f9; }
+    h2 { margin-top: 32px; margin-bottom: 8px; }
+    .store-section { margin-bottom: 32px; }
+    .store-cards { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+    .store-card { flex: 0 0 180px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; box-shadow: 1px 1px 4px rgba(0,0,0,0.1); text-align: center; background: #fff; }
+    .store-card h3 { font-size: 1em; margin: 8px 0; }
+    .store-card p { font-size: 0.85em; margin: 4px 0; }
+    .store-cards::-webkit-scrollbar { height: 6px; }
+    .store-cards::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    a { text-decoration: none; color: #007BFF; }
+    a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -66,14 +32,11 @@
         <a href="{% url 'accounts:favorite_stores' %}">관심 가게 | </a>
         <a href="{% url 'missions:my-mission' %}">내 챌린지 | </a>
         <a href="{% url 'visit_rewards:my_character' %}">내 캐릭터</a>
-
-        
     {% else %}
         <a href="{% url 'accounts:login' %}">로그인</a>
         <a href="{% url 'accounts:signup' %}">회원가입</a>
     {% endif %}
     <hr>
-
 
     <!-- 구 선택 -->
     <div>
@@ -86,11 +49,7 @@
         </a>
     </div>
 
-    <!-- 위치 설정 후에 나타남 -->
     {% if gu_name %}
-    <!-- 위치 설정 후에 나타남 -->
-    {% if gu_name %}
-
     <!-- 방문자 랭킹 -->
     <div class="store-section">
         <h2>방문자 랭킹</h2>
@@ -98,6 +57,18 @@
             {% for store in top_visits %}
                 <div class="store-card">
                     <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                    <p>{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                    {% if store.open_time and store.close_time %}
+                        <p>{{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                        {% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                    {% else %}
+                        <p>영업시간 미정</p>
+                    {% endif %}
+                    {% if store.distance %}
+                        <p>거리: {{ store.distance }}</p>
+                    {% else %}
+                        <p>거리 정보 없음</p>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -111,6 +82,18 @@
             {% for store in review_best %}
                 <div class="store-card">
                     <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                    <p>{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                    {% if store.open_time and store.close_time %}
+                        <p>{{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                        {% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                    {% else %}
+                        <p>영업시간 미정</p>
+                    {% endif %}
+                    {% if store.distance %}
+                        <p>거리: {{ store.distance }}</p>
+                    {% else %}
+                        <p>거리 정보 없음</p>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -125,6 +108,18 @@
                 {% for store in recommended_stores %}
                     <div class="store-card">
                         <h3><a href="{% url 'stores:store-detail' store.id %}">{{ store.name }}</a></h3>
+                        <p>{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                        {% if store.open_time and store.close_time %}
+                            <p>{{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                            {% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                        {% else %}
+                            <p>영업시간 미정</p>
+                        {% endif %}
+                        {% if store.distance %}
+                            <p>거리: {{ store.distance }}</p>
+                        {% else %}
+                            <p>거리 정보 없음</p>
+                        {% endif %}
                     </div>
                 {% endfor %}
             {% else %}
@@ -134,61 +129,25 @@
         <a href="{% url 'stores:public-store-list' %}">더보기</a>
     </div>
 
-    <!--오늘의 인기 챌린지-->
-        <h3>오늘의 인기 챌린지</h3>
-        {% if rankings %}
-        <ol>
-            {% for r in rankings %}
-                <li>
-                    <a href="{% url 'stores:store-detail' r.mission.store.id %}">
-                        {{ r.mission.store.name }}
-                    </a>
-                    <br/>
-                    {{ r.mission.title }} ▶ 참여자 {{ r.participant_count }}명
-                </li>
-                <br/>
-            {% endfor %}
-        </ol>
-        {% else %}
-            <p>오늘의 인기 챌린지가 없습니다.</p>
-        {% endif %}
-        {% endif %}
-
-        <!-- 가게 검색 -->
-        <nav>
-            <a href="{% url 'stores:store-search' %}">가게 검색</a>
-        </nav>
+    <!-- 오늘의 인기 챌린지 -->
+    <h3>오늘의 인기 챌린지</h3>
+    {% if rankings %}
+    <ol>
+        {% for r in rankings %}
+            <li>
+                <a href="{% url 'stores:store-detail' r.mission.store.id %}">{{ r.mission.store.name }}</a>
+                <br/>{{ r.mission.title }} ▶ 참여자 {{ r.participant_count }}명
+            </li>
+        {% endfor %}
+    </ol>
+    {% else %}
+        <p>오늘의 인기 챌린지가 없습니다.</p>
     {% endif %}
 
-
-    <!-- ################## JS ################## -->
-    <script>
-    // 구 선택 이벤트
-    document.getElementById('gu-select').addEventListener('change', function() {
-        var selectedGu = this.value;
-        window.location.href = '?gu=' + selectedGu;
-    });
-
-    // 현재 위치 버튼
-    document.getElementById('current-location').addEventListener('click', function() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-
-                // 단순히 도봉구로 고정 (추후 geocoding으로 실제 구 계산 가능)
-                var detectedGu = '도봉구';
-                window.location.href = '?gu=' + detectedGu;
-            }, function(error) {
-                alert('현재 위치를 가져올 수 없습니다. 위치 권한을 허용해주세요.');
-            });
-        } else {
-            alert('현재 위치를 가져올 수 없는 브라우저입니다.');
-        }
-    });
-    </script>
-
-
+    <!-- 가게 검색 -->
+    <nav>
+        <a href="{% url 'stores:store-search' %}">가게 검색</a>
+    </nav>
+    {% endif %}
 </body>
-</html>
 </html>
