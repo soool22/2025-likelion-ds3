@@ -104,7 +104,7 @@ header{
     height: 35px;
     flex-shrink: 0;
     border-radius: 11px;
-    background: #F5F5F5;
+    border: 2px dashed #FFD400 ;
     display: flex;
     align-items: center;
     margin-left: 22px;
@@ -127,7 +127,7 @@ header{
 
 }
 
-.other-btn{
+.use-coupon-btn{
     width: 275px;
 height: 35px;
 flex-shrink: 0;
@@ -135,8 +135,15 @@ border-radius: 11px;
 background: #F5F5F5;
 display: flex;
 align-items: center;
+border:none;
 }
 
+.date{
+    font-size: 11px;
+    color: #7B7B7B;
+    margin-left: 140px;
+    margin-top: 5px;
+}
 
 .coupon-img{
     width: 20px;
@@ -181,7 +188,7 @@ align-items: center;
     }
 
     /* 버튼 */
-.modal-btn {
+.modal-btn{
     display: block;
     width: 100%;
     background: #FFD400;
@@ -190,8 +197,20 @@ align-items: center;
     font-weight: bold;
     border-radius: 12px;
     cursor: pointer;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: #FFF;
+}
+
+.modal-input{
+    display: block;
+    width: 91.4%;
+    border: 2px dashed #ffd400;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #FFF;
+    margin-bottom: 40px;
 }
 
 .modal-overlay{
