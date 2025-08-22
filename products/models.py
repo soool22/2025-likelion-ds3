@@ -19,6 +19,13 @@ class Product(models.Model):
     description = models.TextField(blank=True)  # 상품 설명
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_main = models.BooleanField(default=False) # 대표 메뉴 여부
 
+    def save(self, *args, **kwargs):
+        if self.is_main:
+            # 같은 가게의 다른 대표 메뉴를 False로 변경
+            Product.objects.filter(store=self.store, is_main=True).exclude(pk=self.pk).update(is_main=False)
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return f"{self.name} ({self.store.name})"

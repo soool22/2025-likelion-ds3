@@ -4,6 +4,7 @@ from stores.models import Store
 from django.utils import timezone
 from datetime import timedelta
 from visit_rewards.models import Visit
+from visit_rewards.models import Reward
 
 # 챌린지 종류
 class MissionType(models.Model):
@@ -17,12 +18,21 @@ class MissionType(models.Model):
     
 # 점주가 생성하는 챌린지
 class Mission(models.Model):
+    REWARD_TYPE_CHOICES = [
+        ('POINT', '포인트'),
+        ('CUSTOM', '직접 입력 보상'),  # 예: 음료 쿠폰, 사은품 등
+    ]
+
     store = models.ForeignKey(to=Store, on_delete=models.CASCADE, related_name='missions')
     mission_type = models.ForeignKey(to=MissionType, on_delete=models.CASCADE, related_name='missions')
 
     title = models.CharField(max_length=100)
     description = models.TextField()
-    reward_description = models.CharField(max_length=200)
+
+    reward_type = models.CharField(max_length=20, choices=REWARD_TYPE_CHOICES, default='POINT')
+    reward_points = models.PositiveIntegerField(default=0)  # 포인트 지급일 경우 사용
+    reward_description = models.CharField(max_length=200, blank=True)  # CUSTOM 보상일 때 사용
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     target_value = models.PositiveIntegerField() # 목표치 (금액, 방문 횟수, 기간 등)
@@ -57,6 +67,7 @@ class MissionProgress(models.Model):
     current_value = models.PositiveIntegerField(default=0)
     is_completed = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
+    reward_given = models.BooleanField(default=False) # 보상 지급됐는지 확인 여부
 
     class Meta:
         unique_together = ('mission', 'user')
@@ -75,11 +86,23 @@ class MissionProgress(models.Model):
 
 
     def check_completion(self):
-        #미션 완료 조건 검사
         if not self.is_completed and self.current_value >= self.mission.target_value:
             self.is_completed = True
             self.save()
             MissionComplete.objects.get_or_create(mission=self.mission, user=self.user)
+
+            # Reward 지급 (POINT 타입)
+            if not self.reward_given and self.mission.reward_type == 'POINT':
+                Reward.objects.create(
+                    user=self.user,
+                    reward_type='point',
+                    amount=self.mission.reward_points,
+                    description=f"{self.mission.title} 완료 보상"
+                )
+                self.user.points += self.mission.reward_points
+                self.user.save()
+                self.reward_given = True
+                self.save()
 
 # 소비자가 챌린지를 완료했을 때
 class MissionComplete(models.Model):
@@ -109,4 +132,4 @@ class VisitAmountAccess(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'store', 'created_at')  
+        unique_together = ('user', 'store', 'visit')  

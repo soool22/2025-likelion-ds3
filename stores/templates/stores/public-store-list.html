@@ -48,10 +48,11 @@
             </a>
             <br/>
 
-            주소: {{ store.address }}<br/>
-            
+            주소: {{ store.address }}
             <!-- 거리 -->
-            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
+            {% if store.distance %}
+                ({{ store.distance }})
+            {% endif %}
             <br/>
 
             카테고리:

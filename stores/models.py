@@ -28,7 +28,8 @@ def generate_uuid():
 # 가게
 class Store(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False) # 가게 이름
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 점주 계정 ( 현재 로그인한 모든 계정 포함 )
+    created_at = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 점주 계정
     address = models.CharField(max_length=255, null=False, blank=False) # 주소
     latitude = models.FloatField(null=False) # 위도
     longitude = models.FloatField(null=False) # 경도
@@ -49,7 +50,7 @@ class Store(models.Model):
     open_time = models.TimeField(null=True, blank=True)
     close_time = models.TimeField(null=True, blank=True)
     
-     # 리뷰 요약 관련 필드 추가
+    # 리뷰 요약 관련 필드 추가
     review_summary_text = models.TextField(blank=True, default="")
     review_keywords = models.TextField(blank=True, default="")  # 콤마로 구분
     review_snippet = models.TextField(blank=True, default="")
