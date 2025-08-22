@@ -143,11 +143,9 @@
                     <div class="containerMiddleBox">
                         <p class="middleLastTitle">유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}</p>
                         {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
-                            {% if user_can_access_amount %}
                             <a href="{% url 'missions:update-amount' mission.id %}">
                                 <p class="middleLastContent">누적 금액 입력</p>
                             </a>
-                            {% endif %}
                         {% endif %} 
                     </div>
                 </div>
@@ -165,7 +163,7 @@
 
                             {% comment %} {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
                             <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
-                            {% endif %} {% endcomment %}
+                            {% endif %}  {% endcomment %}
                         </p>
                         {% empty %}
                         <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
