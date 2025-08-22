@@ -50,7 +50,7 @@
                         </div>
                         <div class="topBox">
                             <img class="topIcon" src="{% static 'img/top.svg'%}" alt="">
-                            <p class="topText">TOP 100</p>
+                            <p class="topText">오늘의 HOT</p>
                         </div>
                         <div class="reviewbestBox">
                             <img class="reviewbestIcon" src="{% static 'img/reviewbest.svg'%}" alt="">
@@ -60,140 +60,121 @@
                 </form>
                 <form>
                     <div id="storeContainer">
-                        <div id="storeCardBox">
-                            <div class="storeCard">
-                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
-                                <div class="storeInfoBox">
-                                    <div class="storeInfoMediumBox">
-                                        <div class="storeInfoSmallBox">
-                                            <p class="storeCategory">도봉구, 양식</p>
-                                            <p class="storeName">미뇨리</p>
-                                        </div>
-                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
-                                    </div>
-                                    <div class="distanceTimeBox">
-                                        <div class="distanceTime">
-                                            <p class="distanceTimeContent">📍</p>
-                                            <p class="distanceTimeContent">300m</p>
-                                        </div>
-                                        <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="../img/clock.svg"/>
-                                            <p class="distanceTimeContent">영업중</p>
+                        {% comment %} 추천 {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-recommend" >
+                            {% if recommended_stores %}
+                            {% for store in recommended_stores %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="commentBox">
-                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
-                                    <p class="commentContent">청양불고기파스타</p>
-                                </div>
-                            </div>
-                            <div class="storeCard">
-                                <img class="storeImg" src="../img/storeImg.jpg"/>
-                                <div class="storeInfoBox">
-                                    <div class="storeInfoMediumBox">
-                                        <div class="storeInfoSmallBox">
-                                            <p class="storeCategory">도봉구, 양식</p>
-                                            <p class="storeName">미뇨리</p>
-                                        </div>
-                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
-                                    </div>
-                                    <div class="distanceTimeBox">
-                                        <div class="distanceTime">
-                                            <p class="distanceTimeContent">📍</p>
-                                            <p class="distanceTimeContent">300m</p>
-                                        </div>
-                                        <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
-                                            <p class="distanceTimeContent">영업중</p>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="commentBox">
-                                    <img class="commentIcon" src="../img/comment.svg"/>
-                                    <p class="commentContent">청양불고기파스타</p>
-                                </div>
-                            </div>
-                            <div class="storeCard">
-                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
-                                <div class="storeInfoBox">
-                                    <div class="storeInfoMediumBox">
-                                        <div class="storeInfoSmallBox">
-                                            <p class="storeCategory">도봉구, 양식</p>
-                                            <p class="storeName">미뇨리</p>
-                                        </div>
-                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
-                                    </div>
-                                    <div class="distanceTimeBox">
-                                        <div class="distanceTime">
-                                            <p class="distanceTimeContent">📍</p>
-                                            <p class="distanceTimeContent">300m</p>
-                                        </div>
-                                        <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
-                                            <p class="distanceTimeContent">영업중</p>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                                <p>추천 가게를 불러오는 중입니다...</p>
+                            {% endif %}
+                        </div>
+                        
+                        {% comment %} top100 {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-top" >
+                            {% for store in top_visits %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="commentBox">
-                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
-                                    <p class="commentContent">청양불고기파스타</p>
-                                </div>
-                            </div>
-                            <div class="storeCard">
-                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
-                                <div class="storeInfoBox">
-                                    <div class="storeInfoMediumBox">
-                                        <div class="storeInfoSmallBox">
-                                            <p class="storeCategory">도봉구, 양식</p>
-                                            <p class="storeName">미뇨리</p>
-                                        </div>
-                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
-                                    </div>
-                                    <div class="distanceTimeBox">
-                                        <div class="distanceTime">
-                                            <p class="distanceTimeContent">📍</p>
-                                            <p class="distanceTimeContent">300m</p>
-                                        </div>
-                                        <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
-                                            <p class="distanceTimeContent">영업중</p>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="commentBox">
-                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
-                                    <p class="commentContent">청양불고기파스타</p>
-                                </div>
-                            </div>
-                            <div class="storeCard">
-                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
-                                <div class="storeInfoBox">
-                                    <div class="storeInfoMediumBox">
-                                        <div class="storeInfoSmallBox">
-                                            <p class="storeCategory">도봉구, 양식</p>
-                                            <p class="storeName">미뇨리</p>
-                                        </div>
-                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
-                                    </div>
-                                    <div class="distanceTimeBox">
-                                        <div class="distanceTime">
-                                            <p class="distanceTimeContent">📍</p>
-                                            <p class="distanceTimeContent">300m</p>
-                                        </div>
-                                        <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
-                                            <p class="distanceTimeContent">영업중</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% comment %} 리뷰best {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-review">
+                            {% for store in review_best %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="commentBox">
-                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
-                                    <p class="commentContent">청양불고기파스타</p>
-                                </div>
-                            </div>
+                            </a>
+                            {% endfor %}
                         </div>
                         <div id="btnBox">
-                            <a href="../html/StoreSearchPage.html">
+                            <a href="{% url 'stores:store-search' %}">
                                 <div id="mapBtn">
                                     <div id="mapBtnBox">
                                         <img id="mapIcon" src="{% static 'img/map.svg'%}"/>
@@ -215,9 +196,15 @@
                                 <p id="challengeTitle">🔥 주간 인기 챌린지</p>
                             </a>
                             <div id="challengeRanking">
-                                <p class="challenge">🥇 같은 음료 3번 먹기 ▶️ 참여자 432명</p>
-                                <p class="challenge">🥈 골목 3코스 완주 ▶️ 참여자 289명</p>
-                                <p class="challenge">🥉 이번 주 NEW 가게 도전! ▶️ 참여자 175명</p>
+                                {% if rankings %}
+                                    {% for r in rankings %}
+                                        <a href="{% url 'stores:store-detail' r.mission.store.id %}">
+                                            <p class="challenge">[{{ r.mission.store.name }}] {{ r.mission.title }} ▶ 참여자 {{ r.participant_count }}명</p>
+                                        </a>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="challenge">오늘의 인기 챌린지가 없습니다.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -226,12 +213,12 @@
             {% endif %}
             <div id="tapBar">
                 <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel">홈</p>
+                    <img class="tapBarIcon" src="{% static 'img/homepicked.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel picked">홈</p>
                 </a>
                 <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel picked">가게 검색</p>
+                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel">가게 검색</p>
                 </a>
                 <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
                     <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
@@ -247,6 +234,67 @@
                 <a href="{% url 'accounts:signup' %}">회원가입</a>
             {% endif %}
         </main>
+        <script>
+        (() => {
+        const tabs = document.querySelectorAll(
+            '.recommendstoreBox, .topBox, .reviewbestBox'
+        );
+        if (!tabs.length) return;
+
+        const plusLink = document.getElementById('plusBtn')?.closest('a');
+
+        const ROUTES = {
+            recommend: '{% url 'stores:public-store-list' %}',
+            top: '{% url 'stores:popular-store-list' %}',
+            review: '{% url 'stores:review-best-list' %}',
+        };
+
+        // 박스 3개를 순서대로 잡음: [추천, top, review]
+        const boxes = document.querySelectorAll('#storeContainer .storeCardBox');
+        const KEYS  = ['recommend', 'top', 'review'];
+        const BOXES = {};
+        boxes.forEach((box, i) => { BOXES[KEYS[i]] = box; });
+
+        function tabKey(el) {
+            if (el.classList.contains('recommendstoreBox')) return 'recommend';
+            if (el.classList.contains('topBox'))           return 'top';
+            return 'review';
+        }
+
+        function showBox(key) {
+            Object.entries(BOXES).forEach(([k, el]) => {
+            if (!el) return;
+            el.style.display = (k === key) ? '' : 'none';
+            el.hidden = (k !== key);
+            el.setAttribute('aria-hidden', String(k !== key));
+            });
+        }
+
+        function setActiveTab(selected) {
+            tabs.forEach(tab => {
+            tab.classList.remove('active');
+            const img = tab.querySelector('img');
+            if (img) img.src = img.src.replace('picked', '');
+            });
+
+            selected.classList.add('active');
+            const icon = selected.querySelector('img');
+            if (icon && !/picked\.svg$/.test(icon.src)) {
+            icon.src = icon.src.replace('.svg', 'picked.svg');
+            }
+
+            const key = tabKey(selected);
+            showBox(key);
+
+            if (plusLink) plusLink.href = ROUTES[key] || '#';
+        }
+
+        // 초기: 첫 탭
+        setActiveTab(tabs[0]);
+
+        tabs.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab)));
+        })();
+        </script>
     </body>
     <script src="{% static 'js/HomePage.js'%}"></script>
 </html>

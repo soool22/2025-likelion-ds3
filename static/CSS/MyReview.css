@@ -20,6 +20,10 @@ main{
     font-style: normal;
 }
 
+a{
+    text-decoration: none;
+}
+
 header{
     display: flex;
     margin-top: 32px;

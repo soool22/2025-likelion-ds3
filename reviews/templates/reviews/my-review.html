@@ -1,45 +1,53 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내가 쓴 리뷰</title>
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/MyReview.css'%}" />    
 </head>
 <body>
-    <a href="{% url 'home:main' %}">홈으로</a>
-    <h2>내가 작성한 리뷰</h2>
-
-    {% if reviews %}
-        {% for review in reviews %}
-            <div class="review-item">
+    <main>
+        <header>
+            <a href="{% url 'home:main' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 내 리뷰 관리 </div>
+        </header>
+        <div class="separation-box"></div>
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-box">
                 <a href="{% url 'stores:store-detail' review.store.id %}">
-                    <h3>{{ review.store.name }}</h3>
+                    <div class="store-name text">{{ review.store.name }}</div>
                 </a>
-                {{ review.stars }}
-                <br/>
-                {{ review.comment|linebreaks }}
-                {{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})
-                <br/>
-                {% for img in review.images.all %}
-                    {% if img.image %}
-                        <a href="{{ img.image.url }}" target="_blank">
-                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
-                        </a>
+                <div class="second-line">
+                    <div class="review-star">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                    </div>
+                    <div class="date text">{{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})</div>
+                </div>
+                <div class="short-review text">{{ review.comment|linebreaks }}</div>
+                <div class="fourth-line">
+                    {% if review.likes.count > 0 %}
+                        <div class="recommend-num">{{ review.likes.count }}명이 추천해요</div>
                     {% endif %}
-                <br/>
-                {% endfor %}
-                {% if review.likes.count > 0 %}
-                    <p>{{ review.likes.count }}명이 이 리뷰를 추천해요</p>
-                {% endif %}
-                <br/>
-                <a href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                    <div style="display: flex; align-items: center;">
+                        <div class="delete-box">
+                        <img src="{% static 'IMG/delete.png'%}">
+                        <div class="delete text">삭제</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <hr/>
-        {% endfor %}
-    {% else %}
-        아직 작성한 리뷰가 없습니다.
-    {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+        {% endif %}
+    </main>
 </body>
 </html>

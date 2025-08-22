@@ -327,6 +327,7 @@ header{
     height: 90px;
     border-radius: 12px;
     /* border: 1px solid #CCC; */
+    object-fit: cover; 
 }
 
 .aiReviewBox{

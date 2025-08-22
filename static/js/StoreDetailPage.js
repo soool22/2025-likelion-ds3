@@ -24,14 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3) 인증 버튼 클릭 시 이동 (요소가 있을 때만)
   if (certBtn) {
-    certBtn.addEventListener('click', () => {
-      // 실제 경로로 교체하세요 (Django URL이면 템플릿에서 data-로 넘겨도 좋음)
-      const CERT_PAGE_URL = '../html/CertificationPage.html';
-      window.location.href = CERT_PAGE_URL;
-      // 돌아왔을 때 review로 바꾸고 싶다면, 인증 완료 시점에 아래 값을 '1'로 저장하도록 구현
-      // sessionStorage.setItem(CERT_DONE_KEY, '1');
-    });
-  }
+  certBtn.addEventListener('click', () => {
+    if (window.CERT_PAGE_URL) window.location.href = window.CERT_PAGE_URL;
+  });
+}
+
 
   // 4) AI 요약 토글
   if (aiBtn && aiReview) {
