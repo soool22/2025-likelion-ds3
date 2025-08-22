@@ -95,7 +95,7 @@ header{
 
 #userName{
     margin: 0;
-    color: #b7b7b7;
+    color: #393939;
     font-size: 20px;
     font-weight: 600;
 }
@@ -105,6 +105,7 @@ header{
     height: 20px;
 }
 /* 헤더 끝 */
+p{margin: 0;}
 
 #containerBody{
     display: flex;
@@ -113,86 +114,41 @@ header{
 }
 
 #banner{
-    width: 335px;
-    height: 169px;
-    border-radius: 24px;
-    border: solid 1px #cccccc;
-    margin: 22px 0 4px 0;  
-    padding: 26px 38px;
+    width: 337px;
+    height: 131px;
+    border-radius: 25px;
+    background: linear-gradient(259deg, #FFB237 -3.24%, #FFEFDE 102.42%);
+    margin-top: 27px;
+    padding: 24px 27px;
     box-sizing: border-box;
-    gap: 19px;
+    display: flex;
+    align-content: center;
+    gap: 46px;
+}
+
+#bannerBox{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
 }
 
-.achievementBox{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.achievementSmallBox{
-    width: 260px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.achievementSmallBox2{
-    width: 260px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.achievementTitle{
-    margin: 0;
+#bannerTitle{
     color: #000000;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
+    line-height: 1.18;
+    
 }
 
-.sideClick{
-    width: 6px;
-}
-
-.totalAchievement{
-    width: 200px;
-    height: 11px;
-    border-radius: 5.5px;
-    background-color: #F5F5F5;
-}
-
-.achievement{
-    width: 50%;
-    height: 11px;
-    border-radius: 5.5px;
-    background-color: #FFCC02;
-    transition: width .3s ease;
-}
-
-.scoreBox{
-    display: flex;
-    align-items: center;
-}
-
-.nowScore{
-    margin: 0;
+#bannerContent{
+    color: #5C5C5C;
     font-size: 12px;
     font-weight: 600;
-    color: #000000;
+    line-height: 1.17;
 }
 
-.totalScore{
-    margin: 0;
-    font-size: 12px;
-    font-weight: 600;
-    color: #cccccc;
-}
-
-.stampIcon{
-    width: 10px;
+#bannerCharacter{
+    height: 87px;
 }
 
 .containerBigBox{

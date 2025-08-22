@@ -1,121 +1,140 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>마이페이지</title>
-</head>
-<body>
-    <h1>마이페이지</h1>
-    <a href="{% url 'home:main' %}">홈으로</a><br><br>
-
-    <form method="POST" enctype="multipart/form-data" action="{% url 'accounts:profile_edit' %}">
-        {% csrf_token %}
-        
-        <div>
-            <label for="id_nickname">닉네임</label><br />
-            <input type="text" name="nickname" id="id_nickname" value="{{ user.nickname }}" required />
-        </div>
-
-        <div>
-            <label>이메일</label><br />
-            <input type="email" value="{{ user.email }}" readonly />
-        </div>
-
-        <input type="submit" value="프로필 수정" />
-    </form>
-
-    <h3>관심 설정</h3>
-
-    <p>선호 음식 카테고리:
-        {% if preferred_categories_list %}
-            {% for cat in preferred_categories_list %}
-                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
-                    {{ cat }}
-                </span>
-            {% endfor %}
-        {% else %}
-            설정되지 않음
-        {% endif %}
-    </p>
-    
-    <p>선호 맛:
-        {% if preferred_tastes_list %}
-            {% for taste in preferred_tastes_list %}
-                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
-                    {{ taste }}
-                </span>
-            {% endfor %}
-        {% else %}
-            설정되지 않음
-        {% endif %}
-    </p>
-    
-    <p>선호 가격대:
-        {% if preferred_price_ranges_list %}
-            {% for pr in preferred_price_ranges_list %}
-                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
-                    {{ pr }}
-                </span>
-            {% endfor %}
-        {% else %}
-            설정되지 않음
-        {% endif %}
-    </p>
-    
-    <p>선호 건강 요소:
-        {% if preferred_health_list %}
-            {% for health in preferred_health_list %}
-                <span style="display:inline-block; background:#f0f0f0; border-radius:8px; padding:4px 8px; margin:2px;">
-                    {{ health }}
-                </span>
-            {% endfor %}
-        {% else %}
-            설정되지 않음
-        {% endif %}
-    </p>
-    
-
-    <a href="{% url 'accounts:user_preferences' %}">
-        <button type="button">수정</button>
-    </a>
-
-
-    <h3>찜한 가게</h3>
-    <a href="{% url 'accounts:favorite_stores' %}">찜 목록</a><br><br>
-
-    <h3>방문 내역</h3>
-    <a href="{% url 'visit_rewards:visit_history' %}">방문 내역</a><br><br>
-
-    <h3>내 리워드</h3>
-    <a href="{% url 'visit_rewards:my_rewards' %}">리워드 보기</a><br><br>
-
-    <h3>내 챌린지</h3>
-    <a href="{% url 'missions:my-mission' %}">내 챌린지</a><br><br>
-
-    <h3>내 쿠폰함</h3>
-    <a href="{% url 'visit_rewards:my_gifticons' %}">내 쿠폰함</a><br><br>
-
-    <h3>내가 작성한 리뷰</h3>
-    <a href="{% url 'reviews:my-review' %}">내가 작성한 리뷰</a><br><br>
-
-    <section class="setting">
-        <h3>설정</h3>
-        <div class="setting_detail">
-            <p><a href="{% url 'accounts:terms_of_service' %}">이용약관</a></p>
-            <p><a href="{% url 'accounts:privacy_policy' %}">개인정보 처리방침</a></p>
-
-        </div>
-    </section>
-    
-
-    <p><a href="{% url 'accounts:logout' %}">로그아웃</a></p>
-    <form action="{% url 'accounts:delete_account' %}" method="POST" onsubmit="return confirm('정말 회원 탈퇴 하시겠습니까?');">
-        {% csrf_token %}
-        <button type="submit">회원 탈퇴</button>
-    </form>
-    
-
-</body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/MyInfomationPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <a id="headerBox" href="{% url 'accounts:profile_edit'%}">
+                        <p id="userName">{{ request.user.username }}</p>
+                        <img id="sideClick" src="{% static 'img/rightside.svg'%}" alt="사이드클릭" />
+                    </a>
+                    <a id="settingClick" href="{% url 'accounts:profile_edit'%}">
+                        <img id="setting" src="{% static 'img/settings.svg'%}" alt="설정 아이콘" />
+                    </a>
+                </header>
+                <div id="containerBody">
+                    <div id="banner">
+                        <div id="bannerBox">
+                            <p id="bannerTitle">여러분의 최애 맛집을<br/>
+공유해 주세요</p>
+                            <p id="bannerContent">사람들과 미식 경험을 공유해 보세요!</p>
+                        </div>
+                        <img id="bannerCharacter" src="{% static 'img/character1.svg'%}"/>
+                    </div>
+                    <div class="containerBigBox">
+                        <p class="containerTitle">이용 정보</p>
+                        <div class="containerMediumBox">
+                            <a class="containerSmallBox" href="{% url 'reviews:my-review' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/myreview.svg'%}"/>
+                                    <p class="containerContent">내 리뷰</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'visit_rewards:visit_history' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/visithistory.svg'%}"/>
+                                    <p class="containerContent">방문 기록</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'accounts:favorite_stores' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/recentstore.svg'%}"/>
+                                    <p class="containerContent">내가 찜한 가게</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="containerBigBox">
+                        <p class="containerTitle">마이페이지</p>
+                        <div class="containerMediumBox">
+                            <a class="containerSmallBox" href="{% url 'visit_rewards:my_rewards' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/mystamp.svg'%}"/>
+                                    <p class="containerContent">내 포인트</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'visit_rewards:my_gifticons' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/mycoupon.svg'%}"/>
+                                    <p class="containerContent">내 쿠폰</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'missions:my-mission' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/top.svg'%}"/>
+                                    <p class="containerContent">내 챌린지</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'accounts:user_preferences' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/people.svg'%}"/>
+                                    <p class="containerContent">관심 설정</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="containerBigBox" style="margin-bottom: 55px;">
+                        <p class="containerTitle">서비스 안내</p>
+                        <div class="containerMediumBox">
+                            <a class="containerSmallBox" href="{% url 'accounts:privacy_policy' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/notice.svg'%}"/>
+                                    <p class="containerContent">공지사항</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/customer.svg'%}"/>
+                                    <p class="containerContent">고객센터</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="containerSmallBox" href="{% url 'accounts:terms_of_service' %}">
+                                <div class="containerLittleBox">
+                                    <img class="icon" src="{% static 'img/policy.svg'%}"/>
+                                    <p class="containerContent">약관 및 정책</p>
+                                </div>
+                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel">가게 검색</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
+                    <p class="tapBarLabel">관심 매장</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                    <img class="tapBarIcon" src="{% static 'img/myinfopicked.svg'%}" alt="내 정보 아이콘" />
+                    <p class="tapBarLabel picked">내 정보</p>
+                </a>
+            </div>
+        </main>
+    </body>
+    <script src="{% static 'js/MyInfomationPage.js'%}"></script>
 </html>

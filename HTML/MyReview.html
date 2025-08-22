@@ -10,34 +10,44 @@
 <body>
     <main>
         <header>
-            <a href="./MyInfomationPage.html">
+            <a href="{% url 'home:main' %}">
                 <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 리뷰 관리 </div>
         </header>
         <div class="separation-box"></div>
-        <div class="review-box">
-            <div class="store-name text">미뇨리</div>
-            <div class="second-line">
-                <div class="review-star">
-                    <img src="{% static 'IMG/star-yellow.png'%}">
-                    <img src="{% static 'IMG/star-yellow.png'%}">
-                    <img src="{% static 'IMG/star-yellow.png'%}">
-                    <img src="{% static 'IMG/star-yellow.png'%}">
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-box">
+                <a href="{% url 'stores:store-detail' review.store.id %}">
+                    <div class="store-name text">{{ review.store.name }}</div>
+                </a>
+                <div class="second-line">
+                    <div class="review-star">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        <img src="{% static 'IMG/star-yellow.png'%}">
+                    </div>
+                    <div class="date text">{{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})</div>
                 </div>
-                <div class="date text">지난 주</div>
-            </div>
-            <div class="short-review text">청양크림파스타가 정말 맛있어요</div>
-            <div class="fourth-line">
-                <div class="recommend-num">2명이 추천해요</div>
-                <div style="display: flex; align-items: center;">
-                    <div class="delete-box">
-                    <img src="{% static 'IMG/delete.png'%}">
-                    <div class="delete text">삭제</div>
+                <div class="short-review text">{{ review.comment|linebreaks }}</div>
+                <div class="fourth-line">
+                    {% if review.likes.count > 0 %}
+                        <div class="recommend-num">{{ review.likes.count }}명이 추천해요</div>
+                    {% endif %}
+                    <div style="display: flex; align-items: center;">
+                        <div class="delete-box">
+                        <img src="{% static 'IMG/delete.png'%}">
+                        <div class="delete text">삭제</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+        {% endif %}
     </main>
 </body>
 </html>
