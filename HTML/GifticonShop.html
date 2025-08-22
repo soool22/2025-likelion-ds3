@@ -9,105 +9,73 @@
 </head>
 <body>
     <main>
+        <!-- 헤더 -->
         <header>
-            <a href="./MyPoint.html">
-                <img src="../IMG/edit-back.png" class="back-img"></img>
+            <a href="{% url 'visit_rewards:my_gifticons' %}">
+                <img src="{% static 'IMG/edit-back.png' %}" class="back-img"></img>
             </a>
             <div class="tittle text"> 기프티콘 샵 </div>
         </header>
+
+        <!-- 내 포인트 -->
         <div class="coin-box">
             <img src="{% static 'IMG/coin.svg'%}" class="coin-img">
-            <div class="coin text">내 포인트 {{ user_points }}</div>
+            <div class="coin text">내 포인트 {{ user_points }}점</div>
         </div>
+
+        <!-- 기프티콘 리스트 -->
         <div class="gifticon-box">
             <div class="line">
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-coffee(ice).png'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">1500</div>
+                {% for g in gifticons %}
+                    <div class="gifticon-back">
+                        {% if g.image %}
+                            <img src="{{ g.image.url }}" alt="{{ g.name }}">
+                        {% else %}
+                            <img src="{% static 'IMG/default_gifticon.png' %}" alt="기본 이미지">
+                        {% endif %}
+
+                        <div class="text-box">
+                            <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                            <div class="icon-text">{{ g.point_cost }}</div>
+                        </div>
+
+                        <div class="gifticon-name text">{{ g.name }}</div>
+
+                        {% if g.remaining_points >= 0 %}
+                            <a href="{% url 'visit_rewards:buy_gifticon' g.id %}" 
+                               class="buy-btn"
+                               data-cost="{{ g.point_cost }}"
+                               data-remaining="{{ g.remaining_points }}">
+                                구매하기
+                            </a>
+                        {% else %}
+                            <a href="javascript:void(0);" class="buy-btn disabled">
+                                구매 불가
+                            </a>
+                        {% endif %}
                     </div>
-                </div>
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-egg.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">2700</div>
-                    </div>
-                </div>
-            </div>
-            <div class="line">
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-dumpling.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">6200</div>
-                    </div>
-                </div>
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-sandwich.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">5400</div>
-                    </div>
-                </div>
-            </div>
-            <div class="line">
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-coffee(hot).svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">4200</div>
-                    </div>
-                </div>
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-cutlet.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">2000</div>
-                    </div>
-                </div>
-            </div>
-            <div class="line">
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-juice.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">4200</div>
-                    </div>
-                </div>
-                <div class="gifticon-back">
-                    <img src="{% static 'IMG/gifticon-yogurt.svg'%}">
-                    <div class="text-box">
-                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
-                        <div class="icon-text">2200</div>
-                    </div>
-                </div>
+
+                    {% if forloop.counter|divisibleby:2 %}
+                        </div><div class="line">
+                    {% endif %}
+                {% empty %}
+                    <p>등록된 기프티콘이 없습니다.</p>
+                {% endfor %}
             </div>
         </div>
-        <div class="modal-overlay hidden">
-            <div class="modal-box able hidden">
-                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
-                <div class="modal-title">기프티콘 구매 완료되었습니다<br>바로 사용 가능합니다</div>
-                <div class="modal-subtitle">BLACK DOWN COFFEE</div>
-                <div class="modal-desc">블다라떼 HOT</div>
-                <a href="./MyCoupon.html" style="text-decoration: none;">
-                    <button class="modal-btn">내 쿠폰함으로 가기</button>
-                </a>
+
+        <!-- 모달 (구매 확인) -->
+        <div id="check-modal" class="modal-overlay hidden">
+            <div class="modal-box check hidden">
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
+                <div class="modal-title">구매 확인</div>
+                <div class="modal-subtitle"></div>
+                <div class="modal-desc"></div>
+                <button class="modal-btn confirm-btn">구매하기</button>
+                <button class="modal-btn cancel-btn">취소</button>
             </div>
         </div>
-        <div class="modal-overlay hidden">
-            <div class="modal-box able hidden">
-                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
-                <div class="modal-title">기프티콘 구매 완료되었습니다<br>바로 사용 가능합니다</div>
-                <div class="modal-subtitle">BLACK DOWN COFFEE</div>
-                <div class="modal-desc">블다라떼 HOT</div>
-                <a href="./MyCoupon.html" style="text-decoration: none;">
-                    <button class="modal-btn">내 쿠폰함으로 가기</button>
-                </a>
-            </div>
-        </div>
-        
+
         <script src="{% static 'js/GifticonShop.js'%}"></script>
     </main>
 </body>

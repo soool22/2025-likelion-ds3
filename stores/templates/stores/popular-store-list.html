@@ -1,4 +1,4 @@
-    {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,18 +15,17 @@
             </a>
             <div class="tittle-box">
                 <img src="{% static 'IMG/top100-tittle.svg'%}">
-                <div class="tittle text">TOP 100</div>
+                <div class="tittle text">오늘의 HOT</div>
             </div>
         </header>
 
-        <!-- 가게 리스트가 들어갈 영역 -->
-        <div class="store-info-box" id="storeList"></div>
-    </main>
-
+        <!-- 가게 리스트 -->
+        <div class="store-info-box">
             {% for store in stores %}
-                <a href="{% url 'stores:store-detail' store.id %}" class="box">
+                <a href="{% url 'stores:store-detail' store.id %}" class="box"  style="text-decoration: none;">
                     <div class="left-box">
-                        <div class="first-line text">{{ store.address }} 
+                        <div class="first-line text">
+                            {{ store.address }} 
                             {% for category in store.category.all %}
                                 {{ category.name }}{% if not forloop.last %}, {% endif %}
                             {% endfor %}
@@ -36,22 +35,15 @@
                             <div class="store-name text">{{ store.name }}</div>
                         </div>
                         <div class="third-line">
-                            <div class="position text">
-                                {% if store.distance %}
-                                    📍{{ store.distance }}
-                                {% endif %}
-                                <br/>
+                            <div class="position text">📍{{ store.distance|default_if_none:"-"|floatformat:0 }}m</div>
                             <div class="operation">
-                                <img src="{% static 'IMG/Time.svg'%}">
-                                <!-- 영업 시간 -->
-                                {% if store.open_time and store.close_time %}
-                                    {% if store.is_open %}
-                                        <div class="time text">영업중</div>
-                                    {% else %}
-                                        <div class="time text">영업종료</div>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
+                            <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+                            {% if store.is_open %}                                
+                                <div class="time text" style="color:#0094D6">영업중</div>
+                            {% else %}
+                                <div class="time text" style="color:#0094D6">영업 종료</div>
+                            {% endif %}
+                        </div>
                         </div>
                     </div>
                     {% if store.image %}
@@ -60,20 +52,10 @@
                         <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" class="store-img">
                     {% endif %}
                 </a>
+            {% empty %}
+                <p>가게가 없습니다.</p>
             {% endfor %}
-            <br/>
-
-            <!-- 영업 시간 -->
-            {% if store.open_time and store.close_time %}
-                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-                {% if store.is_open %}
-                    (영업 중)
-                {% else %}
-                    (영업 종료)
-                {% endif %}
-            {% endif %}
         </div>
-    </a>
-    <hr/>
+    </main>
 </body>
 </html>

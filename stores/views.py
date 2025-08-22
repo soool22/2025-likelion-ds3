@@ -316,3 +316,5 @@ def store_detail(request, store_id):
     }
 
     return render(request, 'stores/store-detail.html', context)
+
+
