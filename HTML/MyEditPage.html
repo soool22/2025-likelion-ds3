@@ -64,10 +64,11 @@
             <div class="nick-name-box">
                 <div class="nick-name-tittle">
                     <div class="text">닉네임 수정</div>
-                    <img src="{% static 'IMG/MY-X.png" style="cursor: pointer;'%}">
+                    <img src="{% static 'IMG/MY-X.png' %}" style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
-                <form action="/edit-phone" method="post">
+                <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <textarea class="nick-name-textarea" name="nick-name" placeholder="기존 닉네임"></textarea>
                 </form>
                 </div>
@@ -80,7 +81,8 @@
                     <img src="{% static 'IMG/MY-X.png'%}"style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
-                <form action="/edit-phone" method="post">
+                <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <textarea class="nick-name-textarea" name="num" placeholder="010-1234-5678"></textarea>
                 </form>
             </div>
@@ -90,7 +92,8 @@
                 <img src="{% static 'IMG/my-back.png'%}" class="back"style="cursor: pointer;">
                 <div class="email-tittle">이메일을 입력해주세요.</div>
                 <div class="email-input">
-                    <form action="/edit-email" method="post">
+                    <form method="post"enctype="multipart/form-data">
+                        {% csrf_token %}
                         <textarea class="email-textarea" name="email" placeholder="기존이메일"></textarea>
                     </form>
                 </div>
@@ -105,7 +108,8 @@
                     <div class="password-input">
                         <div class="password-name">비밀번호</div>
                         <div class="password-wrapper">
-                            <form action="/edit-password" method="post">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
                                 <input type="password" class="password-textarea" name="password" placeholder="비밀번호 확인" required>
                             </form>
                             <button type="button" class="toggle-btn"></button>
@@ -114,7 +118,8 @@
                     <div class="password-input">
                         <div class="password-name">비밀번호 확인</div>
                         <div class="password-wrapper">
-                            <form action="/edit-password-check" method="post">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
                                 <input type="password" class="password-textarea" name="passwordcheck" placeholder="비밀번호 확인" required>
                             </form>
                             <button type="button" class="toggle-btn"></button>

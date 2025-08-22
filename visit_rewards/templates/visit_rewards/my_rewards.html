@@ -1,31 +1,86 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>QR 방문 인증</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static "CSS/MyPoint.css" %}" />
 </head>
 <body>
-    <a href="{% url 'home:main' %}">홈으로</a><br><br>
-    <h2>방문 인증 포인트: {{ visit_points }}점</h2>
-    <h2>챌린지 포인트: {{ challenge_points }}점</h2>
-    <h2>총 포인트: {{ points }}점</h2>
+    <main>
+        <div id="point-data"
+            data-visit="{{ visit_points }}"
+            data-challenge="{{ challenge_points }}"
+            data-total="{{ points }}"
+            style="display: none;">
+        </div>
 
-    <a href="{% url 'visit_rewards:purchase_history' %}">구매 내역</a><br><br>
+        <header>
+            <a href="{% url 'home:main' %}">
+                <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 내 포인트 </div>
+        </header>
+        <div class="list">
+            <div class=" box">
+                <div class="first-line">
+                    <div class="B text"> 연짱이 님</div>
+                </div>
+                <div class="mission-box">
+                    <div class="mission1 text">현재 {{ points }} 포인트가 있습니다</div>
+                    <div class="mission-box-flex">
+                        <div class="gray-range">
+                            <div id="visit-bar" class="yellow-range"></div>
+                        </div>
+                        <div class="percent text">
+                            <span style="color: black;">방문인증 포인트</span> 
+                        </div>
+                    </div>
+                    <div class="mission-box-flex">
+                        <div class="gray-range">
+                            <div id="challenge-bar" class="yellow-range"></div>
+                        </div>
+                        <div class="percent text">
+                            <span style="color: black;">챌린지 포인트</span> 
+                        </div>
+                    </div>
+                    <div class="mission-btn">
+                        <a href="{% url 'visit_rewards:my_character' %}" class="mission-QR" style="text-decoration:none">
+                            <img src="{% static 'IMG/pen.png'%}" class="qr-img">
+                            <div class="text" style="font-size: 14px;margin-left: 11px;">내 캐릭터</div>
+                        </a>
+                        <div class="other-btn-box">
+                            <a class="other-btn" href="{% url 'visit_rewards:shop_gifticons' %}">
+                                <img src="{% static 'IMG/home-y.svg'%}" class="benefit-img">
+                                <div class="text" style="font-size: 14px;margin-left: 11px;">포인트 샵</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const visitPoints = {{ visit_points|default:0 }};
+      const challengePoints = {{ challenge_points|default:0 }};
+      const totalPoints = {{ points|default:1 }}; // 0 방지
 
-    <h3>내 아이템</h3>
-    <ul>
-    {% for user_item in items %}
-        <li>{{ user_item.item.name }}</li>
-    {% empty %}
-        <li>보유한 아이템이 없습니다.</li>
-    {% endfor %}
-    </ul>
+      const visitPercent = (visitPoints / totalPoints) * 100;
+      const challengePercent = (challengePoints / totalPoints) * 100;
 
+      const visitBar = document.getElementById("visit-bar");
+      const challengeBar = document.getElementById("challenge-bar");
 
-    <a href="{% url 'visit_rewards:my_character' %}">내 캐릭터</a>
-    <a href="{% url 'visit_rewards:shop_gifticons' %}">기프티콘 샵</a>
+      // 바로 적용 (애니메이션 없음)
+      visitBar.style.width = visitPercent + "%";
+      challengeBar.style.width = challengePercent + "%";
+      challengeBar.style.left = visitPercent + "%";
+  });
+</script>
+
 
 </body>
 </html>
-    

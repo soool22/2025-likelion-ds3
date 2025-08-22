@@ -1,33 +1,76 @@
-// 버튼 요소들
-const otherBtns = document.querySelectorAll(".gifticon-back");
+document.addEventListener("DOMContentLoaded", () => {
+    const checkModal = document.getElementById("check-modal");
+    const failModal = document.getElementById("fail-modal");
 
-// 모달 부모 (오버레이)
-const modalOverlay = document.querySelector(".modal-overlay");
+    const modalBoxCheck = checkModal.querySelector(".modal-box.check");
+    const modalTitle = modalBoxCheck.querySelector(".modal-title");
+    const modalSubtitle = modalBoxCheck.querySelector(".modal-subtitle");
+    const modalDesc = modalBoxCheck.querySelector(".modal-desc");
+    const confirmBtn = modalBoxCheck.querySelector(".confirm-btn");
+    const cancelBtn = modalBoxCheck.querySelector(".cancel-btn");
 
-// 모든 모달 요소
-const modalAble = document.querySelector(".modal-box.able");
+    const modalBoxFail = failModal.querySelector(".modal-box.fail");
+    const closeFailBtn = failModal.querySelector(".close-fail");
 
+    let targetUrl = null;
 
-// 닫기 버튼들 (공통)
-const modalBtns = document.querySelectorAll(".modal-btn");
+    // ✅ 구매 가능 → 구매 확인 모달
+    document.querySelectorAll(".buy-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
 
-// "쿠폰 사용하기" 버튼 눌렀을 때
-otherBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        // 오버레이 열기
-        modalOverlay.classList.remove("hidden");
+            const name = btn.dataset.name;
+            const cost = btn.dataset.cost;
+            const remain = btn.dataset.remaining;
 
-        
-        modalAble.classList.remove("hidden");
+            modalTitle.innerHTML = `정말 기프티콘을 구매하시겠습니까?<br>가격: ${cost}P`;
+            modalSubtitle.textContent = name;
+            modalDesc.textContent = `(구매 후 잔여 포인트: ${remain}P)`;
+
+            targetUrl = btn.href;
+
+            checkModal.classList.remove("hidden");
+            modalBoxCheck.classList.remove("hidden");
+        });
     });
-});
 
-// 모달 내부 "확인" 버튼 누르면 닫기
-modalBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        modalOverlay.classList.add("hidden");
-        modalAble.classList.add("hidden");
-        modalDisable.classList.add("hidden");
-        modalConfirmation.classList.add("hidden");
+    confirmBtn.addEventListener("click", () => {
+        if (targetUrl) {
+            window.location.href = targetUrl;
+        }
+    });
+
+    cancelBtn.addEventListener("click", () => {
+        checkModal.classList.add("hidden");
+        modalBoxCheck.classList.add("hidden");
+    });
+
+    checkModal.addEventListener("click", (e) => {
+        if (e.target.classList.contains("modal-overlay")) {
+            checkModal.classList.add("hidden");
+            modalBoxCheck.classList.add("hidden");
+        }
+    });
+
+    // ❌ 포인트 부족 → 실패 모달
+    document.querySelectorAll(".not-enough").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            failModal.classList.remove("hidden");
+            modalBoxFail.classList.remove("hidden");
+        });
+    });
+
+    closeFailBtn.addEventListener("click", () => {
+        failModal.classList.add("hidden");
+        modalBoxFail.classList.add("hidden");
+    });
+
+    failModal.addEventListener("click", (e) => {
+        if (e.target.classList.contains("modal-overlay")) {
+            failModal.classList.add("hidden");
+            modalBoxFail.classList.add("hidden");
+        }
     });
 });

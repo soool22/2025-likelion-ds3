@@ -36,14 +36,20 @@
                             <div class="store-name text">{{ store.name }}</div>
                         </div>
                         <div class="third-line">
-                            <div class="position text">📍{{ store.distance|default_if_none:"-"|floatformat:0 }} m</div> 
+                            <div class="position text">
+                                {% if store.distance %}
+                                    📍{{ store.distance }}
+                                {% endif %}
+                                <br/>
                             <div class="operation">
-                                <img src="{% static '../static/IMG/Time.svg'%}">
+                                <img src="{% static 'IMG/Time.svg'%}">
                                 <!-- 영업 시간 -->
-                                {% if store.is_open %}
-                                    <div class="time text">영업중</div>
-                                {% else %}
-                                    <div class="time text">영업종료</div>
+                                {% if store.open_time and store.close_time %}
+                                    {% if store.is_open %}
+                                        <div class="time text">영업중</div>
+                                    {% else %}
+                                        <div class="time text">영업종료</div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -55,5 +61,21 @@
                     {% endif %}
                 </a>
             {% endfor %}
+            <br/>
+
+            <!-- 영업 시간 -->
+            {% if store.open_time and store.close_time %}
+                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                {% if store.is_open %}
+                    (영업 중)
+                {% else %}
+                    (영업 종료)
+                {% endif %}
+            {% endif %}
+
+            
+        </div>
+    </a>
+    <hr/>
 </body>
 </html>

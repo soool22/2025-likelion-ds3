@@ -1,91 +1,64 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>리뷰 BEST(리뷰 평점 순)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'css/Top100&ReviewBest.css'%}" />    
 </head>
 <body>
-    <a href="{% url 'home:main'%}">홈</a>
-    <br/>
-
-    <h1>리뷰 BEST</h1>
-
-    <!-- 카테고리 필터 -->
-    <form method="get">
-        <select name="category" onchange="this.form.submit()">
-            <option value="">전체</option>
-            {% for category in categories %}
-                <option value="{{ category.slug }}" {% if category.slug == selected_category %}selected{% endif %}>
-                {{ category.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </form>
-    <br/>
-
-    {% for store in stores %}
-    <a href="{% url 'stores:store-detail' store.id %}">
-        <div>
-            {% if store.image %}
-                <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="150" height="150">
-                <br/>
-            {% else %}
-                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150">
-                <br/>
-            {% endif %}
-            <br/>
-
-            <h3>{{ store.name }}</h3>
-
-            <!-- 리뷰 목록 -->
-            <a href="{% url 'reviews:review-list' store.id %}">
-                <!-- 점수 -->
-                ★ {{ store.rating|floatformat:1 }}
-                <!-- 리뷰 개수-->
-                ({{ store.reviews.count }}) 
+    <main>
+        <header>
+            <a href="{% url 'home:main'%}">
+                <img src="{% static "IMG/edit-back.png" %}" class="back-img"></img>
             </a>
-            <br/>
+            <div class="tittle-box">
+                <img src="{% static 'IMG/reviewbest-tittle.svg'%}">
+                <div class="tittle text">리뷰 BEST</div>
+            </div>
+        </header>
 
-            주소: {{ store.address }}
+        
 
-            <!-- 거리 -->
-            {% if store.distance %}
-                ({{ store.distance }})
-            {% endif %}
-            <br/>
-            
-            카테고리:
-            {% for category in store.category.all %}
-            {{ category.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            <br/>
-
-            <!-- 영업 -->
-            {% if store.open_time and store.close_time %}
-                영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-                {% if store.is_open %}
-                    (영업 중)
+        {% for store in stores %}
+            <a href="{% url 'stores:store-detail' store.id %}" class="box"  style="text-decoration: none;">
+                <div class="left-box">
+                    <div class="first-line text">
+                        {{ store.address }}
+                        {% for category in store.category.all %}
+                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="second-line">
+                        <div class="num text">{{ forloop.counter }}</div>
+                        <div class="store-name text">{{ store.name }}</div>
+                    </div>
+                    <div class="third-line">
+                        <div class="position text">📍 {{ store.distance|default_if_none:"-"|floatformat:0 }}m</div>
+                        <div class="operation">
+                            <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+                            {% if store.is_open %}                                
+                                <div class="time text" style="color:#0094D6">영업중</div>
+                            {% else %}
+                                <div class="time text" style="color:#0094D6">영업 종료</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if store.image %}
+                    <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="store-img">
                 {% else %}
-                    (영업 종료)
+                    <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" class="store-img">
                 {% endif %}
-            {% endif %}
-
-        </div>
-    </a>
-        <hr/>
-    {% empty %}
-    <div>
-        <a href="{% url 'accounts:user_location' %}">
-            {% if user_location and user_location.gu_name %}
-                {{ user_location.gu_name }}▼
-            {% else %}
-                위치 설정
-            {% endif %}
-        </a>
-    </div>
-        리뷰 많은 가게가 없습니다.
-    {% endfor %}
+            </a>
+        {% empty %}
+            <div class="no-store">
+                리뷰 많은 가게가 없습니다.
+            </div>
+        {% endfor %}
+    </main>
 </body>
 </html>
+
+

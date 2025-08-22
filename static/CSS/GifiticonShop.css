@@ -3,6 +3,7 @@ body{
     background-color:#fafafa;
     margin: 0px;
 }
+
 main{
     display: flex;
     justify-self: center;
@@ -11,6 +12,12 @@ main{
     background-color: white;
     flex-direction:column;
     position: relative;
+      overflow-y: scroll;     /* 내용 스크롤 가능 */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+main::-webkit-scrollbar {
+  display: none;
 }
 
 header{
@@ -116,7 +123,7 @@ line-height: normal;
     .modal-title {
     font-weight: bold;
     margin: 5px 0;
-    font-size: 22px;
+    font-size: 18px;
     }
     .modal-error {
         font-weight: bold;
@@ -126,9 +133,10 @@ line-height: normal;
     color: orange;
     font-weight: bold;
     margin: 5px 0;
+    font-size: 24px;
     }
     .modal-desc {
-    font-size: 16px;
+    font-size: 12px;
     color: black;
     margin: 5px 0px 10px 0px;
     font-weight: bold;
@@ -144,7 +152,7 @@ line-height: normal;
     font-weight: bold;
     border-radius: 12px;
     cursor: pointer;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: #FFF;
 }
 

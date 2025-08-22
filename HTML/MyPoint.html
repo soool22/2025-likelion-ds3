@@ -5,12 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="../CSS/MyPoint.css" />
 </head>
 <body>
     <main>
+        <div id="point-data"
+            data-visit="{{ visit_points }}"
+            data-challenge="{{ challenge_points }}"
+            data-total="{{ points }}"
+            style="display: none;">
+        </div>
+
         <header>
-            <a href="./MyInfomationPage.html">
+            <a href="{% url 'home:main' %}">
                 <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 포인트 </div>
@@ -21,23 +29,30 @@
                     <div class="B text"> 연짱이 님</div>
                 </div>
                 <div class="mission-box">
-                    <div class="mission1 text">현재 1500 포인트가 있습니다</div>
+                    <div class="mission1 text">현재 {{ points }} 포인트가 있습니다</div>
                     <div class="mission-box-flex">
                         <div class="gray-range">
-                            <div class="yellow-range"></div>
+                            <div id="visit-bar" class="yellow-range"></div>
                         </div>
                         <div class="percent text">
-                            <span style="color: black;">5</span> <span style="color: #CCC;">/ 10</span>
+                            <span style="color: black;">방문 인증 포인트</span> 
                         </div>
-                        <img src="../IMG/stemp.png" class="stemp"></img>
+                    </div>
+                    <div class="mission-box-flex">
+                        <div class="gray-range">
+                            <div id="challenge-bar" class="yellow-range"></div>
+                        </div>
+                        <div class="percent text">
+                            <span style="color: black;">챌린지 포인트</span> 
+                        </div>
                     </div>
                     <div class="mission-btn">
-                        <div class="mission-QR">
+                        <a href="{% url 'visit_rewards:my_character' %}" class="mission-QR">
                             <img src="{% static 'IMG/my-qr.png'%}" class="qr-img">
-                            <div class="text" style="font-size: 14px;margin-left: 11px;">QR코드로 방문 인증하기</div>
-                        </div>
+                            <div class="text" style="font-size: 14px;margin-left: 11px;">내 캐릭터</div>
+                        </a>
                         <div class="other-btn-box">
-                            <a class="other-btn" href="./GifticonShop.html">
+                            <a class="other-btn" href="{% url 'visit_rewards:shop_gifticons' %}">
                                 <img src="{% static 'IMG/home-y.svg'%}" class="benefit-img">
                                 <div class="text" style="font-size: 14px;margin-left: 11px;">포인트 샵</div>
                             </a>
@@ -47,6 +62,25 @@
             </div>
         </div>
     </main>
-    <script src="{% static 'JS/MyPoint.js'%}"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const visitPoints = {{ visit_points|default:0 }};
+      const challengePoints = {{ challenge_points|default:0 }};
+      const totalPoints = {{ points|default:1 }}; // 0 방지
+
+      const visitPercent = (visitPoints / totalPoints) * 100;
+      const challengePercent = (challengePoints / totalPoints) * 100;
+
+      const visitBar = document.getElementById("visit-bar");
+      const challengeBar = document.getElementById("challenge-bar");
+
+      // 바로 적용 (애니메이션 없음)
+      visitBar.style.width = visitPercent + "%";
+      challengeBar.style.width = challengePercent + "%";
+      challengeBar.style.left = visitPercent + "%";
+  });
+</script>
+
+
 </body>
 </html>
