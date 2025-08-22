@@ -8,8 +8,6 @@
     <title>상품/메뉴 수정</title>
 </head>
 <body>
-    <a href="{% url 'products:product-list' store.id %}">이전</a>
-    <br/>
 
     <h2>{{ store.name }} - 상품 수정</h2>
 
@@ -40,7 +38,14 @@
             {{ form.description }}
         </div>
 
-        <button type="submit">완료</button>
+        <div>
+            대표 상품/메뉴 여부
+            {{ form.is_main }}
+        </div>
+
+
+        <button type="submit">완료</button> <br/>
+        <a href="{% url 'products:product-list' store.id %}">취소</a>
     </form>
 
 </body>

@@ -35,11 +35,21 @@ def visit_check(request, store_id):
     buf.seek(0)
     qr_base64 = base64.b64encode(buf.read()).decode('utf-8')
     store_qr_url = f"data:image/png;base64,{qr_base64}"
+    
+    # 누적 금액 챌린지
+    now = timezone.now()
+    has_amount_mission = Mission.objects.filter(
+        store=store,
+        mission_type__key='amount',  # 누적 금액 챌린지
+        start_date__lte=now,
+        end_date__gte=now,
+    ).exists()
 
     return render(request, 'visit_rewards/visit_checking.html', {
         'store': store,
         'store_qr_url': store_qr_url,
         'qr_url': qr_url,  # JS fetch용
+        'has_amount_mission': has_amount_mission,
     })
 
 @login_required
@@ -99,11 +109,35 @@ def visit_store(request):
     # 로그인 사용자 기준 누적 방문 횟수
     total_visits = Visit.objects.filter(store=store, user=request.user).count()
 
+    # 누적 금액 챌린지 존재 여부
+    now = timezone.now()
+    amount_mission = Mission.objects.filter(
+        store=store,
+        mission_type__key='amount',
+        start_date__lte=now,
+        end_date__gte=now,
+    ).first()
+
+    # 이미 완료했는지 확인
+    if amount_mission:
+        has_amount_mission = True
+        completed_amount_mission = MissionProgress.objects.filter(
+            mission=amount_mission,
+            user=request.user,
+            is_completed=True
+        ).exists()
+    else:
+        has_amount_mission = False
+        completed_amount_mission = False
+
     return JsonResponse({
         "status": "ok",
         "store_name": store.name,
         "total_visits": total_visits,
-        "points_earned": points_earned
+        "points_earned": points_earned,
+        "store_id": store.id,
+        "has_amount_mission": has_amount_mission,
+        "completed_amount_mission": completed_amount_mission,
     })
     
 @login_required
@@ -136,11 +170,13 @@ def visit_history(request):
 @login_required
 def my_rewards(request):
     """유저가 가진 포인트와 아이템 확인"""
-    total_points = Reward.objects.filter(
-        user=request.user,
-        used=False,
-        amount__gt=0
-    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # 방문 인증 포인트
+    visit_points = Reward.objects.filter(user=request.user, reward_type='visit', amount__gt=0, used=False).aggregate(total=Sum('amount'))['total'] or 0
+    # 챌린지 포인트
+    challenge_points = Reward.objects.filter(user=request.user, reward_type='point', amount__gt=0, used=False).aggregate(total=Sum('amount'))['total'] or 0
+    
+    total_points = visit_points + challenge_points  # 합산해서 계산용
 
     # 사용되지 않은 꾸미기 아이템
     items_qs = Reward.objects.filter(
@@ -159,6 +195,8 @@ def my_rewards(request):
     gifticons = list({r.gifticon for r in gifticons_qs})
 
     return render(request, 'visit_rewards/my_rewards.html', {
+        'visit_points': visit_points,
+        'challenge_points': challenge_points,
         'points': total_points,
         'items': items,
         'gifticons': gifticons,

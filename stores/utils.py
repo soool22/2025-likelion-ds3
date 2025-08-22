@@ -12,7 +12,15 @@ def haversine(lat1, lon1, lat2, lon2):
     dlon = radians(lon2 - lon1)
     a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
     c = 2 * atan2(sqrt(a), sqrt(1-a))
-    return R * c * 1000  # m 단위
+    distance_m = R * c * 1000  # m 단위
+    return distance_m  # 숫자 값만 반환
+
+def format_distance(distance_m):
+    """출력용 단위 변환"""
+    if distance_m < 1000:
+        return f"{int(distance_m)} m"
+    else:
+        return f"{distance_m/1000:.2f} km"
 
 # 사용자 위치 가져오기
 def get_user_location(user):
@@ -26,8 +34,11 @@ def get_user_location(user):
 def annotate_distance(stores, user_lat, user_lng):
     for store in stores:
         if store.latitude and store.longitude:
-            store.distance = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            store.distance_m = distance_m       # 계산용 숫자
+            store.distance = format_distance(distance_m)  # 출력용 문자열
         else:
+            store.distance_m = None
             store.distance = None
     return stores
 

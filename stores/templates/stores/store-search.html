@@ -71,7 +71,7 @@
             data-lng="{{ store.longitude }}"
             data-name="{{ store.name }}"
             data-address="{{ store.address }}"
-            data-distance="{{ store.distance|default_if_none:0|floatformat:0 }}"
+            data-distance="{{ store.distance|default:'-' }}"
             data-img="{% if store.image %}{{ store.image.url }}{% endif %}"
             data-url="{% url 'stores:store-detail' store.id %}"
             data-category="{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
@@ -133,7 +133,7 @@ storeElements.forEach(function(el) {
                     '<strong>' + name + '</strong><br>' +
                     (img ? '<img src="' + img + '" width="150" height="150"><br>' : '') +
                     address + '<br>' +
-                    '(' + distance + 'm)<br>' +
+                    '(' + distance + ')<br>' +
                     category + '<br>' +
                     (is_open ? is_open + '<br>' : '') +
                     '★' + rating + ' (' + review_count + ')<br>' +

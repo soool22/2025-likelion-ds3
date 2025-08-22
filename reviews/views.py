@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from visit_rewards.models import Visit, Reward
 from django.http import HttpResponse
 from ai_services.services import summarize_reviews
+from django.urls import reverse
 
 
 @login_required
@@ -89,10 +90,10 @@ def review_create(request, store_id):
         request.user.points += points_earned
         request.user.save()
 
-        return HttpResponse("""
+        return HttpResponse(f"""
             <script>
-                alert('리뷰가 등록되었습니다.\n 500 point 적립 완료!');
-                window.location.href = '/reviews/{store_id}/';  // 리뷰 목록으로 이동
+                alert('리뷰가 등록되었습니다.\\n500 point 적립 완료!');
+                window.location.href = '{reverse("reviews:review-list", args=[store.id])}';
             </script>
         """)
 
@@ -209,3 +210,50 @@ def my_review(request):
     return render(request, 'reviews/my-review.html', {
         'reviews': reviews,
     })
+
+# 점주용 리뷰 목록
+def owner_review_list(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+
+    reviews = Review.objects.filter(store=store).prefetch_related('images').annotate(
+        helpful_count=Count('likes')
+    )
+
+    # 정렬
+    sort = request.GET.get('sort', 'latest')
+    if sort == 'latest':
+        reviews = reviews.order_by('-created_at')
+    elif sort == 'rating_desc':
+        reviews = reviews.order_by('-rating')
+    elif sort == 'rating_asc':
+        reviews = reviews.order_by('rating')
+    elif sort == 'helpful':
+        reviews = reviews.order_by('-helpful_count')
+
+    avg_rating = store.rating
+    avg_star_count = int(round(avg_rating))
+    stars_list = range(1, 6)
+    rating_counts = {i: reviews.filter(rating=i).count() for i in range(1, 6)}
+
+    now = timezone.now()  # 현재 시간
+
+    # 각 리뷰에 별 표시 추가
+    for review in reviews:
+        review.stars = "★" * review.rating
+
+        # 날짜 차이 계산
+        delta = now - review.created_at
+        days = delta.days
+        review.natural_days = f"{days}일 전" if days > 0 else "오늘"
+
+    context = {
+        'store': store,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'avg_star_count': avg_star_count,
+        'stars_list': stars_list,
+        'rating_counts': rating_counts,
+        'sort': sort,
+    }
+
+    return render(request, 'reviews/owner-review-list.html', context)

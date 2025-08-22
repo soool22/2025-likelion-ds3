@@ -13,6 +13,7 @@
     </style>
 </head>
 <body>
+
     <h2>가게 정보 수정</h2>
     <form method="POST" action="{% url 'stores:store-update' store.id %}" enctype="multipart/form-data">
         {% csrf_token %} 
@@ -83,7 +84,8 @@
             {{ form.secret_code.errors }}
         </div>
     
-        <button type="submit">완료</button>
+        <button type="submit">완료</button> <br/>
+        <a href="{% url 'stores:self-service' store.id %}">취소</a>
     </form>
 
     <!-- ################## JS ##################-->

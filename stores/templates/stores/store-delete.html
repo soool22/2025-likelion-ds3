@@ -10,7 +10,7 @@
     <form method="post">
         {% csrf_token %}
         <button type="submit">삭제</button> <br/>
-        <a href="{% url 'stores:owner-store-list' %}">취소</a>
+        <a href="{% url 'stores:self-service' store.id %}">취소</a>
     </form>
 </body>
 </html>

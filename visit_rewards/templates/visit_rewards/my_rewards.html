@@ -7,8 +7,10 @@
 </head>
 <body>
     <a href="{% url 'home:main' %}">홈으로</a><br><br>
-    <h2>내 포인트: {{ points }}점</h2>
-   
+    <h2>방문 인증 포인트: {{ visit_points }}점</h2>
+    <h2>챌린지 포인트: {{ challenge_points }}점</h2>
+    <h2>총 포인트: {{ points }}점</h2>
+
     <a href="{% url 'visit_rewards:purchase_history' %}">구매 내역</a><br><br>
 
     <h3>내 아이템</h3>

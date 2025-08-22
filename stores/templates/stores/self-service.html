@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>셀프 서비스(점주용)</title>
+</head>
+<body>
+    <a href="{% url 'stores:owner-store-list' %}">이전</a><br/>
+
+    <h2>셀프 서비스</h2>
+
+    <!--매장 정보 수정/삭제-->
+    <a href="{% url 'stores:store-update' store.id %}">매장 정보 변경</a><br/>
+    <a href="{% url 'stores:store-delete' store.id %}">매장 삭제</a><br/>
+    <br/>
+
+    <!-- 챌린지 -->
+    <a href="{% url 'missions:mission-list' store.id %}">챌린지</a><br/>
+
+    <!-- 상품/메뉴 -->
+    <a href="{% url 'products:product-list' store.id %}">상품/메뉴</a><br/>
+
+    <!--리뷰-->
+    <a href="{% url 'reviews:owner-review-list' store.id %}">리뷰 목록</a><br/>
+    <br/>
+
+    <!--로그아웃-->
+    <a href="{% url 'accounts:logout' %}">로그아웃</a><br/>
+</body>
+</html>

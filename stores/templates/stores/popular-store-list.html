@@ -48,12 +48,13 @@
             방문 수: {{ store.visit_count }}
             <br/>
 
-            <!-- 거리 -->
-            거리: {{ store.distance|default_if_none:"-"|floatformat:0 }} m
-            <br/>
-
             <!-- 주소 -->
             주소: {{ store.address }}
+            
+            <!-- 거리 -->
+            {% if store.distance %}
+                ({{ store.distance }})
+            {% endif %}
             <br/>
 
             <!-- 카테고리 -->
@@ -76,7 +77,7 @@
     </a>
     <hr/>
     {% empty %}
-        <a href="{% url 'accounts:user_preferences' %}">위치 설정하기</a>
+        방문자 많은 가게가 없습니다.
     {% endfor %}
 </body>
 </html>

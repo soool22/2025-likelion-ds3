@@ -9,7 +9,7 @@
     <title>가게 정보</title>
 </head>
 <body>
-    <a href='{% url "stores:public-store-list" %}'>가게 목록</a>
+    <a href='{% url "stores:owner-store-list" %}'>홈</a>
     <br/><br/>
 
     <!-- ######### 가게 정보 #########-->
@@ -23,23 +23,13 @@
 
     <h2>{{ store.name }}</h2>
 
-    <!-- 찜 버튼 -->
-    <button id="favorite-btn" data-store="{{ store.id }}">
-        {% if is_favorite %}
-            ♥ 찜 해제
-        {% else %}
-            ♡ 찜하기
-        {% endif %}
-    </button>
-    <br/><br/>
-
     주소: {{ store.address }} 
     {% if store.distance %}
-        ({{ store.distance }})
+        ({{ store.distance|floatformat:0 }}m)
     {% endif %}
     <br/>
 
-    <a href="{% url 'reviews:review-list' store.id %}">
+    <a href="{% url 'reviews:owner-review-list' store.id %}">
         ★{{ store.rating|floatformat:1 }} 
         ({{ store.reviews.count }})
     </a>
@@ -73,43 +63,6 @@
         <br/><br/>
     {% endif %}
 
-    <a href="{% url 'reviews:review-create' store.id %}" class="btn">리뷰 작성</a>
-    <br/><br/>
-
-    <!-- ######### 리뷰 전체 요약 박스 ######### -->
-    <h3>리뷰 요약</h3>
-    {% if ai_summary %}
-    <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; background-color: #f9f9f9;">
-        <p>
-            <strong>키워드:</strong>
-            {% for kw in review_keywords %}
-                {{ kw }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        <p>
-            <strong>요약:</strong> {{ ai_summary }}
-        </p>
-        <p>
-            <strong>원문 일부:</strong> {{ snippet }}
-        </p>
-    </div>
-    {% else %}
-    <p>리뷰 요약 정보가 없습니다.</p>
-    {% endif %}
-
-
-
-
-    {% if messages %}
-    <script>
-    {% for message in messages %}
-        alert('{{ message }}');
-    {% endfor %}
-    </script>
-    {% endif %}
-
-    <hr/><br/>
-
     <!-- ######### 챌린지 ######### -->
     <h3>진행 중인 챌린지</h3>
     <hr/>
@@ -119,7 +72,6 @@
             {{ mission.description }}<br/>
             {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
             <br/>
-
 
             <!--################보상################-->
             {% if mission.reward_type == "POINT" %}
@@ -132,7 +84,6 @@
             </div>
             {% endif %}
             <!---####################################-->
-
             
             {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
 
@@ -171,28 +122,5 @@
         등록된 상품이 없습니다.
     {% endfor %}
 
-<script>
-    document.getElementById('favorite-btn').addEventListener('click', function() {
-        const storeId = this.dataset.store;
-        fetch("{% url 'accounts:toggle_favorite' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: `store_id=${storeId}`
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === "added") {
-                this.textContent = "♥ 찜 해제";
-            } else if(data.status === "removed") {
-                this.textContent = "♡ 찜하기";
-            } else {
-                alert("찜 처리에 실패했습니다.");
-            }
-        });
-    });
-</script>
 </body>
 </html>

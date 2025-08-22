@@ -17,6 +17,8 @@ from datetime import timedelta
 from missions.models import VisitAmountAccess
 from visit_rewards.models import Visit
 
+from missions.utils import challenge_summary
+from .utils import annotate_distance
 ################ 점주 ################
 
 # 가게 등록
@@ -65,8 +67,28 @@ def store_location(request):
 # 점주용: 내가 등록한 가게 목록
 @login_required
 def owner_store_list(request):
-    stores = Store.objects.filter(owner=request.user).order_by('-id')
-    return render(request, 'stores/owner-store-list.html', {'stores': stores})
+    stores = request.user.store_set.all()
+    today = timezone.localdate()
+    store_data = []
+
+    for store in stores:
+        # 오늘/누적 방문
+        today_visits = store.visits.filter(visit_time__date=today).count()
+        total_visits = store.visits.count()
+
+        # 챌린지 통계 가져오기 (utils.py 함수 사용)
+        challenge_stats = challenge_summary(store)
+
+        store_data.append({
+            'store': store,
+            'today_visits': today_visits,
+            'total_visits': total_visits,
+            **challenge_stats,  # challenge_summary에서 나온 모든 값 포함
+        })
+
+    return render(request, 'stores/owner-store-list.html', {
+        'store_data': store_data
+    })
 
 # 등록한 가게 삭제
 @login_required
@@ -100,6 +122,28 @@ def store_update(request, store_id):
         'store': store,
         'form': form,
     })
+
+# 셀프 서비스
+def self_service(request,store_id):
+    store = get_object_or_404(Store, id=store_id, owner=request.user)
+    return render(request, 'stores/self-service.html', {'store': store})
+
+# 가게 상세 페이지
+def owner_store_detail(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    products = store.products.all()
+    missions = store.missions.filter(end_date__gte=timezone.now())
+
+    context = {
+        'store': store,
+        'products': products,
+        'missions': missions,
+        'ai_summary': store.review_summary_text,
+        'review_keywords': store.review_keywords.split(",") if store.review_keywords else [],
+        'snippet': store.review_snippet,
+    }
+
+    return render(request, 'stores/owner-store-detail.html', context)
 
 ################ 소비자용 ################
 
@@ -214,7 +258,8 @@ def store_search(request):
 
         stores = sorted(stores, key=lambda s: (-getattr(s, 'visit_count', 0), s.id))
     elif sort == "distance":
-        stores = sorted(stores, key=lambda s: s.distance if s.distance is not None else 999999)
+        stores = sorted(stores, key=lambda s: s.distance_m if s.distance_m is not None else float('inf'))
+
     return render(request, "stores/store-search.html", {
         "stores": stores,
         "categories": categories,
@@ -237,24 +282,19 @@ def store_detail(request, store_id):
     if request.user.is_authenticated:
         user_lat, user_lng, _ = get_user_location(request.user)
     else:
-        # 비로그인 시 기본 위치
         user_lat, user_lng = 37.5665, 126.9780  # 서울시청
 
-    # 거리 계산 (m 단위)
-    if store.latitude and store.longitude:
-        store.distance = haversine(user_lat, user_lng, store.latitude, store.longitude)
-    else:
-        store.distance = None
+    # 거리 계산 (annotate_distance 활용)
+    store = annotate_distance([store], user_lat, user_lng)[0]
 
     # 마지막 요약 갱신 30분 이상 지났으면 새로 호출
     if not store.review_summary_updated or timezone.now() - store.review_summary_updated > timedelta(minutes=30):
         store = summarize_reviews(store)
 
     # 즐겨찾기 여부
-    is_favorite = False
-    if request.user.is_authenticated:
-        is_favorite = request.user.favorites.filter(id=store.id).exists()
+    is_favorite = request.user.is_authenticated and request.user.favorites.filter(id=store.id).exists()
 
+    # 최근 방문 기록
     time_threshold = timezone.now() - timedelta(hours=24)
     recent_visit = Visit.objects.filter(user=request.user, store=store, visit_time__gte=time_threshold).order_by('-visit_time').first()
 
