@@ -137,14 +137,14 @@
                         {% for mission in missions %}
                         <p class="containerSmallContent">
                             {{ mission.title }}
-                            {{ mission.description }}<br/>
+                            {% comment %} {{ mission.description }}<br/>
                             {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}<br/>
                             보상: {{ mission.reward_description }}<br/>
-                            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
+                            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/> {% endcomment %}
 
-                            {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
+                            {% comment %} {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
                             <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
-                            {% endif %}
+                            {% endif %} {% endcomment %}
                         </p>
                         {% empty %}
                         <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
@@ -157,16 +157,16 @@
                         {% for product in products %}
                         <div class="containerTinyContentBox">
                             <div class="menuSmallBox">
-                            <div class="mainMenu">대표</div>
+                            {% comment %} <div class="mainMenu">대표</div> {% endcomment %}
                             <p class="containerSmallContent">{{ product.name }}</p>
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}</p>
-                            <p class="price">{{ product.description }}</p>
-                            {% if product.image %}
+                            {% comment %} <p class="price">{{ product.description }}</p> {% endcomment %}
+                            {% comment %} {% if product.image %}
                             <a href="{{ product.image.url }}" target="_blank">
                                 <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
                             </a>
-                            {% endif %}
+                            {% endif %} {% endcomment %}
                         </div>
                         {% empty %}
                         <p class="containerSmallContent">등록된 상품이 없습니다.</p>
