@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/GifiticonShop.css'%}" />    
+</head>
+<body>
+    <main>
+        <header>
+            <a href="./MyPoint.html">
+                <img src="../IMG/edit-back.png" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 기프티콘 샵 </div>
+        </header>
+        <div class="coin-box">
+            <img src="{% static 'IMG/coin.svg'%}" class="coin-img">
+            <div class="coin text">내 포인트 {{ user_points }}</div>
+        </div>
+        <div class="gifticon-box">
+            <div class="line">
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-coffee(ice).png'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">1500</div>
+                    </div>
+                </div>
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-egg.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">2700</div>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-dumpling.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">6200</div>
+                    </div>
+                </div>
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-sandwich.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">5400</div>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-coffee(hot).svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">4200</div>
+                    </div>
+                </div>
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-cutlet.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">2000</div>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-juice.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">4200</div>
+                    </div>
+                </div>
+                <div class="gifticon-back">
+                    <img src="{% static 'IMG/gifticon-yogurt.svg'%}">
+                    <div class="text-box">
+                        <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
+                        <div class="icon-text">2200</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay hidden">
+            <div class="modal-box able hidden">
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
+                <div class="modal-title">기프티콘 구매 완료되었습니다<br>바로 사용 가능합니다</div>
+                <div class="modal-subtitle">BLACK DOWN COFFEE</div>
+                <div class="modal-desc">블다라떼 HOT</div>
+                <a href="./MyCoupon.html" style="text-decoration: none;">
+                    <button class="modal-btn">내 쿠폰함으로 가기</button>
+                </a>
+            </div>
+        </div>
+        <div class="modal-overlay hidden">
+            <div class="modal-box able hidden">
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
+                <div class="modal-title">기프티콘 구매 완료되었습니다<br>바로 사용 가능합니다</div>
+                <div class="modal-subtitle">BLACK DOWN COFFEE</div>
+                <div class="modal-desc">블다라떼 HOT</div>
+                <a href="./MyCoupon.html" style="text-decoration: none;">
+                    <button class="modal-btn">내 쿠폰함으로 가기</button>
+                </a>
+            </div>
+        </div>
+        
+        <script src="{% static 'js/GifticonShop.js'%}"></script>
+    </main>
+</body>
+</html>

@@ -1,132 +1,180 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>가게 검색</title>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/StoreSearchPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <header>
+                <form method="GET" action="{% url 'stores:store-search' %}">
+                    <div id="searchBox">
+                        <div id="search">
+                            <img id="searchIcon" src="{% static 'img/searchpicked.svg'%}" alt="검색 아이콘"/>
+                            <input id="searchInput" type="text" placeholder="매장, 메뉴로 검색해 보세요." />
+                            <input type="hidden" name="gu" value="{{ selected_gu|default:'' }}">
+                            <button id="searchBtn" type="submit"></button> 
+                            <!-- 검색 아이콘 누르면 버튼 눌리게 js -->
+                        </div>
+                    </div>
+                </form>
+                <form method="GET" action="{% url 'stores:store-search' %}">
+                    <input type="hidden" name="q" value="{{ query|default:'' }}">
+                    <div id="recommendTagBigBox">
+                        <div id="recommendTagBox">
+                            {% for category in categories %}
+                            <button class="recommendTag"type="submit" name="category" value="{{ category.slug }}"
+                {% if category.slug == selected_category %}style="border:solid 1.5px #FFB635;"{% endif %}>
+                                {% comment %} <img class="recommendIcon" src="{% static '/img/store.svg'%}"/> {% endcomment %}
+                                <p class="recommendContent">{{ category.name }}</p>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </header>
+            <div id="container">
+                <div id="map">
+                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services,clusterer"></script>
+                </div>
+                
+                <section id="sheet">
+                    <div id="sheetHandle" aria-hidden="true"></div>
+                    <form method="GET" action="{% url 'stores:store-search' %}">
+                        <div id="sheetHeader">
+                            <input type="hidden" name="q" value="{{ query|default:'' }}">
+                            <input type="hidden" name="category" value="{{ selected_category|default:'' }}">
+                            <input type="hidden" name="gu" value="{{ selected_gu }}">
+                            <div class="sheetHeaderBox">
+                                <img id="filterIcon" src="{% static 'img/filter.svg'%}"/>
+                                <p class="sheetHeaderContent">필터</p>
+                            </div>
+                            <button class="sheetHeaderBox" type="submit" name="sort" value="distance" {% if sort == 'distance' %}style="border:solid 1.5px #FFB635;"{% endif %}>
+                                <p class="sheetHeaderContent">거리순</p>
+                            </button>
+                            <button class="sheetHeaderBox" type="submit" name="sort" value="rating" {% if sort == 'rating' %}style="border:solid 1.5px #FFB635;"{% endif %}>
+                                <p class="sheetHeaderContent">별점순</p>
+                            </button>
+                            <button class="sheetHeaderBox" type="submit" name="sort" value="visit" {% if sort == 'visit' %}style="border:solid 1.5px #FFB635;"{% endif %}>
+                                <p class="sheetHeaderContent">방문자순</p>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="sheet-body">
+                        {% for store in stores %}
+                            <div class="storeInfoBox">
+                                <div class="storeBox">
+                                    <p class="storeName">{{ store.name }}</p>
+                                    {% comment %} <img id="starIcon" class="star" src="{% static 'img/star.svg'%}"/> {% endcomment %}
+                                </div>
+                                <div class="storeInfo">
+                                    <div class="storeInfoSmallBox">
+                                        <p class="score">⭐ {{ store.rating }}</p>
+                                        <p class="scoreCount">({{ store.reviews.count }})</p>
+                                    </div>
+                                    <p class="nowState">
+                                    {% if store.open_time and store.close_time %}
+                                        {% if store.is_open %}영업 중{% else %}영업 종료{% endif %}
+                                    {% endif %}
+                                    </p>
+                                    <div class="storeInfoSmallBox">
+                                        <p class="storeMenu">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                        <p class="locate">({{ store.distance|default:'-' }})</p>
+                                    </div>
+                                </div>
+                                <div class="store-item"
+                                    style="display:none"
+                                    data-lat="{{ store.latitude }}"
+                                    data-lng="{{ store.longitude }}"
+                                    data-name="{{ store.name }}"
+                                    data-address="{{ store.address }}"
+                                    data-distance="{{ store.distance|default:'-' }}"
+                                    data-img="{% if store.image %}{{ store.image.url }}{% endif %}"
+                                    data-url="{% url 'stores:store-detail' store.id %}"
+                                    data-category="{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+                                    data-rating="{{ store.rating }}"
+                                    data-review_count="{{ store.reviews.count }}"
+                                    {% if store.open_time and store.close_time %}
+                                    data-is_open="{{ store.is_open|yesno:'true,false' }}"
+                                    {% endif %}
+                                ></div>
+                                <p class="storeComment">{{ store.address }}</p>
+                                <img class="aiBox" src="{% if store.image %}{{ store.image.url }}{% else %}{% static 'img/default_store.png' %}{% endif %}" 
+                                    data-img="{% if store.image %}{{ store.image.url }}{% else %}{% static 'img/default_store.png' %}{% endif %}" 
+                                    data-url="{% url 'stores:store-detail' store.id %}" 
+                                    alt="{{ store.name }} 이미지"/>
+                                <div class="aiReviewBox">
+                                    <img class="aiReviewIcon" src="{% static 'img/ai.svg'%}" alt="ai 아이콘"/>
+                                    <div class="aiReview">AI 리뷰 요약</div>
+                                </div>
+                                <div style="height: 70px;"></div>
+                            </div>
+                        {% empty %}
+                            <p>가게가 없습니다.</p>
+                        {% endfor %}
+                    </div>
+                </section>
 
-    <!-- 카카오맵 SDK -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services,clusterer"></script>
+            </div>
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel picked">가게 검색</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
+                    <p class="tapBarLabel">관심 매장</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
+                    <p class="tapBarLabel">내 정보</p>
+                </a>
+            </div>
+        </main>
+        <script>
+        var map = new kakao.maps.Map(document.getElementById('map'), {
+            center: new kakao.maps.LatLng({{ user_lat }}, {{ user_lng }}),
+            level: 3
+        });
+        var geocoder = new kakao.maps.services.Geocoder();
+        var currentInfoWindow = null;
 
-    <!-- ################## CSS ##################-->
-    <style>
-        body { margin: 0; padding: 0; }
-        #map { width: 100%; height: 60vh; }
-        #search-bar { padding: 10px; display: flex; gap: 10px; }
-        #category-filter { padding: 10px; display: flex; gap: 5px; flex-wrap: wrap; }
-        #store-list { padding: 10px; }
-        .store-item { padding: 5px 0; border-bottom: 1px solid #ccc; cursor: pointer; }
-    </style>
-</head>
-<body>
+        // 검색어 이동
+        {% if query %}
+        geocoder.addressSearch("{{ query }}", function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                map.setCenter(new kakao.maps.LatLng(result[0].y, result[0].x));
+            }
+        });
+        {% endif %}
 
-<a href="{% url 'home:main' %}">홈</a><br><br>
+        var storeElements = document.querySelectorAll('.store-item');
+        storeElements.forEach(function(el) {
+            var lat = el.dataset.lat;
+            var lng = el.dataset.lng;
+            var name = el.dataset.name;
+            var address = el.dataset.address;
+            var distance = el.dataset.distance;
+            var img = el.dataset.img;
+            var url = el.dataset.url;
+            var category = el.dataset.category;
+            var rating = el.dataset.rating;
+            var review_count = el.dataset.review_count;
+            var is_open = el.dataset.is_open ? "영업 중" : "";
 
-<!-- 검색 바 -->
-<div id="search-bar">
-    <form method="GET" action="{% url 'stores:store-search' %}">
-        <input type="text" name="q" placeholder="가게명" value="{{ query|default:'' }}">
-        <input type="hidden" name="gu" value="{{ selected_gu|default:'' }}">
-        <button type="submit">검색</button>
-    </form>
-</div>
-
-<!-- 카테고리 필터 -->
-<div id="category-filter">
-    <form method="GET" action="{% url 'stores:store-search' %}">
-        <input type="hidden" name="q" value="{{ query|default:'' }}">
-        {% for category in categories %}
-            <button type="submit" name="category" value="{{ category.slug }}"
-                {% if category.slug == selected_category %}style="font-weight:bold;"{% endif %}>
-                {{ category.name }}
-            </button>
-        {% endfor %}
-    </form>
-</div>
-
-<!-- 지도 -->
-<div id="map"></div>
-<br/>
-
-<!-- 정렬 기준 -->
-<div id="sort-buttons">
-    <form method="GET" action="{% url 'stores:store-search' %}">
-        <input type="hidden" name="q" value="{{ query|default:'' }}">
-        <input type="hidden" name="category" value="{{ selected_category|default:'' }}">
-        <input type="hidden" name="gu" value="{{ selected_gu }}">
-        <button type="submit" name="sort" value="distance" {% if sort == 'distance' %}style="font-weight:bold;"{% endif %}>거리순</button>
-        <button type="submit" name="sort" value="rating" {% if sort == 'rating' %}style="font-weight:bold;"{% endif %}>평점순</button>
-        <button type="submit" name="sort" value="visit" {% if sort == 'visit' %}style="font-weight:bold;"{% endif %}>방문자순</button>
-    </form>
-</div>
-
-
-<!-- 가게 리스트 -->
-<div id="store-list">
-    {% for store in stores %}
-        <div class="store-item"
-            data-lat="{{ store.latitude }}"
-            data-lng="{{ store.longitude }}"
-            data-name="{{ store.name }}"
-            data-address="{{ store.address }}"
-            data-distance="{{ store.distance|default:'-' }}"
-            data-img="{% if store.image %}{{ store.image.url }}{% endif %}"
-            data-url="{% url 'stores:store-detail' store.id %}"
-            data-category="{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
-            data-rating="{{ store.rating }}"
-            data-review_count="{{ store.reviews.count }}"
-            {% if store.open_time and store.close_time %}
-                data-is_open="{{ store.is_open }}"
-            {% else %}
-                data-is_open=""
-            {% endif %}
-            >
-        </div>
-    {% empty %}
-        <p>가게가 없습니다.</p>
-    {% endfor %}
-</div>
-
-<!-- ################## JS ##################-->
-<script>
-var map = new kakao.maps.Map(document.getElementById('map'), {
-    center: new kakao.maps.LatLng({{ user_lat }}, {{ user_lng }}),
-    level: 3
-});
-var geocoder = new kakao.maps.services.Geocoder();
-var currentInfoWindow = null;
-
-// 검색어 이동
-{% if query %}
-geocoder.addressSearch("{{ query }}", function(result, status) {
-    if (status === kakao.maps.services.Status.OK) {
-        map.setCenter(new kakao.maps.LatLng(result[0].y, result[0].x));
-    }
-});
-{% endif %}
-
-var storeElements = document.querySelectorAll('.store-item');
-storeElements.forEach(function(el) {
-    var lat = el.dataset.lat;
-    var lng = el.dataset.lng;
-    var name = el.dataset.name;
-    var address = el.dataset.address;
-    var distance = el.dataset.distance;
-    var img = el.dataset.img;
-    var url = el.dataset.url;
-    var category = el.dataset.category;
-    var rating = el.dataset.rating;
-    var review_count = el.dataset.review_count;
-    var is_open = el.dataset.is_open ? "영업 중" : "";
-
-    // 마커
-    var marker = new kakao.maps.Marker({
-        map: map,
-        position: new kakao.maps.LatLng(lat, lng),
-        title: name
-    });
+            // 마커
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(lat, lng),
+                title: name
+            });
 
     // 인포윈도우 / 목록 표시용 HTML ( 수정할 부분 )
     var infoContent = '<div style="padding:5px; max-width:250px;">' +
@@ -140,37 +188,37 @@ storeElements.forEach(function(el) {
                     '<a href="' + url + '">상세보기</a>' +
                     '</div>';
 
-    var infowindow = new kakao.maps.InfoWindow({ content: infoContent });
+            var infowindow = new kakao.maps.InfoWindow({ content: infoContent });
 
-    // 마커 클릭
-    kakao.maps.event.addListener(marker, 'click', function() {
-        if (currentInfoWindow) currentInfoWindow.close();
-        infowindow.open(map, marker);
-        currentInfoWindow = infowindow;
-    });
+            // 마커 클릭
+            kakao.maps.event.addListener(marker, 'click', function() {
+                if (currentInfoWindow) currentInfoWindow.close();
+                infowindow.open(map, marker);
+                currentInfoWindow = infowindow;
+            });
 
-    // 목록 클릭
-    el.innerHTML = infoContent.replace('<a href="' + url + '">상세보기</a>', ''); // a 태그 제거
+            // 목록 클릭
+            el.innerHTML = infoContent.replace('<a href="' + url + '">상세보기</a>', ''); // a 태그 제거
 
-el.addEventListener('click', function() {
-    map.setCenter(new kakao.maps.LatLng(lat, lng));
-    if (currentInfoWindow) currentInfoWindow.close();
-    infowindow.open(map, marker);
-    currentInfoWindow = infowindow;
+        el.addEventListener('click', function() {
+            map.setCenter(new kakao.maps.LatLng(lat, lng));
+            if (currentInfoWindow) currentInfoWindow.close();
+            infowindow.open(map, marker);
+            currentInfoWindow = infowindow;
 
-    // div 클릭 시 바로 상세 페이지로 이동
-    window.location.href = url;
-});
-});
+            // div 클릭 시 바로 상세 페이지로 이동
+            window.location.href = url;
+        });
+        });
 
-// 지도 클릭 시 인포윈도우 닫기
-kakao.maps.event.addListener(map, 'click', function() {
-    if (currentInfoWindow) {
-        currentInfoWindow.close();
-        currentInfoWindow = null;
-    }
-});
-</script>
-
-</body>
+        // 지도 클릭 시 인포윈도우 닫기
+        kakao.maps.event.addListener(map, 'click', function() {
+            if (currentInfoWindow) {
+                currentInfoWindow.close();
+                currentInfoWindow = null;
+            }
+        });
+        </script>
+    </body>
+    <script src="{% static 'js/StoreSearchPage.js'%}"></script>
 </html>

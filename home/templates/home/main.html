@@ -55,19 +55,25 @@
     </style>
 </head>
 <body>
-    <a href="{% url 'accounts:start-page' %}">점주/소비자 변환</a>
     <h2>메인 페이지</h2>
     <hr>
 
     {% if request.user.is_authenticated %}
-        {{ request.user.nickname }}({{ request.user.username }})님 환영합니다.  
-        <a href="{% url 'accounts:logout' %}">로그아웃</a><br><br>
-        <a href="{% url 'accounts:mypage' %}">마이페이지</a><br><br>
+        {{ request.user.nickname }}({{ request.user.username }})님 환영합니다.<br><br>
+        <a href='{% url 'accounts:start-page' %}'>소비자/점주 전환</a><br>  
+        <a href="{% url 'accounts:logout' %}">로그아웃</a><br><br><hr>
+        <a href="{% url 'accounts:mypage' %}">마이페이지 | </a>
+        <a href="{% url 'accounts:favorite_stores' %}">관심 가게 | </a>
+        <a href="{% url 'missions:my-mission' %}">내 챌린지 | </a>
+        <a href="{% url 'visit_rewards:my_character' %}">내 캐릭터</a>
+
+        
     {% else %}
         <a href="{% url 'accounts:login' %}">로그인</a>
         <a href="{% url 'accounts:signup' %}">회원가입</a>
     {% endif %}
     <hr>
+
 
     <!-- 구 선택 -->
     <div>
@@ -80,6 +86,8 @@
         </a>
     </div>
 
+    <!-- 위치 설정 후에 나타남 -->
+    {% if gu_name %}
     <!-- 위치 설정 후에 나타남 -->
     {% if gu_name %}
 
@@ -144,12 +152,14 @@
         {% else %}
             <p>오늘의 인기 챌린지가 없습니다.</p>
         {% endif %}
+        {% endif %}
 
         <!-- 가게 검색 -->
         <nav>
             <a href="{% url 'stores:store-search' %}">가게 검색</a>
         </nav>
     {% endif %}
+
 
     <!-- ################## JS ################## -->
     <script>

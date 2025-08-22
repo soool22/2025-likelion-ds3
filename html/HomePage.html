@@ -1,50 +1,59 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="../css/HomePage.css" />
+        <link rel="stylesheet" href="{% static 'css/HomePage.css'%}" />
     </head>
     <body>
         <main>
+            {% if request.user.is_authenticated %}
             <header>
                 <div id="headerBox">
-                    <div id="headerSmallBox">
-                        <img id="locationIcon" src="../img/location.svg"/>
-                        <p id="locationName">도봉구 전체</p>
-                        <img id="downSideClick" src="../img/downside.svg"/>
-                    </div>
+                    <a href="{% url 'accounts:user_location' %}">
+                        <div id="headerSmallBox">
+                            <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
+                            {% if user_location and user_location.gu_name %}
+                                <p id="locationName">{{ user_location.gu_name }}</p>
+                            {% else %}
+                                <p id="locationName">위치 설정</p>
+                            {% endif %}
+                            <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
+                        </div>
+                    </a>
                     <div id="headerLastBox">
-                        <a href="../html/GrowCharacter.html">
-                            <img id="characterIcon" src="../img/charactericon.svg"/>
+                        <a href="{% url 'visit_rewards:my_character' %}">
+                            <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
                         </a>
                         <a href="../html/AlarmCenterPage.html">
-                            <img id="alarmIcon" src="../img/alarm.svg"/>
+                            <img id="alarmIcon" src="{% static 'img/alarm.svg'%}"/>
                         </a>
                     </div>
                 </div>
             </header>
+            {% if gu_name %}
             <div id="container">
                 <div id="banner">
                     <div id="bannerBox">
                         <p id="bannerTitle">7월 동네 인기 맛집<br/>업데이트 완료</p>
                         <p id="bannerContent">이용자들이 가장 많이 재방문한 <br/>인기 맛집을 확인해 보세요!</p>
                     </div>
-                    <img id="bannerCharacter" src="../img/characterBell.svg"/>
+                    <img id="bannerCharacter" src="{% static 'img/characterBell.svg'%}"/>
                 </div>
                 <form>
                     <div class="tabContainer">
                         <div class="recommendstoreBox">
-                            <img class="recommendstoreIcon" src="../img/recommendstore.svg" alt="">
+                            <img class="recommendstoreIcon" src="{% static 'img/recommendstore.svg'%}" alt="">
                             <p class="recommendstoreText">추천 가게</p>
                         </div>
                         <div class="topBox">
-                            <img class="topIcon" src="../img/top.svg" alt="">
+                            <img class="topIcon" src="{% static 'img/top.svg'%}" alt="">
                             <p class="topText">TOP 100</p>
                         </div>
                         <div class="reviewbestBox">
-                            <img class="reviewbestIcon" src="../img/reviewbest.svg" alt="">
+                            <img class="reviewbestIcon" src="{% static 'img/reviewbest.svg'%}" alt="">
                             <p class="reviewbestText">리뷰 BEST</p>
                         </div>
                     </div>
@@ -53,14 +62,14 @@
                     <div id="storeContainer">
                         <div id="storeCardBox">
                             <div class="storeCard">
-                                <img class="storeImg" src="../img/storeImg.jpg"/>
+                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
                                 <div class="storeInfoBox">
                                     <div class="storeInfoMediumBox">
                                         <div class="storeInfoSmallBox">
                                             <p class="storeCategory">도봉구, 양식</p>
                                             <p class="storeName">미뇨리</p>
                                         </div>
-                                        <img class="keep" src="../img/save.svg"/>
+                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
                                     </div>
                                     <div class="distanceTimeBox">
                                         <div class="distanceTime">
@@ -74,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="commentBox">
-                                    <img class="commentIcon" src="../img/comment.svg"/>
+                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
                                     <p class="commentContent">청양불고기파스타</p>
                                 </div>
                             </div>
@@ -86,7 +95,7 @@
                                             <p class="storeCategory">도봉구, 양식</p>
                                             <p class="storeName">미뇨리</p>
                                         </div>
-                                        <img class="keep" src="../img/save.svg"/>
+                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
                                     </div>
                                     <div class="distanceTimeBox">
                                         <div class="distanceTime">
@@ -94,7 +103,7 @@
                                             <p class="distanceTimeContent">300m</p>
                                         </div>
                                         <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="../img/clock.svg"/>
+                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
                                             <p class="distanceTimeContent">영업중</p>
                                         </div>
                                     </div>
@@ -105,14 +114,14 @@
                                 </div>
                             </div>
                             <div class="storeCard">
-                                <img class="storeImg" src="../img/storeImg.jpg"/>
+                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
                                 <div class="storeInfoBox">
                                     <div class="storeInfoMediumBox">
                                         <div class="storeInfoSmallBox">
                                             <p class="storeCategory">도봉구, 양식</p>
                                             <p class="storeName">미뇨리</p>
                                         </div>
-                                        <img class="keep" src="../img/save.svg"/>
+                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
                                     </div>
                                     <div class="distanceTimeBox">
                                         <div class="distanceTime">
@@ -120,25 +129,25 @@
                                             <p class="distanceTimeContent">300m</p>
                                         </div>
                                         <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="../img/clock.svg"/>
+                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
                                             <p class="distanceTimeContent">영업중</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="commentBox">
-                                    <img class="commentIcon" src="../img/comment.svg"/>
+                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
                                     <p class="commentContent">청양불고기파스타</p>
                                 </div>
                             </div>
                             <div class="storeCard">
-                                <img class="storeImg" src="../img/storeImg.jpg"/>
+                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
                                 <div class="storeInfoBox">
                                     <div class="storeInfoMediumBox">
                                         <div class="storeInfoSmallBox">
                                             <p class="storeCategory">도봉구, 양식</p>
                                             <p class="storeName">미뇨리</p>
                                         </div>
-                                        <img class="keep" src="../img/save.svg"/>
+                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
                                     </div>
                                     <div class="distanceTimeBox">
                                         <div class="distanceTime">
@@ -146,25 +155,25 @@
                                             <p class="distanceTimeContent">300m</p>
                                         </div>
                                         <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="../img/clock.svg"/>
+                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
                                             <p class="distanceTimeContent">영업중</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="commentBox">
-                                    <img class="commentIcon" src="../img/comment.svg"/>
+                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
                                     <p class="commentContent">청양불고기파스타</p>
                                 </div>
                             </div>
                             <div class="storeCard">
-                                <img class="storeImg" src="../img/storeImg.jpg"/>
+                                <img class="storeImg" src="{% static 'img/storeImg.jpg'%}"/>
                                 <div class="storeInfoBox">
                                     <div class="storeInfoMediumBox">
                                         <div class="storeInfoSmallBox">
                                             <p class="storeCategory">도봉구, 양식</p>
                                             <p class="storeName">미뇨리</p>
                                         </div>
-                                        <img class="keep" src="../img/save.svg"/>
+                                        <img class="keep" src="{% static 'img/save.svg'%}"/>
                                     </div>
                                     <div class="distanceTimeBox">
                                         <div class="distanceTime">
@@ -172,13 +181,13 @@
                                             <p class="distanceTimeContent">300m</p>
                                         </div>
                                         <div class="distanceTime">
-                                            <img class="distanceTimeIcon" src="../img/clock.svg"/>
+                                            <img class="distanceTimeIcon" src="{% static 'img/clock.svg'%}"/>
                                             <p class="distanceTimeContent">영업중</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="commentBox">
-                                    <img class="commentIcon" src="../img/comment.svg"/>
+                                    <img class="commentIcon" src="{% static 'img/comment.svg'%}"/>
                                     <p class="commentContent">청양불고기파스타</p>
                                 </div>
                             </div>
@@ -187,7 +196,7 @@
                             <a href="../html/StoreSearchPage.html">
                                 <div id="mapBtn">
                                     <div id="mapBtnBox">
-                                        <img id="mapIcon" src="../img/map.svg"/>
+                                        <img id="mapIcon" src="{% static 'img/map.svg'%}"/>
                                         <p id="mapTitle">지도로 보기</p>
                                     </div>
                                 </div>
@@ -195,14 +204,16 @@
                             <a href="">
                                 <div id="plusBtn">
                                     <div id="plusBtnBox">
-                                        <img id="plusIcon" src="../img/plus.svg"/>
+                                        <img id="plusIcon" src="{% static 'img/plus.svg'%}"/>
                                         <p id="plusTitle">더보기</p>
                                     </div>
                                 </div>
                             </a>
                         </div>
                         <div id="challengeBox">
-                            <p id="challengeTitle">🔥 주간 인기 챌린지</p>
+                            <a href="{% url 'missions:my-mission' %}">
+                                <p id="challengeTitle">🔥 주간 인기 챌린지</p>
+                            </a>
                             <div id="challengeRanking">
                                 <p class="challenge">🥇 같은 음료 3번 먹기 ▶️ 참여자 432명</p>
                                 <p class="challenge">🥈 골목 3코스 완주 ▶️ 참여자 289명</p>
@@ -212,25 +223,30 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
             <div id="tapBar">
-                <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="../img/homepicked.svg" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel picked">홈</p>
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
                 </a>
-                <a class="tapBarBox" href="../html/StoreSearchPage.html">
-                    <img class="tapBarIcon" src="../img/search.svg" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel">가게 검색</p>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel picked">가게 검색</p>
                 </a>
-                <a class="tapBarBox" href="./InterestingStore.html">
-                    <img class="tapBarIcon" src="../img/intereststore.svg" alt="관심 매장 아이콘" />
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
-                <a class="tapBarBox" href="../html/MyInfomationPage.html">
-                    <img class="tapBarIcon" src="../img/myinfo.svg" alt="내 정보 아이콘" />
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel">내 정보</p>
                 </a>
             </div>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">로그인</a>
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+            {% endif %}
         </main>
     </body>
-    <script src="../js/HomePage.js"></script>
+    <script src="{% static 'js/HomePage.js'%}"></script>
 </html>
