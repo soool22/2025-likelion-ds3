@@ -213,7 +213,7 @@ header{
     align-items: flex-start;
 }
 
-#storeCardBox{
+.storeCardBox{
     height: 199px;
     width: 100%;
     gap: 17px;
@@ -266,20 +266,17 @@ header{
 
 .storeCategory{
     margin: 0;
-    font-size: 6px;
+    font-size: 10px;
     color: #7B7B7B;
     font-weight: 600;
 }
 
 .storeName{
     margin: 0;
-    font-size: 16px;
+    font-size: 17px;
     color: #000000;
     font-weight: 600;
-}
-
-.keep{
-    width: 7px;
+    white-space: nowrap;
 }
 
 .distanceTimeBox{
@@ -297,9 +294,9 @@ header{
 
 .distanceTimeContent{
     margin: 0;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 500;
-    color: #000000;
+    color: #7B7B7B;
     white-space: nowrap;
 }
 
@@ -312,17 +309,6 @@ header{
     align-items: center;
     gap: 5px;
     padding: 5px 8px;
-}
-
-.commentIcon{
-    width: 7px;
-}
-
-.commentContent{
-    color: #7B7B7B;
-    font-size: 6px;
-    font-weight: 500;
-    
 }
 
 #btnBox{

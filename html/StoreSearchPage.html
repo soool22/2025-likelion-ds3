@@ -65,6 +65,7 @@
                     </form>
                     <div class="sheet-body">
                         {% for store in stores %}
+                        <a href="{% url 'stores:store-detail' store.id %}">
                             <div class="storeInfoBox">
                                 <div class="storeBox">
                                     <p class="storeName">{{ store.name }}</p>
@@ -112,6 +113,7 @@
                                 </div>
                                 <div style="height: 70px;"></div>
                             </div>
+                        </a>
                         {% empty %}
                             <p>가게가 없습니다.</p>
                         {% endfor %}

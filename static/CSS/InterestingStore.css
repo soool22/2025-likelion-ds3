@@ -19,6 +19,10 @@ main{
     font-style: normal;
 }
 
+a{
+    text-decoration: none;
+}
+
 header{
     display: flex;
     margin-top: 32px;
@@ -43,11 +47,19 @@ header{
 }
 
 .store-list{
-    margin-left: 50px;
+    margin-left: 30px;
 }
 
 .list{
+    width: 350px;
     display: flex;
+    margin-bottom: 15px;
+}
+
+.store-img{
+    width: 75px;
+    height: 75px;
+    background-size: cover; 
 }
 
 .store-text{

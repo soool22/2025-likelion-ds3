@@ -6,6 +6,7 @@ main{
     display: flex;
     justify-self: center;
     min-width: 430px;
+    max-width: 430px;
     min-height: 100dvh;
     margin-bottom: 65px;
     background-color: white;
@@ -113,6 +114,7 @@ width: 275px;
 height: 157px;
 background-color: #cccccc;
 border-radius: 12px;
+object-fit: cover;
 }
 
 #storeInfoBox{
@@ -248,12 +250,47 @@ display: flex;
 flex-direction: column;
 }
 
+.containerMiddleBox{
+    width: 331px;
+    display: flex;
+    padding: 5px 40px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.middleTitle{
+    color: #7B7B7B;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.middleContent{
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.middleLastTitle{
+    color: #CCC;
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.middleLastContent{
+    color: #FFCC02;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-top: 6px;
+}
+
 .containerTitle{
     width: 100%;
     padding: 7px 40px;
     border-bottom: solid 1.5px #cccccc;
     box-sizing: border-box;
-    margin-top: 47px;
+    margin-top: 37px;
     color: #000;
     font-size: 17px;
     font-weight: 600;
@@ -272,12 +309,14 @@ flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
 }
 
 .containerSmallContent{
     color: #000;
     font-size: 14px;
     font-weight: 600;
+    white-space: normal; 
 }
 
 .menuSmallBox{

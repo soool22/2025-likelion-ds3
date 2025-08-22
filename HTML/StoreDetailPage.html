@@ -131,16 +131,37 @@
                         {% endif %}
                     </div>
                 </div>
+                <div class="containerContent" style="margin-top: 31px;">
+                    <div class="containerMiddleBox">
+                        <p class="middleTitle">챌린지 누적 금액</p>
+                        <p class="middleContent">1,000원</p>
+                    </div>
+                    <div class="containerMiddleBox">
+                        <p class="middleTitle">포인트</p>
+                        <p class="middleContent">1,000점</p>
+                    </div>
+                    <div class="containerMiddleBox">
+                        <p class="middleLastTitle">유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}</p>
+                        {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
+                            {% if user_can_access_amount %}
+                            <a href="{% url 'missions:update-amount' mission.id %}">
+                                <p class="middleLastContent">누적 금액 입력</p>
+                            </a>
+                            {% endif %}
+                        {% endif %} 
+                    </div>
+                </div>
                 <div class="containerContent">
                     <div class="containerTitle">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
                         {% for mission in missions %}
                         <p class="containerSmallContent">
-                            {{ mission.title }}
-                            {% comment %} {{ mission.description }}<br/>
-                            {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}<br/>
-                            보상: {{ mission.reward_description }}<br/>
-                            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/> {% endcomment %}
+                            -{{ mission.title }}&nbsp;
+                            {% comment %} {{ mission.description }} {% endcomment %}
+                            ({{ mission.mission_type.name }} {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }})
+                            {% comment %} 보상: {{ mission.reward_description }}<br/> {% endcomment %}
+                            {% comment %} {{ mission.start_date|date:"Y-m-d H:i" }} {% endcomment %}
+                            {% comment %} <br/>~ {{ mission.end_date|date:"Y-m-d H:i" }} {% endcomment %}
 
                             {% comment %} {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
                             <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
@@ -157,16 +178,16 @@
                         {% for product in products %}
                         <div class="containerTinyContentBox">
                             <div class="menuSmallBox">
-                            {% comment %} <div class="mainMenu">대표</div> {% endcomment %}
+                            <div class="mainMenu">대표</div>
                             <p class="containerSmallContent">{{ product.name }}</p>
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}</p>
-                            {% comment %} <p class="price">{{ product.description }}</p> {% endcomment %}
-                            {% comment %} {% if product.image %}
+                            <p class="price">{{ product.description }}</p>
+                            {% if product.image %}
                             <a href="{{ product.image.url }}" target="_blank">
                                 <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
                             </a>
-                            {% endif %} {% endcomment %}
+                            {% endif %}
                         </div>
                         {% empty %}
                         <p class="containerSmallContent">등록된 상품이 없습니다.</p>
@@ -195,6 +216,7 @@
         </main>
 
         <script>
+        window.CERT_PAGE_URL = "{% url 'visit_rewards:visit_check' store.id %}";
         document.addEventListener('DOMContentLoaded', function () {
         const favBtn  = document.getElementById('favorite-btn');
         const starImg = document.getElementById('star');
