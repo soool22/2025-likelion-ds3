@@ -10,7 +10,7 @@
 <body>
     <main>
         <header>
-            <a href="./MyInfomationPage.html">
+            <a href="{% url 'accounts:mypage'%}">
                 <img src="{% static 'IMG/edit-back.png'%}" class="back-img" ></img>
             </a>
             <div class="tittle text"> 내 정보 관리 </div>
@@ -30,21 +30,21 @@
         <div class="edit-box">
             <div class="edit-tittle">닉네임</div>
             <div class="edit-content">
-                <div class="edit-text">연짱이</div>
+                <div class="edit-text">{{ request.user.nickname }}</div>
                 <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow1">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">이메일</div>
             <div class="edit-content">
-                <div class="edit-text">djWjrnwjWjrn@duksung.ac.kr</div>
+                <div class="edit-text">{{ request.user.email }}</div>
                 <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow2">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">연락처</div>
             <div class="edit-content">
-                <div class="edit-text">010-1234-4321</div>
+                <div class="edit-text">연락처 남기기</div>
                 <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow3">
             </div>
         </div>
@@ -69,7 +69,7 @@
                 <div class="separation-box"></div>
                 <form  method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <textarea class="nick-name-textarea" name="nick-name" placeholder="기존 닉네임"></textarea>
+                    <textarea class="nick-name-textarea" name="nick-name" placeholder="{{ nickname }}"></textarea>
                 </form>
                 </div>
         </div>

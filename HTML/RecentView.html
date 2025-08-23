@@ -16,11 +16,44 @@
             <div class="tittle text"> 최근 본 매장 </div>
         </header>
         <div class="list">
-                <img src="{% static 'IMG/store-img.png'%}" class="store-img">
-                <div class="store-text">
-                    <div class="store-name">산책</div>
-                </div>
+                {% if most_visited %}
+                <img src="{% static 'IMG/most-visited.png'%}" style="text-decoration: none;">
+                <a href="{% url 'stores:store-detail' most_visited.store__id %}" >
+                    <img src="{% static 'IMG/store-img.png'%}" class="store-img"> 
+                    <div class="store-text">
+                        <div class="store-name">{{ most_visited.store__name }}</div>
+                        (방문 횟수: {{ most_visited.visits_count }}회)
+                    </div>
+                </a>
+                {% endif %}
+
+                {% if latest_visit %}
+                <img src="{% static 'IMG/latest_visit.png'%}">
+                <a href="{% url 'stores:store-detail' latest_visit.store.id %}" class="store-link">
+                    <img src="{% static 'IMG/store-img.png'%}" class="store-img">
+                    <div class="store-text">
+                        <div class="store-name"> {{ latest_visit.store.name }}</div>
+                            (방문 시간: {{ latest_visit.visit_time|date:"Y-m-d H:i" }})
+                    </div>
+                </a>
             </div>
+            {% endif %}
+            {% if visits %}
+                {%  for visit in visits %}
+                <a href="{% url 'stores:store-detail' latest_visit.store.id %}" class="store-link">
+                    <img src="{% static 'IMG/store-img.png'%}" class="store-img">
+                    <div class="store-text">
+                        <div class="store-name">{{ visit.store.name }}</div>
+                        {{ visit.visit_time|date:"Y-m-d H:i" }}
+                        {% with visit.reward_set.first as r %}
+                            {% if r %}{{ r.amount }}P{% else %}-{% endif %}
+                        {% endwith %}
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p>아직 방문한 가게가 없습니다.</p>
+            {% endif %}
     </main>
 </body>
 </html>
