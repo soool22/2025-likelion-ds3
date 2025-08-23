@@ -139,3 +139,72 @@
     <script src="{% static 'JS/MyCoupon.js'%}"></script>
 </body>
 </html>
+
+
+<div class="gifticon-section">
+        <h3>내 기프티콘</h3>
+        <ul id="gifticon-list">
+            {% for reward in gifticons %}
+            <li id="gift-{{ reward.id }}">
+                {% if reward.gifticon.image %}
+                    <img src="{{ reward.gifticon.image.url }}" 
+                         alt="{{ reward.gifticon.name }}" 
+                         class="gifticon-img"
+                         width="100">
+                {% endif %}
+                사용처 [{{ reward.gifticon.name }}] 유효기간 [~2025.12.31]
+
+                {% if reward.used %}
+                    (사용 완료)
+                {% else %}
+                    <input type="checkbox" class="use-gifticon" data-id="{{ reward.id }}">
+                    <label>사용 완료</label>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li>보유한 기프티콘이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="{% url 'visit_rewards:shop_gifticons' %}">기프티콘 샵</a>
+
+    <script>
+    // 이미지 클릭 확대
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".gifticon-img").forEach(img => {
+            img.addEventListener("click", function() {
+                this.classList.toggle("enlarged");
+            });
+        });
+
+        // 기프티콘 사용 체크박스 처리
+        document.querySelectorAll(".use-gifticon").forEach(function(checkbox) {
+            checkbox.addEventListener("change", function() {
+                const gifticonId = this.dataset.id;
+                if (this.checked) {
+                    if (confirm("사용 처리 후에는 복구가 불가합니다. 쿠폰을 삭제하시겠습니까?")) {
+                        fetch("{% url 'visit_rewards:use_gifticon' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token }}"
+                            },
+                            body: JSON.stringify({ id: gifticonId })
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                document.getElementById("gift-" + gifticonId).remove();
+                            } else {
+                                alert("사용 처리에 실패했습니다.");
+                                this.checked = false;
+                            }
+                        });
+                    } else {
+                        this.checked = false;
+                    }
+                }
+            });
+        });
+    });
+    </script>

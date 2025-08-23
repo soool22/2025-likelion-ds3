@@ -1,127 +1,87 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리뷰 작성</title>
-
-    <!-- ############## CSS ############## -->
-    <style>
-        /*별*/
-        .rating {
-            display: flex;
-            justify-content: flex-start; /* 왼쪽 정렬 */
-            gap: 5px;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-        .rating span {
-            color: #ccc;
-            transition: color 0.2s;
-        }
-        .rating span.hover,
-        .rating span.selected {
-            color: gold;
-        }
-        textarea {
-            width: 60%;
-            margin-top: 10px;
-        }
-        button {
-            margin-top: 10px;
-            padding: 5px 15px;
-            font-size: 1rem;
-        }
-    </style>
-
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
 </head>
 <body>
-    <h2>평가 및 리뷰 작성</h2>
-    <h3>{{ store.name }}</h3>
-
-    {% if store.image %}
-        <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" width="150" height="150">
-        <br/>
-    {% else %}
-        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150">
-        <br/>
-    {% endif %}
-
-    <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data">
+    <main>
+        <header>
+            <a href="{% url 'reviews:my-review' %}" style="text-decoration: none;">
+            <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle text" > 평가 및 리뷰 작성 </div>
+        </header>
+        <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="rating" id="rating">
-            <span data-value="1">★</span>
-            <span data-value="2">★</span>
-            <span data-value="3">★</span>
-            <span data-value="4">★</span>
-            <span data-value="5">★</span>
-        </div>
-        
-        <!-- 선택한 별점을 form에 담기 위한 hidden input -->
-        <input type="hidden" name="rating" id="rating-input" required>
-
-        <textarea name="comment" placeholder="솔직한 리뷰를 작성해주세요. 상품과 서비스에 대해 자세히 써주시면 유용한 리뷰가 돼요." rows="10" required></textarea> 
-        <br/>
-
-        <!-- 사진 추가 -->
-        <input type="file" id="fileInput" name="images" accept="image/*" multiple><br>
-        <div id="preview"></div>
-        <br>
-
-        <button type="submit">완료</button>
-    </form>
-
-    <!-- 방문 인증 후 스탬프 적립-->
-
-    <!-- ############## JS ############## -->
-    <script>
-        // 별점
-        const stars = document.querySelectorAll('#rating span');
-        const ratingInput = document.getElementById('rating-input');
-        let selectedRating = 0;
-
-        stars.forEach((star, idx) => {
-            star.addEventListener('mouseover', () => {
-                stars.forEach((s, i) => {
-                    s.classList.toggle('hover', i <= idx);
-                });
-            });
-
-            star.addEventListener('mouseout', () => {
-                stars.forEach((s, i) => {
-                    s.classList.remove('hover');
-                    s.classList.toggle('selected', i < selectedRating);
-                });
-            });
-
-            star.addEventListener('click', () => {
-                selectedRating = idx + 1;
-                ratingInput.value = selectedRating; // form 전송 값 설정
-                stars.forEach((s, i) => {
-                    s.classList.toggle('selected', i < selectedRating);
-                });
-            });
-        });
-
-        // 다중 사진 추가 preview
-        const fileInput = document.getElementById('fileInput');
-        const preview = document.getElementById('preview');
-        let filesArray = [];
-
-        fileInput.addEventListener('change', (e) => {
-            for (let i = 0; i < e.target.files.length; i++) {
-                filesArray.push(e.target.files[i]);
-            }
-            preview.innerHTML = filesArray.map(f => `<p>${f.name}</p>`).join('');
-    
-            // FormData에 추가
-            const dataTransfer = new DataTransfer();
-            filesArray.forEach(f => dataTransfer.items.add(f));
-            fileInput.files = dataTransfer.files;
-        });
-    </script>
-
+            <div class="evaluation-zone">
+                <div style="display:block; gap: 30px;">
+                    <div class="store-name">{{ store.name }}</div>
+                    <div class="evaluation-food">
+                        <div class="evaluation-food-text">음식은 어떠셨나요?</div>
+                        <div class="evaluation-food-star">
+                            <img src="{% static 'IMG/my-star.png'%}" class="star1">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star1"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}" class="star2">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star3">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star4">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star4"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star5">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star5"style="width: 22px; display: none;">
+                        </div>
+                    </div>
+                    <div class="evaluation-service">
+                        <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
+                        <div class="evaluation-service-star">
+                            <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
+                        </div>
+                    </div>
+                                    <!-- ⭐ 숨겨진 input들 추가 -->
+                    <input type="hidden" id="food-rating">
+                    <input type="hidden" id="service-rating">
+                    <input type="hidden" name="rating" id="rating-input" required>
+                </div>
+                {% if store.image %}
+            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지"  class="store-img">
+            {% else %}
+                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지"  class="store-img">
+            {% endif %}
+            </div>
+            <div class="separation-box"></div>
+            <div class="write-review">
+                <div class="text">자세한 리뷰를 작성해주세요</div>
+                <textarea class="write-review-box" name="comment"
+                    placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해
+    자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."
+                required
+                ></textarea>
+                <div class="input-area">
+                    <div class="upload-content">
+                        <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
+                        <span class="upload-text">사진 추가</span>
+                    </div>
+                    <input type="file" class="file-input" id="fileInput" name="images" accept="image/*" multiple>
+                </div>
+                <div class="stemp-area">
+                    <button type="submit" class="stemp-area-text">완료</button>
+                </div>
+            </div>
+        </form>
+    </main>
+    <script src="{% static 'JS/WriteReview.js'%}"></script>
 </body>
 </html>

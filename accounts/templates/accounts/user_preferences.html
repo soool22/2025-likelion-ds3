@@ -1,64 +1,57 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>관심 설정</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/user_preferences.css'%}" />
 </head>
 <body>
+    <main>
+        <header>
+            <a href="{% url 'home:main' %}" style="text-decoration: none;">
+                <img src="{% static "IMG/my-back.png"%}" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 관심 설정 </div>
+        </header>
+        <form method="post" action="{% url 'accounts:user_preferences' %}" class="form">
+        {% csrf_token %}
+            <div class="category1">
+                <div class="sub text">선호 음식 카테고리</div>
+                {% for option in categories %}
+                <label>
+                    <input type="checkbox" name="preferred_categories" value="{{ option }}"
+                        {% if option in selected_categories %}checked{% endif %}>
+                    <div class=" text">{{ option }}</div>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="category2">
+                <div class="sub text">선호하는 맛</div>
+                {% for option in tastes %}
+                <label>
+                    <input type="checkbox" name="preferred_tastes" value="{{ option }}"
+                        {% if option in selected_tastes %}checked{% endif %}>
+                    <div class=" text">{{ option }}</div>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="category3">
+                <div class="sub text">선호 가격대</div>
+                <div style="display:flex; gap: 10px" align-items="center">
+                    {% for option in price_ranges %}
+                    <label>
+                        <input type="checkbox" name="preferred_price_ranges" value="{{ option }}"
+                            {% if option in selected_price_ranges %}checked{% endif %}>
+                        <div class=" text">{{ option }}</div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        <button type="submit">저장</button>
 
-<a href="{% url 'home:main' %}">홈으로</a>
-<br><br>
-<h2>관심 설정</h2>
-<form method="post" action="{% url 'accounts:user_preferences' %}">
-    {% csrf_token %}
-
-    <!-- 선호 카테고리 -->
-    <label>선호 음식 카테고리:</label><br>
-    {% for option in categories %}
-        <label>
-            <input type="checkbox" name="preferred_categories" value="{{ option }}"
-                {% if option in selected_categories %}checked{% endif %}>
-            {{ option }}
-        </label><br>
-    {% endfor %}
-    <br>
-
-    <!-- 선호 맛 -->
-    <label>선호 맛:</label><br>
-    {% for option in tastes %}
-        <label>
-            <input type="checkbox" name="preferred_tastes" value="{{ option }}"
-                {% if option in selected_tastes %}checked{% endif %}>
-            {{ option }}
-        </label><br>
-    {% endfor %}
-    <br>
-
-    <!-- 가격대 -->
-    <label>선호 가격대:</label><br>
-    {% for option in price_ranges %}
-        <label>
-            <input type="checkbox" name="preferred_price_ranges" value="{{ option }}"
-                {% if option in selected_price_ranges %}checked{% endif %}>
-            {{ option }}
-        </label><br>
-    {% endfor %}
-    <br>
-
-    <!-- 건강 요소 -->
-    <label>선호 건강 요소:</label><br>
-    {% for option in health_options %}
-        <label>
-            <input type="checkbox" name="preferred_health" value="{{ option }}"
-                {% if option in selected_health %}checked{% endif %}>
-            {{ option }}
-        </label><br>
-    {% endfor %}
-    <br>
-
-    <button type="submit">저장</button>
-</form>
-
-
+    </main>
 </body>
 </html>
+

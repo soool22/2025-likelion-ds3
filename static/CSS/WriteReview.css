@@ -59,6 +59,7 @@ header{
     display: flex;
     gap: 8px;
     margin-bottom: 20px;
+     cursor:pointer
 }
 
 .store-img{
@@ -121,7 +122,8 @@ textarea::placeholder,textarea {
     height: 20px;
 }
 
-.upload-text {
+.upload-text,
+.stemp-area-text{
     font-size: 14px;
     font-weight: bold;
     color: #FFCC02;
@@ -146,15 +148,10 @@ textarea::placeholder,textarea {
     align-items: center;
     justify-content: center;
     margin-top: 10px;
+    cursor: pointer;
 }
 
-.stemp-area-text{
-    color: #FFCC02;
-text-align: center;
-font-family: Pretendard;
-font-size: 13px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-margin-left: 6px;
+
+button{
+    all:unset;
 }

@@ -1,22 +1,47 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // review-box 안의 모든 a태그 가져오기
-    const reviewLinks = document.querySelectorAll(".review-link");
+function setupStarRating(containerSelector, count, normalClass, yellowClass, hiddenInputId) {
+    const container = document.querySelector(containerSelector);
+    const hiddenInput = document.getElementById(hiddenInputId); // ⭐ 값 저장용 hidden input
 
-    reviewLinks.forEach(link => {
-        const btn = link.querySelector(".review-btn");
+    for (let i = 1; i <= count; i++) {
+        const normalStar = container.querySelector(`.${normalClass}${i}`);
+        const yellowStar = container.querySelector(`.${yellowClass}${i}`);
 
-        // 처음에 disable이면 href 제거
-        if (btn.classList.contains("disable")) {
-            link.removeAttribute("href");
-        }
+        normalStar.addEventListener("click", () => updateStars(i));
+        yellowStar.addEventListener("click", () => updateStars(i));
+    }
 
-        // 3초 뒤 조건 충족 시 (테스트용)
-        setTimeout(() => {
-            if (btn.classList.contains("disable")) {
-                btn.classList.remove("disable");
-                btn.classList.add("able");
-                link.setAttribute("href", "./WriteReview.html");
+    function updateStars(index) {
+        for (let i = 1; i <= count; i++) {
+            const normalStar = container.querySelector(`.${normalClass}${i}`);
+            const yellowStar = container.querySelector(`.${yellowClass}${i}`);
+
+            if (i <= index) {
+                normalStar.style.display = "none";
+                yellowStar.style.display = "inline-block";
+            } else {
+                normalStar.style.display = "inline-block";
+                yellowStar.style.display = "none";
             }
-        }, 3000);
-    });
-});
+        }
+        hiddenInput.value = index;  // ⭐ 해당 카테고리 점수 저장
+        updateTotalRating();        // 합산 갱신
+    }
+}
+
+function updateTotalRating() {
+    const foodRating = parseInt(document.getElementById("food-rating").value) || 0;
+    const serviceRating = parseInt(document.getElementById("service-rating").value) || 0;
+
+    let total = 0;
+
+    if (foodRating > 0 && serviceRating > 0) {
+        total = (foodRating + serviceRating) / 2;   // ⭐ 평균
+    } else if (foodRating > 0) {
+        total = foodRating;   // 하나만 선택된 경우
+    } else if (serviceRating > 0) {
+        total = serviceRating;
+    }
+
+    document.getElementById("rating-input").value = Math.round(total); // 반올림 정수
+}
+
