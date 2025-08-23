@@ -24,10 +24,7 @@
                 </a>
                 <div class="second-line">
                     <div class="review-star">
-                        <img src="{% static 'IMG/star-yellow.png'%}">
-                        <img src="{% static 'IMG/star-yellow.png'%}">
-                        <img src="{% static 'IMG/star-yellow.png'%}">
-                        <img src="{% static 'IMG/star-yellow.png'%}">
+                        {{ review.stars }}
                     </div>
                     <div class="date text">{{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})</div>
                 </div>
@@ -50,4 +47,38 @@
         {% endif %}
     </main>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filledSrc = "{% static 'IMG/starpicked.svg' %}"; // 채운 별
+  const MAX = 5;
+
+  document.querySelectorAll('.review-star').forEach(el => {
+    const raw = (el.textContent || '').trim();
+
+    // 1) "★★★★☆" 같은 문자열이면 ★ 개수 세기
+    let filled = (raw.match(/★/g) || []).length;
+
+    // 2) 만약 숫자라면 숫자로 처리 (예: "4")
+    if (!filled && /^\d+$/.test(raw)) {
+      filled = parseInt(raw, 10) || 0;
+    }
+
+    filled = Math.max(0, Math.min(MAX, filled));
+    const empty = MAX - filled;
+
+    // 이미지로 교체
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < filled; i++) {
+      const img = document.createElement('img');
+      img.src = filledSrc;
+      img.alt = '★';
+      frag.appendChild(img);
+    }
+    
+
+    el.textContent = '';   // 기존 ★ 텍스트 지우기
+    el.appendChild(frag);  // 이미지 삽입
+  });
+});
+</script>
 </html>

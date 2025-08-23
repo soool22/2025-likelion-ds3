@@ -1,0 +1,324 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    min-height: 100dvh;
+    margin-bottom: 65px;
+    background-color: white;
+    flex-direction:column;
+
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+/* 여기까지 기본틀 */
+/* 탭바 시작 */
+#tapBar{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    height: 64px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e5e5e5;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 10;
+}
+
+.tapBarBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.tapBarIcon{
+    width: 24px;
+    height: 24px;
+}
+
+.tapBarLabel{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cccccc;
+}
+
+.tapBarLabel.picked{
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+/* 탭바 끝 */
+
+p{
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+#container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#headerBox{
+    width: 345px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+#sideClick{
+    width: 8px;
+}
+
+#star{
+    width: 16px;
+}
+
+#keep{
+    display: none;
+}
+
+#containerBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 17px;
+    margin-top: 20px;
+}
+
+#storeImg{
+width: 275px;
+height: 157px;
+background-color: #cccccc;
+border-radius: 12px;
+}
+
+#storeInfoBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#category{
+    color: #7B7B7B;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+#storeName{
+    color: #000;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+#reviewScoreBox{
+    width: 275px;
+    height: 107px;
+    border-radius: 15px;
+    border: 1px solid #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#reviewScore{
+    display: flex;
+    gap: 13px;
+    align-items: center;
+}
+
+#bigStar{
+    width: 23px;
+    height: 23px;
+}
+
+#bigScoreBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#score{
+    color: #000;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+#scoreCount{
+    color: #B7B7B7;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: -5px;
+}
+
+#scoreBarBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.barBox{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.totalAchievement{
+    width: 108px;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #F5F5F5;
+}
+
+.achievement{
+    width: 50%;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #FFCC02;
+    transition: width .3s ease;
+}
+
+.numStyle{
+    color: #7B7B7B;
+    font-size: 7px;
+    font-weight: 600;
+}
+
+.containerContent{
+width: 100%;
+display: flex;
+flex-direction: column;
+margin-top: 28px;
+border-top: solid 1px #cccccc;
+align-items: center;
+}
+
+#sheetHeader{
+    width: 293px;
+    height: 22px;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.sheetHeaderBox{
+    width: auto;
+    height: 22px;
+    border-radius: 9px;
+    background-color: #ececec;
+    gap: 5px;
+    padding: 4px 6px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+}
+
+.sheetHeaderContent{
+    color: #7B7B7B;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.reviewBigBox{
+    width: 339px;
+    margin-top: 28px;
+    gap: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reviewBox{
+    width: 339px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.userId{
+color: #7B7B7B;
+font-size: 13px;
+font-weight: 600;
+}
+
+.starScoreBox{
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.starBox{
+display: flex;
+align-items: center;
+gap: 3px;
+}
+
+.star{
+    width: 13px;
+    height: 13px;
+}
+
+.date{
+color: #7B7B7B;
+font-size: 11px;
+font-weight: 600;
+}
+
+.reviewContent{
+color: #000;
+font-size: 20px;
+font-weight: 600;
+}
+
+.reviewLastBox{
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.helpMent{
+color: #7B7B7B;
+font-size: 10px;
+font-weight: 600;
+}
+
+.helpBtn{
+color: #FFB635;
+font-size: 10px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+outline: none;
+border: 0;
+background-color: transparent;
+}
