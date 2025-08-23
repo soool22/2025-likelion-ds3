@@ -10,66 +10,77 @@
 <body>
     <main>
         <header>
-            <a href="./MyReviewWrite.html" style="text-decoration: none;">
-            <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
+            <a href="{% static 'reviews:my-review' %}" style="text-decoration: none;">
+                <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text" > 평가 및 리뷰 작성 </div>
         </header>
-        <div class="evaluation-zone">
-            <div style="display:block; gap: 30px;">
-                <div class="store-name">산책</div>
-                <div class="evaluation-food">
-                    <div class="evaluation-food-text">음식은 어떠셨나요?</div>
-                    <div class="evaluation-food-star">
-                        <img src="{% static 'IMG/my-star.png'%}" class="star1">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star1"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}" class="star2">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star2"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="star3">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star3"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="star4">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star4"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="star5">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="y-star5"style="width: 22px; display: none;">
+        <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="evaluation-zone">
+                <div style="display:block; gap: 30px;">
+                    <div class="store-name">{{ store.name }}</div>
+                    <div class="evaluation-food">
+                        <div class="evaluation-food-text">음식은 어떠셨나요?</div>
+                        <div class="evaluation-food-star">
+                            <img src="{% static 'IMG/my-star.png'%}" class="star1">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star1"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}" class="star2">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star3">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star4">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star4"style="width: 22px; display: none; cursor:pointer">
+                            <img src="{% static 'IMG/my-star.png'%}"class="star5">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="y-star5"style="width: 22px; display: none;">
+                        </div>
                     </div>
-                </div>
-                <div class="evaluation-service">
-                    <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
-                    <div class="evaluation-service-star">
-                        <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
-                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
-                        <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
-                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
-                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
-                        <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
-                        <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
+                    <div class="evaluation-service">
+                        <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
+                        <div class="evaluation-service-star">
+                            <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
+                            <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
+                            <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
+                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
+                        </div>
                     </div>
+                                    <!-- ⭐ 숨겨진 input들 추가 -->
+                    <input type="hidden" id="food-rating">
+                    <input type="hidden" id="service-rating">
+                    <input type="hidden" name="rating" id="rating-input" required>
+                </div>
+                {% if store.image %}
+            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지"  class="store-img">
+            {% else %}
+                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지"  class="store-img">
+            {% endif %}
+            </div>
+            <div class="separation-box"></div>
+            <div class="write-review">
+                <div class="text">자세한 리뷰를 작성해주세요</div>
+                <textarea class="write-review-box" name="comment"
+                    placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해
+    자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."
+                required
+                ></textarea>
+                <div class="input-area">
+                    <div class="upload-content">
+                        <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
+                        <span class="upload-text">사진 추가</span>
+                    </div>
+                    <input type="file" class="file-input" id="fileInput" name="images" accept="image/*" multiple>
+                </div>
+                <div class="stemp-area">
+                    <button type="submit" class="stemp-area-text">완료</button>
                 </div>
             </div>
-            <img src="{% static 'IMG/store-img.png'%}" class="store-img" ></img>
-        </div>
-        <div class="separation-box"></div>
-        <div class="write-review">
-            <div class="text">자세한 리뷰를 작성해주세요</div>
-            <textarea class="write-review-box"
-                placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해
-자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."
-            ></textarea>
-            <div class="input-area">
-                <div class="upload-content">
-                    <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
-                    <span class="upload-text">사진 추가</span>
-                </div>
-                <input type="file" class="file-input" accept="image/*">
-            </div>
-            <div class="stemp-area">
-                <img src="{% static 'IMG/my-qr.png'%}" class="stemp-img">
-                <div class="stemp-area-text">방문 인증 후 스템프 적립</div>
-            </div>
-        </div>
+        </form>
     </main>
     <script src="{% static 'JS/WriteReview.js'%}"></script>
 </body>

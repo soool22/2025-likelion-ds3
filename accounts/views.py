@@ -68,10 +68,10 @@ def profile_edit(request):
             return redirect('accounts:mypage')
         else:
     
-            return render(request, 'accounts/mypage.html', {'form': form})
+            return render(request, 'accounts/profile_edit.html', {'form': form})
 
     form = UserUpdateForm(instance=request.user)
-    return render(request, 'accounts/mypage.html', {'form': form})
+    return render(request, 'accounts/profile_edit.html', {'form': form})
 
 @login_required
 def user_info_view(request):

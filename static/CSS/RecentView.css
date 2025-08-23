@@ -9,7 +9,6 @@ main{
     height: 100dvh; 
     background-color: white;
     flex-direction:column;
-
 }
 @font-face {
     font-family: 'Pretendard-Regular';
@@ -36,14 +35,16 @@ header{
 .tittle{
     font-size: 22px;
     font-weight: 600;
+    color: #000;
 }
 .text{
-    color: #000;
+    color: #FFCC02;
     text-align: center;
     font-family: Pretendard;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+    font-size: 12px;
 }
 .back-img{
     width: 8px;
@@ -54,9 +55,9 @@ header{
 }
 
 .list{
-    display: flex;
     margin-left: 50px;
     margin-top: 32px;
+    
 }
 
 .store-text{
@@ -67,7 +68,27 @@ header{
 .store-name{
     font-size: 20px;
     font-weight: 600;
+    color: #000;
+
 }
 .store-img{
     border-radius: 10px;
+}
+
+.top-img{
+    width: 181px;
+    height: 31px;
+}
+
+
+.store-link{
+    display: flex;
+}
+
+.separation-box{
+    width: 100%;
+height: 2px;
+background: #D9D9D9;
+flex-shrink: 0;
+margin-top: 20px;
 }
