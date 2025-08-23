@@ -81,18 +81,24 @@
                         {% endif %}
                     </div>
                     <div id="buttonBox">
-                        <button id="certificationBtn" type="button">
+                        <a href="{% url 'visit_rewards:visit_check' store.id %}" class="btnLink">
+                            <button id="certificationBtn" type="button">
                             <div class="btnInnerBox">
                                 <img class="btnIcon" src="{% static 'img/qrwhite.svg'%}"/>
                                 <p class="btnText1">QR 코드로 방문 인증하기</p>
                             </div>
-                        </button>
-                        <button id="reviewBtn" type="button">
+                            </button>
+                        </a>
+
+                        <!-- 리뷰 작성: 직접 링크 -->
+                        <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
+                            <button id="reviewBtn" type="button" style="background-color:#ffd386";>
                             <div class="btnInnerBox">
                                 <img class="btnIcon" src="{% static 'img/reviewwhite.svg'%}"/>
                                 <p class="btnText1">리뷰 작성하기</p>
                             </div>
-                        </button>
+                            </button>
+                        </a>
                         <button id="aiBtn" type="button">
                             <div class="btnInnerBox">
                                 <img class="btnIcon" src="{% static 'img/aigray.svg'%}"/>
@@ -131,24 +137,42 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="containerContent" style="margin-top: 31px;">
+                <div class="containerContent" style="margin-top:31px;">
                     <div class="containerMiddleBox">
                         <p class="middleTitle">챌린지 누적 금액</p>
-                        <p class="middleContent">1,000원</p>
+                        <p class="middleContent">
+                        {% if amount_progress is not None %}
+                            {{ amount_progress|intcomma }}원
+                        {% else %}
+                            -
+                        {% endif %}
+                        </p>
                     </div>
+
                     <div class="containerMiddleBox">
                         <p class="middleTitle">포인트</p>
-                        <p class="middleContent">1,000점</p>
+                        <p class="middleContent">
+                        {% if user_points is not None %}
+                            {{ user_points|intcomma }}점
+                        {% else %}
+                            -
+                        {% endif %}
+                        </p>
                     </div>
+
                     <div class="containerMiddleBox">
-                        <p class="middleLastTitle">유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}</p>
-                        {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
-                            <a href="{% url 'missions:update-amount' mission.id %}">
-                                <p class="middleLastContent">누적 금액 입력</p>
-                            </a>
-                        {% endif %} 
+                        {% if mission %}
+                        <p class="middleLastTitle">
+                            유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}
+                        </p>
+                        {% endif %}
+                        {% if mission and mission.mission_type.key == 'amount' and user_can_access_amount %}
+                        <a href="{% url 'missions:update-amount' mission.id %}">
+                            <p class="middleLastContent">누적 금액 입력</p>
+                        </a>
+                        {% endif %}
                     </div>
-                </div>
+                    </div>
                 <div class="containerContent">
                     <div class="containerTitle">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
@@ -176,7 +200,9 @@
                         {% for product in products %}
                         <div class="containerTinyContentBox">
                             <div class="menuSmallBox">
+                            {% if product.is_main %}
                             <div class="mainMenu">대표</div>
+                            {% endif %}
                             <p class="containerSmallContent">{{ product.name }}</p>
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}</p>
@@ -214,63 +240,58 @@
         </main>
 
         <script>
-        window.CERT_PAGE_URL = "{% url 'visit_rewards:visit_check' store.id %}";
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', () => {
+        // 찜 토글 (그대로 유지)
         const favBtn  = document.getElementById('favorite-btn');
         const starImg = document.getElementById('star');
-        if (!favBtn || !starImg) return;
+        if (favBtn && starImg) {
+            const storeId     = favBtn.dataset.store;
+            const KEY         = 'fav_store_' + storeId;
+            const SRC_DEFAULT = starImg.dataset.default;
+            const SRC_PICKED  = starImg.dataset.picked;
 
-        const storeId     = favBtn.dataset.store;
-        const KEY         = 'fav_store_' + storeId;     // e.g. fav_store_3
-        const SRC_DEFAULT = starImg.dataset.default;    // data-default에서 읽음
-        const SRC_PICKED  = starImg.dataset.picked;     // data-picked에서 읽음
+            const saved = localStorage.getItem(KEY);
+            if (saved === '1') { starImg.src = SRC_PICKED; favBtn.textContent = '♥ 찜 해제'; }
+            else if (saved === '0') { starImg.src = SRC_DEFAULT; favBtn.textContent = '♡ 찜하기'; }
 
-        // ---------- A) 초기 상태 복원 (localStorage 우선) ----------
-        const saved = localStorage.getItem(KEY); // '1' or '0' or null
-        if (saved === '1') {
-            starImg.src = SRC_PICKED;
-            favBtn.textContent = '♥ 찜 해제';
-        } else if (saved === '0') {
-            starImg.src = SRC_DEFAULT;
-            favBtn.textContent = '♡ 찜하기';
-        } // null이면 서버가 렌더한 기본 상태를 그대로 둠
+            starImg.addEventListener('click', () => favBtn.click());
 
-        // ---------- B) 별 클릭 시 → 버튼 클릭 위임 ----------
-        starImg.addEventListener('click', () => favBtn.click());
-
-        // ---------- C) 버튼 클릭 시 서버 토글 + localStorage 동기화 ----------
-        let busy = false;
-        favBtn.addEventListener('click', function () {
-            if (busy) return;
-            busy = true;
-
+            let busy = false;
+            favBtn.addEventListener('click', function () {
+            if (busy) return; busy = true;
             fetch("{% url 'accounts:toggle_favorite' %}", {
-            method: "POST",
-            headers: {
+                method: "POST",
+                headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: `store_id=${encodeURIComponent(storeId)}`
+                },
+                body: `store_id=${encodeURIComponent(storeId)}`
             })
             .then(res => res.json())
             .then(data => {
-            if (data.status === 'added') {
-                starImg.src = SRC_PICKED;
-                favBtn.textContent = '♥ 찜 해제';
-                localStorage.setItem(KEY, '1');
-            } else if (data.status === 'removed') {
-                starImg.src = SRC_DEFAULT;
-                favBtn.textContent = '♡ 찜하기';
-                localStorage.setItem(KEY, '0');
-            } else {
+                if (data.status === 'added') {
+                starImg.src = SRC_PICKED; favBtn.textContent = '♥ 찜 해제'; localStorage.setItem(KEY, '1');
+                } else if (data.status === 'removed') {
+                starImg.src = SRC_DEFAULT; favBtn.textContent = '♡ 찜하기'; localStorage.setItem(KEY, '0');
+                } else {
                 alert('찜 처리에 실패했습니다.');
-            }
+                }
             })
-            .catch(() => {
-            alert('네트워크 오류가 발생했습니다.');
-            })
+            .catch(() => alert('네트워크 오류가 발생했습니다.'))
             .finally(() => { busy = false; });
-        });
+            });
+        }
+
+        // AI 요약 토글만 유지
+        const aiBtn    = document.getElementById('aiBtn');
+        const aiReview = document.getElementById('aiReview');
+        if (aiBtn && aiReview) {
+            aiBtn.addEventListener('click', () => {
+            aiBtn.style.display = 'none';
+            aiReview.style.display = 'flex';
+            aiReview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
         });
         </script>
     </body>

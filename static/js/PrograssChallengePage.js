@@ -175,3 +175,4 @@ function renderPercentBar(box) {
 
   barEl.style.width = pct + '%';
 }
+
