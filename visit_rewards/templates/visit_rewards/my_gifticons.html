@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
     <link rel="stylesheet" href="{% static 'CSS/MyCoupon.css'%}" />
+    <style>
+      .gifticon-img {
+          cursor: pointer;
+          transition: transform 0.3s ease;
+      }
+      .gifticon-img.enlarged {
+          transform: scale(2);
+          z-index: 1000;
+          position: relative;
+      }
+      .coupon-section, .gifticon-section {
+          margin-bottom: 30px;
+      }
+    </style>
 </head>
 <body>
     <main>
@@ -52,13 +66,74 @@
 
 
         <div class="separation-box"></div>
+
         <div style="margin-left: 55px;">
             <div class="second-text">포인트로 구매한 기프티콘</div>
+            {% for reward in gifticons %}
             <div class="gifticon">
-                <img src="../IMG/gifticon1.svg" class="gifticon-img">
-                <img src="../IMG/gifticon2.svg" class="gifticon-img">
+                <div id="gift-{{ reward.id }}">
+                {% if reward.gifticon.image %}
+                    <img src="{{ reward.gifticon.image.url }}" 
+                         alt="{{ reward.gifticon.name }}" 
+                         class="gifticon-img"
+                         width="100">
+                {% endif %}
+                <div class="date text" style="margin-left:0px;margin-bottom:5px">{{ reward.gifticon.name }}[~2025.12.31]</div>
+
+                {% if reward.used %}
+                    <div class="data text">사용 완료</div>
+                {% else %}
+                    <input type="checkbox" class="use-gifticon" data-id="{{ reward.id }}">
+                    <label  class="data text">사용 완료</label>
+                {% endif %}
+            </div>
+            {% empty %}
+            <li>보유한 기프티콘이 없습니다.</li>
+            {% endfor %}
             </div>
         </div>
+
+
+        <script>
+    // 이미지 클릭 확대
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".gifticon-img").forEach(img => {
+            img.addEventListener("click", function() {
+                this.classList.toggle("enlarged");
+            });
+        });
+
+        // 기프티콘 사용 체크박스 처리
+        document.querySelectorAll(".use-gifticon").forEach(function(checkbox) {
+            checkbox.addEventListener("change", function() {
+                const gifticonId = this.dataset.id;
+                if (this.checked) {
+                    if (confirm("사용 처리 후에는 복구가 불가합니다. 쿠폰을 삭제하시겠습니까?")) {
+                        fetch("{% url 'visit_rewards:use_gifticon' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token }}"
+                            },
+                            body: JSON.stringify({ id: gifticonId })
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                document.getElementById("gift-" + gifticonId).remove();
+                            } else {
+                                alert("사용 처리에 실패했습니다.");
+                                this.checked = false;
+                            }
+                        });
+                    } else {
+                        this.checked = false;
+                    }
+                }
+            });
+        });
+    });
+    </script>
+
         <div class="modal-overlay hidden">
             <!-- ✅ 시크릿 코드 입력 모달 -->
             <div class="modal-box secret hidden">
@@ -83,8 +158,7 @@
                 <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
                 <div class="modal-title">이 쿠폰은 사용할 수 없습니다</div>
                 <div class="modal-error">QR 인증 후 다시 시도해주세요</div>
-                <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
-                <div class="modal-desc">이용 일시 2025.7.30<br>인증은 2025.8.1 점포 내 직원에게 주세요</div>
+                <div class="modal-desc">이용 일시 2025.7.30<br>인증은 점포 내 직원에게 주세요</div>
                 <button class="modal-btn close-btn">확인</button>
             </div>
 
@@ -92,7 +166,6 @@
             <div class="modal-box confirmation hidden">
                 <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
                 <div class="modal-title">쿠폰 사용은 방문 인증 후<br>사용 가능합니다</div>
-                <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
                 <div class="modal-desc">방문 인증 유효 기간:<br>이용 당일~ 이용 2일 후</div>
                 <button class="modal-btn close-btn">방문 인증 여부 확인하기</button>
             </div>
