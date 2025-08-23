@@ -11,38 +11,81 @@
     <main>
         <header>
             <a href="{% url 'accounts:mypage' %}" style="text-decoration: none;">
-                <img src="../IMG/my-back.png" class="back-img"></img>
+                <img src="{%static "IMG/my-back.png"%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 쿠폰 </div>
         </header>
         <div class="first text">가게 제공 혜택</div>
         <div class="list">
+        {% for coupon in coupons %}
             <div class=" box">
-                <div class="B text"> 산책</div>
+                <div class="B text"> {{ coupon.name }}</div>
                 <div class="mission-box">
-                    <div class="mission1 text">미션달성률</div>
-                    <div class="mission-box-flex">
-                        <div class="gray-range">
-                            <div class="yellow-range"></div>
-                        </div>
-                        <div class="percent text">50%</div>
-                        <img src="{% static 'IMG/my-trophy.png'%}" class="trophy-img"></img>
-                    </div>
                     <div class="mission-btn">
                         <div class="mission-QR">
-                            <img src="{% static 'IMG/my-qr.png'%}" class="qr-img">
-                            <div class="text" style="font-size: 14px;margin-left: 11px;">QR코드로 방문 인증하기</div>
-                        </div>
-                        <div class="other-btn-box">
-                            <div class="other-btn">
-                                <img src="{% static 'IMG/my-coupon.png'%}" class="coupon-img">
-                                <div class="text" style="font-size: 14px;margin-left: 5px;">쿠폰 사용하기</div>
+                            <div class="mission1 text" style="font-size: 14px;margin-left: 11px;">
+                                {{ coupon.type }} ---
+                                {% if coupon.discount_amount %}{{ coupon.discount_amount|floatformat:0 }}원{% endif %}
+                                {% if coupon.discount_percent %}{{ coupon.discount_percent|floatformat:1 }}%{% endif %}
+                                {% if coupon.gift_item %}{{ coupon.gift_item }}{% endif %}
+                                {% if coupon.custom_text %} {{ coupon.custom_text }}{% endif %}
                             </div>
                         </div>
+                        {% if coupon.expire_at %}
+                        유효기간 {{ coupon.expire_at|date:"Y-m-d H:i" }} 
+                        {% endif %}
+
+                        <div class="other-btn-box">
+                            <button class="use-coupon-btn" data-id="{{ coupon.id }}"class="other-btn" style="text-decoration:none">
+                                <img src="{% static 'IMG/my-coupon.png'%}" class="coupon-img">
+                                <div class="text" style="font-size: 14px;margin-left: 5px;">쿠폰 사용하기</div>
+                            </button>
+                        </div>
+                        {% if reward.used %}
+                            (사용 완료)
+                        {% else %}
+                            <input type="checkbox" class="use-gifticon" data-id="{{ reward.id }}">
+                            <label>사용 완료</label>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+        {% empty %}
+        <li>보유한 기프티콘이 없습니다.</li>
+        {% endfor %}
         </div>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".use-coupon-btn").forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    const couponId = this.dataset.id;
+                    const secretCode = prompt("점주 시크릿 코드를 입력하세요:");
+
+                    if (secretCode) {
+                        fetch("{% url 'coupons:use_coupon' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token }}"
+                            },
+                            body: JSON.stringify({ coupon_id: couponId, secret_code: secretCode })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("쿠폰 사용 처리 완료!");
+                                btn.parentElement.remove();
+                            } else {
+                                alert("사용 처리 실패: " + data.error);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        </script>
+
         <div class="separation-box"></div>
         <div style="margin-left: 55px;">
             <div class="second-text">포인트로 구매한 기프티콘</div>
@@ -52,29 +95,46 @@
             </div>
         </div>
         <div class="modal-overlay hidden">
+            <!-- ✅ 시크릿 코드 입력 모달 -->
+            <div class="modal-box secret hidden">
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
+                <div class="modal-title">점주 시크릿 코드를 입력하세요</div>
+                <input type="password" id="secretInput" class="modal-input" placeholder="시크릿 코드 입력">
+                <div class="modal-btn-box">
+                    <button class="modal-btn confirm-btn">확인</button>
+                    <button class="modal-btn cancel-btn">취소</button>
+                </div>
+            </div>
+
+            <!-- ✅ 사용 가능 모달 -->
             <div class="modal-box able hidden">
-                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
                 <div class="modal-title">이 쿠폰은 사용이 가능합니다</div>
                 <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
                 <div class="modal-desc">이용 일시 2025.7.30<br>인증은 2025.8.1 점포 내 직원에게 주세요</div>
-                <button class="modal-btn">확인</button>
+                <button class="modal-btn close-btn">확인</button>
             </div>
+
+            <!-- ✅ 사용 불가 모달 -->
             <div class="modal-box disable hidden">
-                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
                 <div class="modal-title">이 쿠폰은 사용할 수 없습니다</div>
                 <div class="modal-error">QR 인증 후 다시 시도해주세요</div>
                 <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
                 <div class="modal-desc">이용 일시 2025.7.30<br>인증은 2025.8.1 점포 내 직원에게 주세요</div>
-                <button class="modal-btn">확인</button>
+                <button class="modal-btn close-btn">확인</button>
             </div>
+
+            <!-- ✅ 방문 인증 확인 모달 -->
             <div class="modal-box confirmation hidden">
-                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon"></img>
+                <img src="{% static 'IMG/modal-Character.png'%}" class="modal-icon">
                 <div class="modal-title">쿠폰 사용은 방문 인증 후<br>사용 가능합니다</div>
                 <div class="modal-subtitle">BLACK DOWN COFFEE<br>음료 하나 무료</div>
                 <div class="modal-desc">방문 인증 유효 기간:<br>이용 당일~ 이용 2일 후</div>
-                <button class="modal-btn">방문 인증 여부 확인하기</button>
+                <button class="modal-btn close-btn">방문 인증 여부 확인하기</button>
             </div>
         </div>
+
     </main>
     <script src="{% static 'JS/MyCoupon.js'%}"></script>
 </body>

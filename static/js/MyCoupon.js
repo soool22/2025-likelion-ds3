@@ -1,50 +1,73 @@
-// 조건 값 ("able", "disable", "confirmation" 중 하나)
-let couponStatus = "confirmation"; // 테스트용
+document.addEventListener("DOMContentLoaded", function() {
+    const overlay = document.querySelector(".modal-overlay");
+    const secretModal = document.querySelector(".modal-box.secret");
+    const ableModal = document.querySelector(".modal-box.able");
+    const disableModal = document.querySelector(".modal-box.disable");
+    const confirmationModal = document.querySelector(".modal-box.confirmation");
+    const secretInput = document.getElementById("secretInput");
 
-// 버튼 요소들
-const otherBtns = document.querySelectorAll(".other-btn");
+    const confirmBtn = secretModal.querySelector(".confirm-btn");
+    const cancelBtn = secretModal.querySelector(".cancel-btn");
 
-// 모달 부모 (오버레이)
-const modalOverlay = document.querySelector(".modal-overlay");
+    let currentCouponId = null;
 
-// 모든 모달 요소
-const modalAble = document.querySelector(".modal-box.able");
-const modalDisable = document.querySelector(".modal-box.disable");
-const modalConfirmation = document.querySelector(".modal-box.confirmation");
+    function showModal(modal) {
+        overlay.classList.remove("hidden");
+        modal.classList.remove("hidden");
+    }
 
-// 닫기 버튼들 (공통)
-const modalBtns = document.querySelectorAll(".modal-btn");
+    function closeModals() {
+        overlay.classList.add("hidden");
+        document.querySelectorAll(".modal-box").forEach(m => m.classList.add("hidden"));
+        secretInput.value = "";
+        currentCouponId = null;
+    }
 
-// "쿠폰 사용하기" 버튼 눌렀을 때
-otherBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        // 오버레이 열기
-        modalOverlay.classList.remove("hidden");
+    
 
-        // 조건에 맞는 모달 열기
-        if (couponStatus === "able") {
-            modalAble.classList.remove("hidden");
-        } else if (couponStatus === "disable") {
-            modalDisable.classList.remove("hidden");
-        } else if (couponStatus === "confirmation") {
-            modalConfirmation.classList.remove("hidden");
-        }
+    // 닫기 버튼 이벤트
+    cancelBtn.addEventListener("click", closeModals);
+    document.querySelectorAll(".close-btn").forEach(btn => btn.addEventListener("click", closeModals));
+
+    // ✅ 쿠폰 사용 버튼 이벤트 등록
+    document.querySelectorAll("button.use-coupon-btn[data-id]").forEach(function(btn) {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault(); // 새로고침 방지
+            console.log("쿠폰 버튼 클릭됨", this.dataset.id); // 디버그 확인
+            currentCouponId = this.dataset.id;
+            showModal(secretModal);
+        });
+    });
+
+    // ✅ 확인 버튼
+    confirmBtn.addEventListener("click", function() {
+        const secretCode = secretInput.value.trim();
+        if (!secretCode || !currentCouponId) return;
+
+        fetch("{% url 'coupons:use_coupon' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ coupon_id: currentCouponId, secret_code: secretCode })
+        })
+        .then(res => res.json())
+        .then(data => {
+            closeModals();
+            if (data.success) {
+                showModal(ableModal);
+                // 성공 시 해당 쿠폰 박스 삭제
+                document.querySelector(`button.use-coupon-btn[data-id="${currentCouponId}"]`)
+                        ?.closest(".box").remove();
+            } else {
+                showModal(disableModal);
+            }
+        })
+        .catch(err => {
+            closeModals();
+            console.error("서버 오류:", err);
+            alert("서버 통신 오류가 발생했습니다.");
+        });
     });
 });
-
-// 모달 내부 "확인" 버튼 누르면 닫기
-modalBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        modalOverlay.classList.add("hidden");
-        modalAble.classList.add("hidden");
-        modalDisable.classList.add("hidden");
-        modalConfirmation.classList.add("hidden");
-    });
-});
-
-
-//range값 달라지는거
-let rates = [70, 40, 90]; // %
-
-  // 각각 적용
-  document.querySelector('.yellow-range').style.width = rates[0] + "%";
