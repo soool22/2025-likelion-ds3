@@ -13,10 +13,10 @@
             <div id="container">
                 <header>
                     <div id="headerBox">
-                        <a href='{% url "stores:public-store-list" %}'>
+                        <a href='{% url "stores:owner-store-list" %}'>
                             <img id="sideClick" src="{% static 'img/leftside.svg'%}"/>
                         </a>
-                        <button id="favorite-btn" data-store="{{ store.id }}">찜하기</button>
+                        {% comment %} <button id="favorite-btn" data-store="{{ store.id }}">찜하기</button>
                         {% if is_favorite %}
                         <img 
                             id="star" 
@@ -31,7 +31,7 @@
                             data-default="{% static 'img/star.svg' %}" 
                             data-picked="{% static 'img/starpicked.svg' %}"
                         />
-                        {% endif %}
+                        {% endif %} {% endcomment %}
                     </div>
                 </header>
                 <div id="containerBox">
@@ -51,7 +51,7 @@
                         <p id="storeName">{{ store.name }}</p>
                         <a href="{% url 'reviews:review-create' store.id %}">
                             <div id="scoreBox">
-                                <a id="scoreSmallBox" href="{% url 'reviews:review-list' store.id %}">
+                                <a id="scoreSmallBox" href="{% url 'reviews:owner-review-list' store.id %}">
                                     <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>
                                     <p id="realScore">{{ store.rating|floatformat:1 }}</p>
                                     <p id="scoreCount">({{ store.reviews.count }})</p>
@@ -60,7 +60,7 @@
                         </a>
                         <p id="address">{{ store.address }} 
                             {% if store.distance %}
-                                ({{ store.distance }})
+                                ({{ store.distance|floatformat:0 }}m)
                             {% endif %}
                         </p>
                         <p id="call">
@@ -91,7 +91,7 @@
                         </a>
 
                         
-                        <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
+                        {% comment %} <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
                             <button id="reviewBtn" type="button" style="background-color:#ffd386";>
                             <div class="btnInnerBox">
                                 <img class="btnIcon" src="{% static 'img/reviewwhite.svg'%}"/>
@@ -134,7 +134,7 @@
                             alert('{{ message }}');
                         {% endfor %}
                         </script>
-                        {% endif %}
+                        {% endif %} {% endcomment %}
                     </div>
                 </div>
                 <div class="containerContent" style="margin-top:31px;">
@@ -172,7 +172,7 @@
                         </a>
                         {% endif %}
                     </div>
-                    </div>
+                </div>
                 <div class="containerContent">
                     <div class="containerTitle">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
@@ -206,8 +206,8 @@
                             {% endif %}
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}원</p>
-                            {% comment %} <p class="price">{{ product.description }}</p>
-                            {% if product.image %}
+                            {% comment %} <p class="price">{{ product.description }}</p> {% endcomment %}
+                            {% comment %} {% if product.image %}
                             <a href="{{ product.image.url }}" target="_blank">
                                 <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
                             </a>
@@ -219,27 +219,9 @@
                     </div>
                 </div>
             </div>
-            <div id="tapBar">
-                <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel">홈</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel picked">가게 검색</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
-                    <p class="tapBarLabel">관심 매장</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
-                    <p class="tapBarLabel">내 정보</p>
-                </a>
-            </div>
         </main>
 
-        <script>
+        {% comment %} <script>
         document.addEventListener('DOMContentLoaded', () => {
         // 찜 토글 (그대로 유지)
         const favBtn  = document.getElementById('favorite-btn');
@@ -293,7 +275,7 @@
             });
         }
         });
-        </script>
+        </script> {% endcomment %}
     </body>
     <script src="{% static 'js/StoreDetailPage.js'%}"></script>
 </html>

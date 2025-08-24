@@ -2,11 +2,11 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 
-def generate_store_qr(store, test=False):
+def generate_store_qr(store, host="localhost:8000", test=False):
     """
-    QR 코드 생성 (테스트용 포함)
+    QR 코드 생성 (File 객체 + QR URL)
     """
-    qr_url = f"http://localhost:8000/visit?token={store.qr_token}&test={int(test)}"
+    qr_url = f"http://{host}/visit?token={store.qr_token}&test={int(test)}"
 
     qr = qrcode.QRCode(
         version=1,
@@ -22,4 +22,6 @@ def generate_store_qr(store, test=False):
     img.save(buffer, format="PNG")
     buffer.seek(0)
 
-    return File(buffer, name=f"{store.name}_qr.png")
+    qr_file = File(buffer, name=f"{store.name}_qr.png")
+    return qr_file, qr_url  # ✅ 2개 반환
+

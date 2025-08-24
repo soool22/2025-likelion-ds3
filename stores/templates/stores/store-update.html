@@ -1,117 +1,128 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>등록된 가게 정보 수정</title>
-    <!-- 카카오맵 SDK -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services"></script>
-    
-    <!-- ################## CSS ##################-->
-    <style>
-        #map { width: 100%; height: 400px; margin-top: 10px; }
-    </style>
-</head>
-<body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/OwnerStoreRegistration.css'%}" />
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services"></script>
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <a href="{% url 'stores:self-service' store.id %}">
+                        <img src="{% static 'img/leftside.svg'%}" class="sideClick"/>
+                    </a>
+                    <p id="title">가게 정보 수정</p>
+                    <p> </p>
+                </header>
+                <div id="containerBox">
+                    <form method="POST" action="{% url 'stores:store-update' store.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" name="name" placeholder="가게 이름" class="inputBox"
+               id="id_name" value="{{ form.instance.name|default_if_none:'' }}"/>
+                        {{ form.name.errors }}
+                        <div id="searchBox">
+                            <input  class="search" placeholder="주소" type="text" name="address"
+                 id="id_address" value="{{ form.instance.address|default_if_none:'' }}" />
+                            <img id="searchIcon" src="{% static 'img/search.svg'%}" />
+                            <button class="realSearchBtn"></button>
+                        </div>
+                        <input type="hidden" name="latitude" id="id_latitude" value="{{ form.latitude.value|default_if_none:'' }}">
+                        <input type="hidden" name="longitude" id="id_longitude" value="{{ form.longitude.value|default_if_none:'' }}">
 
-    <h2>가게 정보 수정</h2>
-    <form method="POST" action="{% url 'stores:store-update' store.id %}" enctype="multipart/form-data">
-        {% csrf_token %} 
-        <div>
-            가게 이름
-            {{ form.name }}
-            {{ form.name.errors }}
-        </div>
-
-        <div>
-            주소
-            {{ form.address }}
-            <button type="button" id="btn-search">주소 검색</button>
-            <button type="button" id="btn-current">현재 위치</button>
-        </div>
-
-        <div>
-            구 이름
-            {{ form.gu_name }}
-        </div>
-
-        <!-- 히든 필드 -->
-        <input type="hidden" name="latitude" id="id_latitude" value="{{ form.latitude.value|default_if_none:'' }}">
-        <input type="hidden" name="longitude" id="id_longitude" value="{{ form.longitude.value|default_if_none:'' }}">
-        
-        <!-- 지도 영역 -->
-        <div id="map"></div>
-        
-        <div>
-            카테고리
-            {% for checkbox in form.category %}
-                <div>
-                    {{ checkbox.tag }} {{ checkbox.choice_label }}
+                        <div id="map"></div>
+                        <div id="nowLocationBox">
+                            <img id="locationIcon" src="{% static 'img/locationgray.svg'%}"/>
+                            <button type="button" id="btn-current" class="locationBtn">현위치 가져오기</button>
+                        </div>
+                        <input type="text" name="gu_name" placeholder="구 이름"
+               class="inputBox" id="id_gu_name"
+               value="{{ form.instance.gu_name|default_if_none:'' }}"/>
+                        <div class="box">
+                            <p class="boxTitle">카테고리</p>
+                            {% for checkbox in form.category %}
+                            <div class="boxContent">
+                                {{ checkbox.tag }} {{ checkbox.choice_label }}
+                            </div>
+                            {% endfor %}
+                            {{ form.category.errors }}
+                        </div>
+                        <input type="text" name="number" placeholder="가게 전화"
+               class="inputBox" id="id_number"
+               value="{{ form.instance.number|default_if_none:'' }}"/>
+                        <div class="box">
+                            <p class="boxTitle">오픈 시간</p>
+                            <div class="boxContent">
+                                <input type="time" name="open_time" class="timeStyle" id="id_open_time"
+                   value="{{ form.instance.open_time|default_if_none:'' }}"/>
+                                {{ form.open_time.errors }}
+                            </div>
+                        </div>
+                        <div class="box">
+                            <p class="boxTitle">마감 시간</p>
+                            <div class="boxContent">
+                                <input type="time" name="close_time" class="timeStyle" id="id_close_time"
+                   value="{{ form.instance.close_time|default_if_none:'' }}" />
+                                
+                                {{ form.close_time.errors }}
+                            </div>
+                        </div>
+                        <input type="password" name="secret_code" placeholder="점주 코드"
+               class="inputBox" id="id_secret_code"
+               value="{{ form.instance.secret_code|default_if_none:'' }}"/>
+                        {{ form.secret_code.errors }}
+                        <button type="submit" class="btn" id="btn">확인</button>
+                        {% if form.errors %}
+                        <div style="color:#d00;margin-top:8px;">{{ form.errors }}</div>
+                        {% endif %}
+                    </form>
                 </div>
-            {% endfor %}
-            {{ form.category.errors }}
-        </div>
+            </div>
+        </main>
+        <script>
+        var mapContainer = document.getElementById('map');
+        var mapOption = { 
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 3
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var marker = new kakao.maps.Marker({ map: map, draggable: true });
+        var geocoder = new kakao.maps.services.Geocoder();
 
-        <div>
-        전화번호
-        {{ form.number }}
-        </div>
+        // 현재 위치 버튼
+        document.getElementById('btn-current').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    var locPosition = new kakao.maps.LatLng(lat, lng);
+                    map.setCenter(locPosition);
+                    marker.setPosition(locPosition);
+                    document.getElementById('id_latitude').value = lat;
+                    document.getElementById('id_longitude').value = lng;
+                    
+                    geocoder.coord2Address(lng, lat, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            document.getElementById('id_address').value = result[0].address.address_name;
+                            var gu = result[0].address.region_2depth_name;
+                            document.getElementById('id_gu_name').value = gu;
+                        }
+                    });
+                });
+            }
+        });
 
-        <div>
-            {% if store.image %}
-                기존 이미지: <br/>
-                <img width="200" height="200" src="{{ store.image.url }}"><br/>
-            {% endif %}
-            {{ form.image }}
-            {{ form.image.errors }}
-        </div>
+        // 지도 클릭 이벤트
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            var latlng = mouseEvent.latLng;
+            marker.setPosition(latlng);
+            document.getElementById('id_latitude').value = latlng.getLat();
+            document.getElementById('id_longitude').value = latlng.getLng();
 
-        <div>
-            오픈 시간
-            {{ form.open_time }}
-            {{ form.open_time.errors }}
-        </div>
-
-        <div>
-            종료 시간
-            {{ form.close_time }}
-            {{ form.close_time.errors }}
-        </div>
-
-        <div>
-            점주 코드
-            {{ form.secret_code }}
-            {{ form.secret_code.errors }}
-        </div>
-    
-        <button type="submit">완료</button> <br/>
-        <a href="{% url 'stores:self-service' store.id %}">취소</a>
-    </form>
-
-    <!-- ################## JS ##################-->
-<script>
-var mapContainer = document.getElementById('map');
-var mapOption = { 
-    center: new kakao.maps.LatLng(37.5665, 126.9780),
-    level: 3
-};
-var map = new kakao.maps.Map(mapContainer, mapOption);
-var marker = new kakao.maps.Marker({ map: map, draggable: true });
-var geocoder = new kakao.maps.services.Geocoder();
-
-// 현재 위치 버튼
-document.getElementById('btn-current').addEventListener('click', function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var locPosition = new kakao.maps.LatLng(lat, lng);
-            map.setCenter(locPosition);
-            marker.setPosition(locPosition);
-            document.getElementById('id_latitude').value = lat;
-            document.getElementById('id_longitude').value = lng;
-            
-            geocoder.coord2Address(lng, lat, function(result, status) {
+            geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
                 if (status === kakao.maps.services.Status.OK) {
                     document.getElementById('id_address').value = result[0].address.address_name;
                     var gu = result[0].address.region_2depth_name;
@@ -119,60 +130,42 @@ document.getElementById('btn-current').addEventListener('click', function() {
                 }
             });
         });
-    }
-});
 
-// 지도 클릭 이벤트
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    var latlng = mouseEvent.latLng;
-    marker.setPosition(latlng);
-    document.getElementById('id_latitude').value = latlng.getLat();
-    document.getElementById('id_longitude').value = latlng.getLng();
+        // 마커 드래그 이벤트
+        kakao.maps.event.addListener(marker, 'dragend', function() {
+            var latlng = marker.getPosition();
+            document.getElementById('id_latitude').value = latlng.getLat();
+            document.getElementById('id_longitude').value = latlng.getLng();
 
-    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            document.getElementById('id_address').value = result[0].address.address_name;
-            var gu = result[0].address.region_2depth_name;
-            document.getElementById('id_gu_name').value = gu;
-        }
-    });
-});
+            geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    document.getElementById('id_address').value = result[0].address.address_name;
+                    var gu = result[0].address.region_2depth_name;
+                    document.getElementById('id_gu_name').value = gu;
+                }
+            });
+        });
 
-// 마커 드래그 이벤트
-kakao.maps.event.addListener(marker, 'dragend', function() {
-    var latlng = marker.getPosition();
-    document.getElementById('id_latitude').value = latlng.getLat();
-    document.getElementById('id_longitude').value = latlng.getLng();
-
-    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            document.getElementById('id_address').value = result[0].address.address_name;
-            var gu = result[0].address.region_2depth_name;
-            document.getElementById('id_gu_name').value = gu;
-        }
-    });
-});
-
-// 주소 검색
-document.getElementById('btn-search').addEventListener('click', function() {
-    var address = document.getElementById('id_address').value;
-    if(address){
-        geocoder.addressSearch(address, function(result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                var loc = new kakao.maps.LatLng(result[0].y, result[0].x);
-                map.setCenter(loc);
-                marker.setPosition(loc);
-                document.getElementById('id_latitude').value = result[0].y;
-                document.getElementById('id_longitude').value = result[0].x;
-                var gu = result[0].address.region_2depth_name;
-                document.getElementById('id_gu_name').value = gu;
-            } else {
-                alert("주소를 찾을 수 없습니다.");
+        // 주소 검색
+        document.getElementById('btn-search').addEventListener('click', function() {
+            var address = document.getElementById('id_address').value;
+            if(address){
+                geocoder.addressSearch(address, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var loc = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        map.setCenter(loc);
+                        marker.setPosition(loc);
+                        document.getElementById('id_latitude').value = result[0].y;
+                        document.getElementById('id_longitude').value = result[0].x;
+                        var gu = result[0].address.region_2depth_name;
+                        document.getElementById('id_gu_name').value = gu;
+                    } else {
+                        alert("주소를 찾을 수 없습니다.");
+                    }
+                });
             }
         });
-    }
-});
-</script>
-</body>
+        </script>
+    </body>
+    <script src="{% static 'js/OwnerRegistaration.js'%}"></script>
 </html>
-

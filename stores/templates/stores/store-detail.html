@@ -92,7 +92,7 @@
                             </button>
                         </a>
 
-                        <!-- 리뷰 작성: 직접 링크 -->
+                        
                         <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
                             <button id="reviewBtn" type="button" style="background-color:#ffd386";>
                             <div class="btnInnerBox">
@@ -202,18 +202,18 @@
                         {% for product in products %}
                         <div class="containerTinyContentBox">
                             <div class="menuSmallBox">
+                            <p class="containerSmallContent">{{ product.name }}</p>
                             {% if product.is_main %}
                             <div class="mainMenu">대표</div>
                             {% endif %}
-                            <p class="containerSmallContent">{{ product.name }}</p>
                             </div>
-                            <p class="price">{{ product.price|floatformat:0|intcomma }}</p>
-                            <p class="price">{{ product.description }}</p>
+                            <p class="price">{{ product.price|floatformat:0|intcomma }}원</p>
+                            {% comment %} <p class="price">{{ product.description }}</p>
                             {% if product.image %}
                             <a href="{{ product.image.url }}" target="_blank">
                                 <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
                             </a>
-                            {% endif %}
+                            {% endif %} {% endcomment %}
                         </div>
                         {% empty %}
                         <p class="containerSmallContent">등록된 상품이 없습니다.</p>

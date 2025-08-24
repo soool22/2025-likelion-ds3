@@ -12,6 +12,7 @@ urlpatterns = [
     path('store-delete/<int:store_id>/', store_delete, name='store-delete'),
     path('self-service/<int:store_id>/',self_service, name='self-service'),
     path('owner-store-detail/<int:store_id>/', owner_store_detail, name='owner-store-detail'),
+    path('owner-qr/<int:store_id>/', owner_qr, name='owner_qr'), 
 
     # 소비자용
     path('', public_store_list, name='public-store-list'),  # 전체 가게 목록

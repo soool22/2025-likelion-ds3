@@ -44,47 +44,41 @@
                     <div class="containerBodyContent" id="progressList">
                         {% if progresses %}
                             {% for progress in progresses %}
-                            <div class="prograssChallengeBox">
-                                <div class="challengeTitleBox">
-                                    <p class="challengeTitle">{{ progress.mission.title }}</p>
-                                    <a href="{% url 'stores:store-detail' progress.mission.store.id %}">
-                                        <img class="rightSideClick" src="{% static 'img/rightside.svg' %}" />
-                                    </a>
-                                </div>
+                            <div class="prograssChallengeBox" data-mission-id="{{ progress.mission.id }}">
+                            <div class="challengeTitleBox">
+                                <p class="challengeTitle">{{ progress.mission.title }}</p>
+                                <a href="{% url 'stores:store-detail' progress.mission.store.id %}">
+                                <img class="rightSideClick" src="{% static 'img/rightside.svg' %}" alt="상세보기" />
+                                </a>
+                            </div>
 
-                                <div class="challengeMiddleBox">
-                                    <div class="challengeMiddleSmallBox">
-                                        <div class="state">
-                                            {% if progress.is_completed %}
-                                                <a href="{% url 'missions:mission-complete' progress.mission.id %}">완료</a>
-                                            {% else %}
-                                                진행 중
-                                            {% endif %}
-                                        </div>
-                                        <p class="storeName">{{ progress.mission.store.name }}</p>
-                                        <p class="storeDetail">
-                                            {% if progress.mission.reward_type == "POINT" %}
-                                                포인트 {{ progress.mission.reward_points|intcomma }}점
-                                            {% elif progress.mission.reward_type == "CUSTOM" %}
-                                                {{ progress.mission.reward_description }}
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                    <p class="date">~{{ progress.mission.end_date|date:"Y-m-d H:i" }}</p>
+                            <div class="challengeMiddleBox">
+                                <div class="challengeMiddleSmallBox">
+                                <div class="state">
+                                    {% if progress.is_completed %}
+                                    <a href="{% url 'missions:mission-complete' progress.mission.id %}">완료</a>
+                                    {% else %}진행 중{% endif %}
                                 </div>
+                                <p class="storeName">{{ progress.mission.store.name }}</p>
+                                <p class="storeDetail">
+                                    {% if progress.mission.reward_type == "POINT" %}
+                                    포인트 {{ progress.mission.reward_points|intcomma }}점
+                                    {% elif progress.mission.reward_type == "CUSTOM" %}
+                                    {{ progress.mission.reward_description }}
+                                    {% else %}-{% endif %}
+                                </p>
+                                </div>
+                                <p class="date">~{{ progress.mission.end_date|date:"Y-m-d H:i" }}</p>
+                            </div>
 
-                                <div class="challengeLastBox">
-                                    <div class="prograssBar">
-                                        <div class="prograss"></div>
-                                    </div>
-                                    <div class="scoreBigBox">
-                                        <div class="scoreBox">
-                                            <p class="nowScore">{{ progress.percent }}%</p>
-                                        </div>
-                                    </div>
+                            <div class="challengeLastBox">
+                                <div class="prograssBar"><div class="prograss"></div></div>
+                                <div class="scoreBigBox" style="display:none;">
+                                <p class="nowScoreCount">1</p>
+                                <p class="totalScoreCount">3</p>
                                 </div>
+                                <p class="nowScore">{{ progress.percent }}%</p>
+                            </div>
                             </div>
                             {% endfor %}
                         {% else %}
@@ -99,7 +93,7 @@
                     {% if recommended %}
                     <div class="containerBodyContent">
                         {% for mission in recommended %}
-                        <div class="joinChallengeBox">
+                        <div class="joinChallengeBox" data-mission-id="{{ mission.id }}">
                             <div class="challengeTitleBox">
                                 <p class="challengeTitle">{{ mission.title }}</p>
                                 <a href="{% url 'stores:store-detail' mission.store.id %}">

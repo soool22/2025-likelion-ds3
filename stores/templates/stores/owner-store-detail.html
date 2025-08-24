@@ -1,126 +1,276 @@
 {% load static %}
-{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
-
+{% load humanize %}
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>가게 정보</title>
-</head>
-<body>
-    <a href='{% url "stores:owner-store-list" %}'>홈</a>
-    <br/><br/>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/StoreDetailPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <div id="headerBox">
+                        <a href='{% url "stores:owner-store-list" %}'>
+                            <img id="sideClick" src="{% static 'img/leftside.svg'%}"/>
+                        </a>
+                        {% comment %} <button id="favorite-btn" data-store="{{ store.id }}">찜하기</button>
+                        {% if is_favorite %}
+                        <img 
+                            id="star" 
+                            src="{% static 'img/starpicked.svg' %}" 
+                            data-default="{% static 'img/star.svg' %}" 
+                            data-picked="{% static 'img/starpicked.svg' %}"
+                        />
+                        {% else %}
+                        <img 
+                            id="star" 
+                            src="{% static 'img/star.svg' %}" 
+                            data-default="{% static 'img/star.svg' %}" 
+                            data-picked="{% static 'img/starpicked.svg' %}"
+                        />
+                        {% endif %} {% endcomment %}
+                    </div>
+                </header>
+                <div id="containerBox">
+                    {% if store.image %}
+                    <a href="{{ store.image.url }}" target="_blank">
+                        <img id="storeImg" src="{{ store.image.url }}"/>
+                    </a>
+                    {% else %}
+                        <img id="storeImg" src="{% static 'img/default_store.png' %}"/>
+                    {% endif %}
+                    <div id="storeInfoBox">
+                        <p id="category">
+                            {% for category in store.category.all %}
+                                {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p id="storeName">{{ store.name }}</p>
+                        <a href="{% url 'reviews:review-create' store.id %}">
+                            <div id="scoreBox">
+                                <a id="scoreSmallBox" href="{% url 'reviews:owner-review-list' store.id %}">
+                                    <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>
+                                    <p id="realScore">{{ store.rating|floatformat:1 }}</p>
+                                    <p id="scoreCount">({{ store.reviews.count }})</p>
+                                </a>
+                            </div>
+                        </a>
+                        <p id="address">{{ store.address }} 
+                            {% if store.distance %}
+                                ({{ store.distance|floatformat:0 }}m)
+                            {% endif %}
+                        </p>
+                        <p id="call">
+                            {% if store.number %}
+                                <a href="tel:{{ store.number }}">{{ store.number }}</a>
+                            {% else %}
+                                정보 없음
+                            {% endif %}
+                        </p>
+                        {% if store.open_time and store.close_time %}
+                        <p id="hours">{{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }} 
+                            {% if store.is_open %}
+                                (영업 중)
+                            {% else %}
+                                (영업 종료)
+                            {% endif %}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div id="buttonBox">
+                        <a href="{% url 'stores:owner_qr' store.id %}" class="btnLink">
+                            <button id="certificationBtn" type="button">
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/qrwhite.svg'%}"/>
+                                <p class="btnText1">매장 QR 발급</p>
+                            </div>
+                            </button>
+                        </a>
 
-    <!-- ######### 가게 정보 #########-->
-    {% if store.image %}
-        <a href="{{ store.image.url }}" target="_blank">
-            <img src="{{ store.image.url }}" width="200" height="200">
-        </a>
-    {% else %}
-        <img src="{% static 'img/default_store.png' %}" width="200" height="200">
-    {% endif %}
+                        
+                        {% comment %} <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
+                            <button id="reviewBtn" type="button" style="background-color:#ffd386";>
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/reviewwhite.svg'%}"/>
+                                <p class="btnText1">리뷰 작성하기</p>
+                            </div>
+                            </button>
+                        </a>
+                        <button id="aiBtn" type="button">
+                            <div class="btnInnerBox">
+                                <img class="btnIcon" src="{% static 'img/aigray.svg'%}"/>
+                                <p class="btnText2">AI 리뷰 요약 보기</p>
+                            </div>
+                        </button>
+                        
+                        <div id="aiReview">
+                            {% if ai_summary %}
+                            <div class="summaryBox">
+                                <p class="summaryTitle">키워드 요약</p>
+                                <p class="summaryContent">
+                                    {% for kw in review_keywords %}
+                                        {{ kw }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="summaryBox">
+                                <p class="summaryTitle">요약</p>
+                                <p class="summaryContent">{{ ai_summary }}</p>
+                            </div>
+                            <div class="summaryBox">
+                                <p class="summaryTitle">원문 일부</p>
+                                <p class="summaryTitle">{{ snippet }}</p>
+                            </div>
+                            {% else %}
+                            <p class="summaryContent">리뷰 요약 정보가 없습니다.</p>
+                            {% endif %}
+                        </div>
+                        {% if messages %}
+                        <script>
+                        {% for message in messages %}
+                            alert('{{ message }}');
+                        {% endfor %}
+                        </script>
+                        {% endif %} {% endcomment %}
+                    </div>
+                </div>
+                <div class="containerContent" style="margin-top:31px;">
+                    <div class="containerMiddleBox">
+                        <p class="middleTitle">챌린지 누적 금액</p>
+                        <p class="middleContent">
+                        {% if amount_progress is not None %}
+                            {{ amount_progress|intcomma }}원
+                        {% else %}
+                            -
+                        {% endif %}
+                        </p>
+                    </div>
 
-    <h2>{{ store.name }}</h2>
+                    <div class="containerMiddleBox">
+                        <p class="middleTitle">포인트</p>
+                        <p class="middleContent">
+                        {% if user_points is not None %}
+                            {{ user_points|intcomma }}점
+                        {% else %}
+                            -
+                        {% endif %}
+                        </p>
+                    </div>
 
-    주소: {{ store.address }} 
-    {% if store.distance %}
-        ({{ store.distance|floatformat:0 }}m)
-    {% endif %}
-    <br/>
-
-    <a href="{% url 'reviews:owner-review-list' store.id %}">
-        ★{{ store.rating|floatformat:1 }} 
-        ({{ store.reviews.count }})
-    </a>
-    <br/>
-
-    <p>전화번호: 
-        {% if store.number %}
-            <a href="tel:{{ store.number }}">{{ store.number }}</a>
-        {% else %}
-            정보 없음
-        {% endif %}
-    </p>
-
-    카테고리:
-    {% for category in store.category.all %}
-        {{ category.name }}{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    <br/><br/>
-
-    <a href="{% url 'visit_rewards:visit_check' store.id %}">방문 인증</a>
-    <br/><br/>
-
-    <!-- 영업 시간 -->
-    {% if store.open_time and store.close_time %}
-        영업 시간: {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
-        {% if store.is_open %}
-            (영업 중)
-        {% else %}
-            (영업 종료)
-        {% endif %}
-        <br/><br/>
-    {% endif %}
-
-    <!-- ######### 챌린지 ######### -->
-    <h3>진행 중인 챌린지</h3>
-    <hr/>
-    {% for mission in missions %}
-        <div>
-            <h4>{{ mission.title }}</h4>
-            {{ mission.description }}<br/>
-            {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
-            <br/>
-
-            <!--################보상################-->
-            {% if mission.reward_type == "POINT" %}
-            <div>
-                <label>포인트:</label> {{ mission.reward_points }}점
+                    <div class="containerMiddleBox">
+                        {% if mission %}
+                        <p class="middleLastTitle">
+                            유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}
+                        </p>
+                        {% endif %}
+                        {% if mission and mission.mission_type.key == 'amount' and user_can_access_amount %}
+                        <a href="{% url 'missions:update-amount' mission.id %}">
+                            <p class="middleLastContent">누적 금액 입력</p>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="containerContent">
+                    <div class="containerTitle">진행중인 챌린지</div>
+                    <div class="containerSmallContentBox">
+                        {% for mission in missions %}
+                            <div>
+                                <h4>{{ mission.title }}</h4>
+                                {{ mission.description }}<br/>
+                                {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
+                                <br/>
+                                {% if mission.reward_type == "POINT" %}
+                                    <div>
+                                        <label>포인트:</label> {{ mission.reward_points }}점
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="containerContent">
+                    <div class="containerTitle">상품/메뉴</div>
+                    <div class="containerSmallContentBox">
+                        {% for product in products %}
+                        <div class="containerTinyContentBox">
+                            <div class="menuSmallBox">
+                            <p class="containerSmallContent">{{ product.name }}</p>
+                            {% if product.is_main %}
+                            <div class="mainMenu">대표</div>
+                            {% endif %}
+                            </div>
+                            <p class="price">{{ product.price|floatformat:0|intcomma }}원</p>
+                        </div>
+                        {% empty %}
+                        <p class="containerSmallContent">등록된 상품이 없습니다.</p>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-            {% elif mission.reward_type == "CUSTOM" %}
-            <div>
-                <label>직접 입력 보상:</label> {{ mission.reward_description }}
-            </div>
-            {% endif %}
-            <!---####################################-->
-            
-            {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}<br/>
+        </main>
 
-            {% if mission.mission_type.key == 'amount' %}
-                {% if user_can_access_amount %}
-                    <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
-                {% endif %}
-            {% endif %}
-        </div>
-    {% empty %}
-        진행 중인 챌린지가 없습니다.
-    {% endfor %}
-    <hr/><br/>
+                            
 
-    <!-- ######### 상품/메뉴 ######### -->
-    <h3>상품/메뉴</h3>
-    <hr/>
-    {% for product in products %}
-    <div>
-        {% if product.image %}
-        <a href="{{ product.image.url }}" target="_blank">
-            <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
-        </a>
-        {% endif %}
+        {% comment %} <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        // 찜 토글 (그대로 유지)
+        const favBtn  = document.getElementById('favorite-btn');
+        const starImg = document.getElementById('star');
+        if (favBtn && starImg) {
+            const storeId     = favBtn.dataset.store;
+            const KEY         = 'fav_store_' + storeId;
+            const SRC_DEFAULT = starImg.dataset.default;
+            const SRC_PICKED  = starImg.dataset.picked;
 
-        <h4>{{ product.name }}</h4>
-        {% if product.is_main %}
-                대표 메뉴 <br/>
-        {% endif %}
-        {{ product.price|floatformat:0|intcomma }}원
-        <br/>
-        {{ product.description }}
-    </div>
-    <hr/>
-    {% empty %}
-        등록된 상품이 없습니다.
-    {% endfor %}
+            const saved = localStorage.getItem(KEY);
+            if (saved === '1') { starImg.src = SRC_PICKED; favBtn.textContent = '♥ 찜 해제'; }
+            else if (saved === '0') { starImg.src = SRC_DEFAULT; favBtn.textContent = '♡ 찜하기'; }
 
-</body>
+            starImg.addEventListener('click', () => favBtn.click());
+
+            let busy = false;
+            favBtn.addEventListener('click', function () {
+            if (busy) return; busy = true;
+            fetch("{% url 'accounts:toggle_favorite' %}", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `store_id=${encodeURIComponent(storeId)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'added') {
+                starImg.src = SRC_PICKED; favBtn.textContent = '♥ 찜 해제'; localStorage.setItem(KEY, '1');
+                } else if (data.status === 'removed') {
+                starImg.src = SRC_DEFAULT; favBtn.textContent = '♡ 찜하기'; localStorage.setItem(KEY, '0');
+                } else {
+                alert('찜 처리에 실패했습니다.');
+                }
+            })
+            .catch(() => alert('네트워크 오류가 발생했습니다.'))
+            .finally(() => { busy = false; });
+            });
+        }
+
+        // AI 요약 토글만 유지
+        const aiBtn    = document.getElementById('aiBtn');
+        const aiReview = document.getElementById('aiReview');
+        if (aiBtn && aiReview) {
+            aiBtn.addEventListener('click', () => {
+            aiBtn.style.display = 'none';
+            aiReview.style.display = 'flex';
+            aiReview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+        });
+        </script> {% endcomment %}
+    </body>
+    <script src="{% static 'js/StoreDetailPage.js'%}"></script>
 </html>

@@ -25,7 +25,7 @@
                             </p>
                         {% endif %}
                     </div>
-                    <a href="{% url 'stores:store-update' data.store.id %}" id="change">
+                    <a href="{% url 'accounts:start-page' %}" id="change">
                         변경
                     </a>
                 </div>
@@ -95,11 +95,6 @@
                             <div class="font13">점주 코드</div>
                             <div class="font16"> {{ data.store.secret_code }}</div>
                         </div>
-                        {% if store %}
-                            <img src="{{ store_qr_url }}" alt="QR 코드" style="display: flex; align-self: center;">
-                        {% else %}
-                            <p>테스트용 가게가 없습니다.</p>
-                        {% endif %}
 
                     </div>
 
