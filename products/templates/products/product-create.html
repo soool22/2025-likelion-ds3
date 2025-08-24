@@ -11,7 +11,7 @@
         <main>
             <div id="container">
                 <header>
-                    <a> 
+                    <a href="{% url 'products:product-list' store.id %}" id="change">
                         <img src="{% static 'img/leftside.svg'%}" class="sideClick"/>
                     </a>
                     <p id="title">상품 등록/수정</p>

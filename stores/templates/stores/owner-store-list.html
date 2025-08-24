@@ -148,21 +148,23 @@
                 <a href="{% url 'stores:store-create' %}" >새 가게 등록하기</a>
         {% endfor %}
         {% for data in store_data %}
-            <div id="tapBar">
-                <a class="tapBarBox" href="{% url 'stores:owner-store-list' %}">
-                    <img class="tapBarIcon" src="{% static 'img/ownerhomepicked.png' %}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel picked">홈</p>
-                </a>
-                <a class="tapBarBox" href="{%  url 'stores:self-service' data.store.id %}">
-                    <img class="tapBarIcon" src="{% static 'img/ownerselfservice.svg' %}" alt="셀프 서비스 아이콘" />
-                    <p class="tapBarLabel">셀프 서비스</p>
-                </a>
-                <a class="tapBarBox" href="">
-                    <img class="tapBarIcon" src="{% static 'img/setting.svg' %}" alt="셀프 서비스 아이콘" />
-                    <p class="tapBarLabel">설정</p>
-                </a>
-            </div>
-        {% endfor %}
+    {% if forloop.first %}
+        <div id="tapBar">
+            <a class="tapBarBox" href="{% url 'stores:owner-store-list' %}">
+                <img class="tapBarIcon" src="{% static 'img/ownerhomepicked.png' %}" alt="홈 선택 아이콘" />
+                <p class="tapBarLabel picked">홈</p>
+            </a>
+            <a class="tapBarBox" href="{% url 'stores:self-service' data.store.id %}">
+                <img class="tapBarIcon" src="{% static 'img/ownerselfservice.svg' %}" alt="셀프 서비스 아이콘" />
+                <p class="tapBarLabel">셀프 서비스</p>
+            </a>
+            <a class="tapBarBox" href="">
+                <img class="tapBarIcon" src="{% static 'img/setting.svg' %}" alt="설정 아이콘" />
+                <p class="tapBarLabel">설정</p>
+            </a>
+        </div>
+    {% endif %}
+{% endfor %}
         </main>
     </body>
     <script src="../js/OwnerSelfservicePage.js"></script>
