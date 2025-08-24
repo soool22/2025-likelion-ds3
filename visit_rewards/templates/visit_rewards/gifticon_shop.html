@@ -36,12 +36,12 @@
                            data-remaining="{{ g.remaining_points }}"
                            style="textdecoration:none;">  
                             {% if g.image %}
-                                <img src="{{ g.image.url }}" alt="{{ g.name }}">
+                                <img src="{{ g.image.url }}" alt="{{ g.name }}" style="width:111px;">
                             {% else %}
                                 <img src="{% static 'IMG/default_gifticon.png' %}" alt="기본 이미지">
                             {% endif %}
 
-                            <div class="text-box">
+                            <div class="text-box" style="display:none" >
                                 <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
                                 <div class="icon-text">{{ g.point_cost }}</div>
                             </div>

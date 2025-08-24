@@ -107,3 +107,21 @@ header{
     align-items: center;
     justify-content: space-between;
 }
+
+.filterBox{
+    
+    margin:20px 0 -10px 59px;
+    box-sizing: border-box;
+}
+
+.boxStyle{
+    width: 160px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #7b7b7b;
+    border: 1px solid #CCC;
+    border-radius: 12px;
+    outline: none;
+}
