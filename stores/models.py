@@ -29,7 +29,9 @@ def generate_uuid():
 class Store(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False) # 가게 이름
     created_at = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 점주 계정
+    #owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 점주 계정
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    
     address = models.CharField(max_length=255, null=False, blank=False) # 주소
     latitude = models.FloatField(null=False) # 위도
     longitude = models.FloatField(null=False) # 경도
