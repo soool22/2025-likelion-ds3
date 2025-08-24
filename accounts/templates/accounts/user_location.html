@@ -24,7 +24,7 @@
                 <div id="containerBody">
                     <div id="searchBox">
                         <input class="search" type="text" id="address" name="address" value="{{ saved_address }}" placeholder="도로명, 지번"/>
-                        <img id="searchIcon" src="{% static 'img/search.svg'%}" />
+                        <img id="searchIcon" src="{% static 'IMG/search.svg'%}" />
                         <button id="search-address" class="realSearchBtn" type="button"></button>
                     </div>
                     <input type="hidden" name="latitude" id="latitude" value="{{ saved_lat }}">
@@ -34,7 +34,7 @@
                         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services,clusterer"></script>
                     </div>
                     <div id="nowLocationBox">
-                        <img id="locationIcon" src="{% static 'img/locationgray.svg'%}"/>
+                        <img id="locationIcon" src="{% static 'IMG/locationgray.svg'%}"/>
                         <button class="locationBtn" id="current-location" type="button">현위치 가져오기</button>
                     </div>
                     <button class="saveBtn" type="submit">위치 저장</button>

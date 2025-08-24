@@ -13,10 +13,10 @@
                 <header>
                     <a id="headerBox" href="{% url 'accounts:profile_edit'%}">
                         <p id="userName">{{ request.user.username }}</p>
-                        <img id="sideClick" src="{% static 'img/rightside.svg'%}" alt="사이드클릭" />
+                        <img id="sideClick" src="{% static 'IMG/rightside.svg'%}" alt="사이드클릭" />
                     </a>
                     <a id="settingClick" href="{% url 'accounts:profile_edit'%}">
-                        <img id="setting" src="{% static 'img/settings.svg'%}" alt="설정 아이콘" />
+                        <img id="setting" src="{% static 'IMG/settings.svg'%}" alt="설정 아이콘" />
                     </a>
                 </header>
                 <div id="containerBody">
@@ -26,31 +26,31 @@
 공유해 주세요</p>
                             <p id="bannerContent">사람들과 미식 경험을 공유해 보세요!</p>
                         </div>
-                        <img id="bannerCharacter" src="{% static 'img/character1.svg'%}"/>
+                        <img id="bannerCharacter" src="{% static 'IMG/character1.svg'%}"/>
                     </div>
                     <div class="containerBigBox">
                         <p class="containerTitle">이용 정보</p>
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="{% url 'reviews:my-review' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/myreview.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/myreview.svg'%}"/>
                                     <p class="containerContent">내 리뷰</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'visit_rewards:visit_history' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/visithistory.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/visithistory.svg'%}"/>
                                     <p class="containerContent">방문 기록</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'accounts:favorite_stores' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/recentstore.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/recentstore.svg'%}"/>
                                     <p class="containerContent">내가 찜한 가게</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -59,31 +59,31 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="{% url 'visit_rewards:my_rewards' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/mystamp.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/mystamp.svg'%}"/>
                                     <p class="containerContent">내 포인트</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'visit_rewards:my_gifticons' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/mycoupon.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/mycoupon.svg'%}"/>
                                     <p class="containerContent">내 쿠폰</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'missions:my-mission' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/top.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/top.svg'%}"/>
                                     <p class="containerContent">내 챌린지</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'accounts:user_preferences' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/people.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/people.svg'%}"/>
                                     <p class="containerContent">관심 설정</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -92,24 +92,24 @@
                         <div class="containerMediumBox">
                             <a class="containerSmallBox" href="{% url 'accounts:privacy_policy' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/notice.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/notice.svg'%}"/>
                                     <p class="containerContent">공지사항</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/customer.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/customer.svg'%}"/>
                                     <p class="containerContent">고객센터</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                             <a class="containerSmallBox" href="{% url 'accounts:terms_of_service' %}">
                                 <div class="containerLittleBox">
-                                    <img class="icon" src="{% static 'img/policy.svg'%}"/>
+                                    <img class="icon" src="{% static 'IMG/policy.svg'%}"/>
                                     <p class="containerContent">약관 및 정책</p>
                                 </div>
-                                <img class="containerSideClick" src="{% static 'img/rightside.svg'%}"/>
+                                <img class="containerSideClick" src="{% static 'IMG/rightside.svg'%}"/>
                             </a>
                         </div>
                     </div>
@@ -118,19 +118,19 @@
             
             <div id="tapBar">
                 <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'IMG/home.svg'%}" alt="홈 선택 아이콘" />
                     <p class="tapBarLabel">홈</p>
                 </a>
                 <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'IMG/search.svg'%}" alt="가게 검색 아이콘" />
                     <p class="tapBarLabel">가게 검색</p>
                 </a>
                 <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'IMG/intereststore.svg'%}" alt="관심 매장 아이콘" />
                     <p class="tapBarLabel">관심 매장</p>
                 </a>
                 <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                    <img class="tapBarIcon" src="{% static 'img/myinfopicked.svg'%}" alt="내 정보 아이콘" />
+                    <img class="tapBarIcon" src="{% static 'IMG/myinfopicked.svg'%}" alt="내 정보 아이콘" />
                     <p class="tapBarLabel picked">내 정보</p>
                 </a>
             </div>
