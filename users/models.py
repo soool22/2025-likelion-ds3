@@ -52,7 +52,7 @@ class UserPreference(models.Model):
 
 class FavoriteStore(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorites')
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    #store = models.ForeignKey(Store, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
