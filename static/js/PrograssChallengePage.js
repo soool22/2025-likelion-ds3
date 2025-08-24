@@ -1,16 +1,17 @@
+console.log('[PrograssChallengePage] loaded');
+
 document.addEventListener('DOMContentLoaded', () => {
-  initProgressBars();        // 페이지 최초 렌더된 진행형 카드들 바/퍼센트 표시
-  restoreJoinedMissions();   // localStorage 기반으로 '추천 → 진행중' 재배치
-  bindJoinButtons();         // '참여하기' 클릭 시 처리
+  initProgressBars();        // 서버 렌더된 진행 카드 진행바 (% 텍스트 → width)
+  restoreJoinedMissions();   // localStorage 기반으로 추천→진행 전환 및 이동
 });
 
-/* ---------- Storage helpers ---------- */
+/* ---------- 상수 & 스토리지 ---------- */
 const STORAGE_KEY = 'joinedMissions';
 
 function getJoinedSet() {
   try {
     const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    return new Set(arr);
+    return new Set(arr.map(String));
   } catch {
     return new Set();
   }
@@ -32,9 +33,20 @@ function removeJoined(id) {
   saveJoinedSet(set);
 }
 
-/* ---------- UI helpers ---------- */
+/* ---------- DOM 헬퍼 ---------- */
 function getTopContainer() {
-  return document.querySelector('#containerBodyTop .containerBodyContent'); // #progressList도 OK
+  // 기본 구조(#containerBodyTop .containerBodyContent) + 폴백(#progressList)
+  return (
+    document.querySelector('#containerBodyTop .containerBodyContent') ||
+    document.querySelector('#progressList')
+  );
+}
+
+function getRecommendedContainer() {
+  return (
+    document.querySelector('#containerBodyBottom .containerBodyContent') ||
+    document.querySelector('#recommendedList')
+  );
 }
 
 function removeEmptyMsg() {
@@ -44,6 +56,7 @@ function removeEmptyMsg() {
   if (emptyMsg) emptyMsg.remove();
 }
 
+/* ---------- UI 전환 ---------- */
 function toProgressMarkup(cardEl) {
   // 상태 배지: 참여가능 → 진행중
   const stateEl = cardEl.querySelector('.challengeMiddleSmallBox .state');
@@ -52,7 +65,7 @@ function toProgressMarkup(cardEl) {
     stateEl.classList.remove('yet');
   }
 
-  // 하단 영역 교체(진행바 + 퍼센트)
+  // 하단 영역: 버튼 → 진행바 + 퍼센트
   const lastRow = cardEl.querySelector('.challengeLastBox');
   if (lastRow) {
     lastRow.innerHTML = `
@@ -69,14 +82,14 @@ function toProgressMarkup(cardEl) {
   cardEl.classList.remove('joinChallengeBox');
   cardEl.classList.add('prograssChallengeBox');
 
-  // 진행바 렌더
+  // 진행바 초기 렌더
   renderPercentBar(cardEl);
 }
 
 function moveToTopSection(cardEl) {
   const topContainer = getTopContainer();
   if (!topContainer) return;
-  removeEmptyMsg();              // "챌린지가 없습니다." 제거
+  removeEmptyMsg();
   topContainer.appendChild(cardEl);
 }
 
@@ -85,21 +98,21 @@ function restoreJoinedMissions() {
   const joined = getJoinedSet();
   if (!joined.size) return;
 
-  // 1) 추천 영역에서 내가 참여했던 카드들을 찾아 위로 올림
-  document.querySelectorAll('.joinChallengeBox[data-mission-id]').forEach(card => {
+  // 추천 영역에서 참여했던 카드들을 찾아 위로 이동
+  document.querySelectorAll('.joinChallengeBox[data-mission-id]').forEach((card) => {
     const id = card.getAttribute('data-mission-id');
-    if (joined.has(String(id))) {
+    if (id && joined.has(String(id))) {
       toProgressMarkup(card);
       moveToTopSection(card);
     }
   });
 
-  // 2) 클린업(선택): 스토리지엔 있는데 DOM에 아예 없는 ID는 제거
+  // 존재하지 않는 id 정리(선택)
   const stillExists = new Set(
-    [...document.querySelectorAll('[data-mission-id]')].map(el => el.getAttribute('data-mission-id'))
+    [...document.querySelectorAll('[data-mission-id]')].map((el) => String(el.getAttribute('data-mission-id')))
   );
   let mutated = false;
-  joined.forEach(id => {
+  joined.forEach((id) => {
     if (!stillExists.has(String(id))) {
       joined.delete(String(id));
       mutated = true;
@@ -108,62 +121,64 @@ function restoreJoinedMissions() {
   if (mutated) saveJoinedSet(joined);
 }
 
-/* ---------- 클릭 바인딩 ---------- */
-function bindJoinButtons() {
-  const topContainer = getTopContainer();
+/* ---------- 참여 버튼: 이벤트 위임 ---------- */
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.joinBtn');
+  if (!btn) return;
 
-  document.querySelectorAll('.joinBtn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (!topContainer) return;
+  e.preventDefault();
 
-      const joinBox = btn.closest('.joinChallengeBox');
-      if (!joinBox) return;
+  const joinBox = btn.closest('.joinChallengeBox');
+  if (!joinBox) return;
 
-      const missionId = joinBox.getAttribute('data-mission-id');
-      if (!missionId) {
-        alert('mission id가 없습니다. data-mission-id를 넣어주세요.');
-        return;
-      }
+  const missionId = joinBox.getAttribute('data-mission-id');
+  if (!missionId) {
+    alert('mission id가 없습니다. data-mission-id를 넣어주세요.');
+    return;
+  }
 
-      // 1) localStorage에 기록
-      addJoined(missionId);
+  // 스토리지 기록
+  addJoined(missionId);
 
-      // 2) UI 전환 + 이동
-      toProgressMarkup(joinBox);
-      moveToTopSection(joinBox);
-    });
-  });
-}
+  // UI 전환 + 상단 이동
+  toProgressMarkup(joinBox);
+  moveToTopSection(joinBox);
+});
 
-/* ---------- 진행바 관련(기존 로직 유지) ---------- */
+/* ---------- 진행바 렌더 ---------- */
 function initProgressBars() {
-  document.querySelectorAll('.prograssChallengeBox').forEach(box => renderPercentBar(box));
+  document.querySelectorAll('.prograssChallengeBox').forEach((box) => renderPercentBar(box));
 }
 
 function renderPercentBar(box) {
   const lastRow = box.querySelector('.challengeLastBox');
-  const barEl   = box.querySelector('.prograss');
+  const barEl = box.querySelector('.prograss');
   if (!lastRow || !barEl) return;
 
   let nowScoreLabel = lastRow.querySelector('.nowScore');
-  const nowNumEl   = box.querySelector('.scoreBigBox .nowScoreCount');
+  const nowNumEl = box.querySelector('.scoreBigBox .nowScoreCount');
   const totalNumEl = box.querySelector('.scoreBigBox .totalScoreCount');
   let pct = 0;
 
+  // 우선순위 1: 이미 퍼센트 텍스트가 있는 경우(서버에서 {{ progress.percent }}% 렌더)
   if (nowScoreLabel && /%$/.test(nowScoreLabel.textContent.trim())) {
-    pct = Math.max(0, Math.min(100, parseInt(nowScoreLabel.textContent.trim().replace('%',''), 10) || 0));
-  } else if (nowNumEl && totalNumEl) {
-    const now   = Math.max(0, parseInt(nowNumEl.textContent.trim(), 10) || 0);
+    pct = Math.max(0, Math.min(100, parseInt(nowScoreLabel.textContent.trim().replace('%', ''), 10) || 0));
+  }
+  // 우선순위 2: 숫자(now/total) 기반으로 계산
+  else if (nowNumEl && totalNumEl) {
+    const now = Math.max(0, parseInt(nowNumEl.textContent.trim(), 10) || 0);
     const total = Math.max(1, parseInt(totalNumEl.textContent.trim(), 10) || 1);
     pct = Math.max(0, Math.min(100, Math.round((now / total) * 100)));
+
     if (!nowScoreLabel) {
       nowScoreLabel = document.createElement('p');
       nowScoreLabel.className = 'nowScore';
       lastRow.appendChild(nowScoreLabel);
     }
     nowScoreLabel.textContent = pct + '%';
-  } else {
+  }
+  // 기본값
+  else {
     if (!nowScoreLabel) {
       nowScoreLabel = document.createElement('p');
       nowScoreLabel.className = 'nowScore';
@@ -175,4 +190,3 @@ function renderPercentBar(box) {
 
   barEl.style.width = pct + '%';
 }
-

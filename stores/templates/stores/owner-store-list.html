@@ -17,7 +17,7 @@
                         <p id="openState">오픈 예정</p>
                         <p id="openTime"> {{ data.store.open_time|time:"H:i" }}</p>
                     </div>
-                    <a href="{% url 'stores:store-update' data.store.id %}" id="change">
+                    <a href="{% url 'accounts:start-page' %}" id="change">
                         변경
                     </a>
                 </div>
