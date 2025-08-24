@@ -94,7 +94,7 @@ def store_recommend(user):
     # 캐시가 없거나 30분 이상 지난 경우 새 호출
     if not preference.last_ai_recommendation or \
        not preference.last_ai_call_time or \
-       timezone.now() - preference.last_ai_call_time >= timedelta(minutes=30):
+       timezone.now() - preference.last_ai_call_time >= timedelta(minutes=1):
 
         categories = preference.preferred_categories.split(",") if preference.preferred_categories else []
         tastes = preference.preferred_tastes.split(",") if preference.preferred_tastes else []
@@ -112,7 +112,7 @@ def store_recommend(user):
 
         아래 가게 정보 중 사용자의 선호와 최대한 맞는 가게 5개를 JSON 리스트로 추천해 주세요.
         리스트 안 객체에는 "id"와 "name"만 포함하세요.
-        선호 카테고리가 없으면 모든 가게 중 추천 가능합니다.
+        선호 카테고리가 있을 경우 반드시 해당 카테고리의 가게를 우선 추천하세요.
         가게 정보 예시:
         [{{"id": n, "name": "가게이름"}}]
         """
