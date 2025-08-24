@@ -18,8 +18,10 @@ def main(request):
     if request.user.is_authenticated:
         try:
             user_lat, user_lng, gu_name = get_user_location(request.user)
+            if gu_name:
+                user_location = {'gu_name': gu_name}
         except:
-            gu_name = None
+            user_location = None
 
     # ===============================
     # 1. 가게 필터링 (사용자 위치 기준)
@@ -75,12 +77,15 @@ def main(request):
         else:
             recommended_stores = preference.last_ai_recommendation
 
-        # DB에서 Store 객체로 가져오기 + 거리 계산
-        recommended_stores_objs = []
+        # DB에서 Store 객체로 가져오기 + 지역구 필터링 + 거리 계산
+    recommended_stores_objs = []
     for s in recommended_stores:
         store_id = s["id"] if isinstance(s, dict) else s  # dict이면 id 꺼내고, int면 그대로 사용
         try:
             store_obj = Store.objects.get(id=store_id)
+            # 지역구 필터링
+            if gu_name and store_obj.gu_name != gu_name:
+                continue
             recommended_stores_objs.append(store_obj)
         except Store.DoesNotExist:
             continue
@@ -116,3 +121,7 @@ def main(request):
     }
 
     return render(request, "home/main.html", context)
+
+def alarm_center(request):
+    
+    return render(request, 'home/alarmcenter.html')

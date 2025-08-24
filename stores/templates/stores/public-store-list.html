@@ -45,7 +45,7 @@
                             <div class="store-name text">{{ store.name }}</div>
                         </div>
                         <div class="third-line">
-                            <div class="position text">📍{{ store.distance|default_if_none:"-"|floatformat:0 }}m</div>
+                            <div class="position text">📍{{ store.distance|default_if_none:"-" }}</div>
                             <div class="operation">
                             <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
                             {% if store.is_open %}                                
@@ -63,7 +63,7 @@
                     {% endif %}
                 </a>
             {% empty %}
-                <p>가게가 없습니다.</p>
+                <p>해당 지역구에 등록된 가게가 없습니다.</p>
             {% endfor %}
         </div>
     </main>

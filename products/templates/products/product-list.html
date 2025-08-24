@@ -22,11 +22,9 @@
                 <div class="menu-box">
                     <div class="first-line">
                         <div style="display:flex;"> 
-                            <div class="main-menu">
                                 {% if product.is_main %}
-                                    대표
+                                    <div class="main-menu">대표</div>
                                 {% endif %}
-                            </div>
                             <div class="menu-name">{{ product.name }}</div>
                         </div>
                         <div class="menu-name">{{ product.price|floatformat:0|intcomma }}</div>

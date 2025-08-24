@@ -12,24 +12,27 @@
             {% if request.user.is_authenticated %}
             <header>
                 <div id="headerBox">
-                    <a href="{% url 'accounts:user_location' %}">
-                        <div id="headerSmallBox">
-                            <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
-                            {% if user_location and user_location.gu_name %}
+                    <div id="headerSmallBox">
+                        <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
+                        {% if user_location and user_location.gu_name %}
+                            <a href="{% url 'accounts:user_location' %}">
                                 <p id="locationName">{{ user_location.gu_name }}</p>
-                            {% else %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'accounts:user_location' %}">
                                 <p id="locationName">위치 설정</p>
-                            {% endif %}
-                            <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
-                        </div>
-                    </a>
+                            </a>
+                        {% endif %}
+                        <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
+                    </div>
                     <div id="headerLastBox">
                         <a href="{% url 'visit_rewards:my_character' %}">
                             <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
                         </a>
-                        <a href="{% static 'html/AlarmCenterPage.html' %}">
+                        <a href="{% url 'home:alarmcenter' %}">
                             <img id="alarmIcon" src="{% static 'img/alarm.svg'%}"/>
                         </a>
+                        
                     </div>
                 </div>
             </header>
@@ -193,7 +196,7 @@
                         </div>
                         <div id="challengeBox">
                             <a href="{% url 'missions:my-mission' %}">
-                                <p id="challengeTitle">🔥 주간 인기 챌린지</p>
+                                <p id="challengeTitle">🔥 오늘의 인기 챌린지</p>
                             </a>
                             <div id="challengeRanking">
                                 {% if rankings %}
