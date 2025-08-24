@@ -18,6 +18,7 @@ main{
     min-height: 100dvh;
     background-color: white;
     flex-direction:column;
+    margin-bottom: 65px;
 }
 /* 기본틀 끝 */
 
@@ -132,49 +133,111 @@ header{
     flex-direction: column;
     align-items: center;
 }
-
-#title{
-    width: 354px;
-    padding: 15px 8px;
+.title-box{
+    width: 320px;
+}
+.title{
     color: #000;
     font-size: 16px;
     font-weight: 600;
     box-sizing: border-box;
 }
 
+.store{
+    font-size: 20px;
+}
+.left-box{
+    display: flex;
+    align-items: center;
+}
+.title-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 23px;
+    margin-bottom: 15px;
+}
+.star-img{
+    width: 10px;
+    margin:0px 5px;
+
+}
+.font11{
+    color: #7B7B7B;
+font-family: Pretendard;
+font-size: 11px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+    margin-bottom: 5px;
+}
+
+#store-id{
+    color: #7B7B7B;
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
 #containerBody{
     display: flex;
     flex-direction: column;
-    gap: 19px;
+    gap: 15px;
     align-items: center;
 }
 
 .serviceBox{
-    width: 353px;
+    width: 325px;
     box-sizing: border-box;
     border-radius: 14px;
     border: 1px solid #CCC;
-    padding: 12px 14px;
+    padding: 12px 13px;
     gap: 13px;
     display: flex;
-    align-items: center;
     flex-direction: column;
 }
 
-.serviceTitle{
-    color: #7B7B7B;
-    font-size: 13px;
+.firstTitle{
+    color: #000;
     font-weight: 600;
-    width: 327px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 7px;
 }
 
 .serviceContentBox{
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+}
+.line{
+    display: flex;
     align-items: center;
+    gap:12px
+}
+.font13{
+    color: #B7B7B7;
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
 }
 
+.font16{
+    color: #000;
+font-family: Pretendard;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
 .aBox{
     display: flex;
     align-items: center;

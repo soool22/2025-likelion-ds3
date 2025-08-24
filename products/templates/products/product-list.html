@@ -1,48 +1,57 @@
 {% load static %}
-{% load humanize %} {# intcomma 숫자 읽기 쉽게 변환 가능 #}
+{% load humanize %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ store.name }} - 상품/메뉴 목록(점주용)</title>
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/product-list.css'%}" />
 </head>
 <body>
-    <a href="{% url 'stores:self-service' store.id %}">이전</a>
-    <br/>
-
-    <h2>{{ store.name }} - 상품/메뉴 목록</h2>
-
-    <!-- 새 상품 등록 버튼 -->
-    <a href="{% url 'products:product-create' store.id %}">새 상품 등록</a>
-    <br/><br/>
-
-    {% for product in products %}
-        <div>
-
-            {% if product.image %}
-            <a href="{{ product.image.url }}" target="_blank">
-                <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
+    <main>
+        <header>
+            <a href="{% url 'stores:owner-store-list' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
-            {% endif %}
-
-            <h3>{{ product.name }}</h3>
-            {% if product.is_main %}
-                대표 메뉴 <br/>
-            {% endif %}
-            {{ product.price|floatformat:0|intcomma }}원
-            <br/>
-            {{ product.description }}
-            <br/>
-
-            <!-- 상품 수정 / 삭제 -->
-            <a href="{% url 'products:product-update' product.id %}">수정</a>
-            <a href="{% url 'products:product-delete' product.id %}">삭제</a>
-        </div>
-        <hr/>
-    {% empty %}
-        등록된 상품이 없습니다.
-    {% endfor %}
+            <div class="tittle-text"> 상품/메뉴 목록 </div>
+        </header>
+        {% for product in products %}
+            <div class="food-list">
+                <div class="menu-box">
+                    <div class="first-line">
+                        <div style="display:flex;"> 
+                            <div class="main-menu">
+                                {% if product.is_main %}
+                                    대표
+                                {% endif %}
+                            </div>
+                            <div class="menu-name">{{ product.name }}</div>
+                        </div>
+                        <div class="menu-name">{{ product.price|floatformat:0|intcomma }}</div>
+                    </div>
+                    <div class="menu-description">{{ product.description }}</div>
+                    <div class="third-line">
+                        <a href="{% url 'products:product-update' product.id %}" class="btn">
+                            <img src="{% static 'IMG/blue-edit.svg'%}">
+                            <div class="btn-text" style="color: #1DAEEF;">수정</div>
+                        </a>
+                        <a href="{% url 'products:product-delete' product.id %}" class="btn">
+                            <img src="{% static "img/red-trash.svg" %}">
+                            <div class="btn-text" style="color: #FF474F;">삭제</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            등록된 상품이 없습니다.
+        {% endfor %}
+        <!-- 새 상품 등록 버튼 -->
+        <a href="{% url 'products:product-create' store.id %}"  class="new-box">
+            <img src="{% static "img/yellow-plus.svg" %}">
+            <div class="font13">새 상품 등록</div>
+        </a>
+    </main>
 </body>
 </html>
