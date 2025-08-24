@@ -60,7 +60,9 @@
                         </a>
                         <p id="address">{{ store.address }} 
                             {% if store.distance %}
-                                ({{ store.distance|floatformat:0 }}m)
+                                ({{ store.distance }})
+                            {% else %}
+                                거리 정보 없음
                             {% endif %}
                         </p>
                         <p id="call">
