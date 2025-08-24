@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ store.name }} QR 코드</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            max-width: 300px;
+            height: auto;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ store.name }} QR 코드</h1>
+    <img src="{{ store_qr_url }}" alt="QR Code">
+    <p>QR 스캔 시 방문 인증 페이지로 이동합니다.</p>
+</body>
+</html>

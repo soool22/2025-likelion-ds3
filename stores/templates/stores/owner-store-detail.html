@@ -81,11 +81,11 @@
                         {% endif %}
                     </div>
                     <div id="buttonBox">
-                        <a href="{% url 'visit_rewards:visit_check' store.id %}" class="btnLink">
+                        <a href="{% url 'stores:owner_qr' store.id %}" class="btnLink">
                             <button id="certificationBtn" type="button">
                             <div class="btnInnerBox">
                                 <img class="btnIcon" src="{% static 'img/qrwhite.svg'%}"/>
-                                <p class="btnText1">QR 코드로 방문 인증하기</p>
+                                <p class="btnText1">매장 QR 발급</p>
                             </div>
                             </button>
                         </a>
@@ -177,20 +177,19 @@
                     <div class="containerTitle">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
                         {% for mission in missions %}
-                        <p class="containerSmallContent">
-                            -{{ mission.title }}&nbsp;
-                            {% comment %} {{ mission.description }} {% endcomment %}
-                            ({{ mission.mission_type.name }} {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }})
-                            {% comment %} 보상: {{ mission.reward_description }}<br/> {% endcomment %}
-                            {% comment %} {{ mission.start_date|date:"Y-m-d H:i" }} {% endcomment %}
-                            {% comment %} <br/>~ {{ mission.end_date|date:"Y-m-d H:i" }} {% endcomment %}
-
-                            {% comment %} {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
-                            <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
-                            {% endif %}  {% endcomment %}
-                        </p>
+                            <div>
+                                <h4>{{ mission.title }}</h4>
+                                {{ mission.description }}<br/>
+                                {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
+                                <br/>
+                                {% if mission.reward_type == "POINT" %}
+                                    <div>
+                                        <label>포인트:</label> {{ mission.reward_points }}점
+                                    </div>
+                                {% endif %}
+                            </div>
                         {% empty %}
-                        <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
+                            <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -206,12 +205,6 @@
                             {% endif %}
                             </div>
                             <p class="price">{{ product.price|floatformat:0|intcomma }}원</p>
-                            {% comment %} <p class="price">{{ product.description }}</p> {% endcomment %}
-                            {% comment %} {% if product.image %}
-                            <a href="{{ product.image.url }}" target="_blank">
-                                <img src="{{ product.image.url }}" alt="{{ product.name }} 이미지" width="150" height="150">
-                            </a>
-                            {% endif %} {% endcomment %}
                         </div>
                         {% empty %}
                         <p class="containerSmallContent">등록된 상품이 없습니다.</p>
@@ -220,6 +213,8 @@
                 </div>
             </div>
         </main>
+
+                            
 
         {% comment %} <script>
         document.addEventListener('DOMContentLoaded', () => {

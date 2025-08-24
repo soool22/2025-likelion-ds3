@@ -318,4 +318,27 @@ def store_detail(request, store_id):
 
     return render(request, 'stores/store-detail.html', context)
 
+from visit_rewards.utils import generate_store_qr
 
+#QR발급
+def owner_qr(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+
+    # QR 코드 생성
+    store_qr_file, qr_url = generate_store_qr(store, host=request.get_host(), test=False)
+
+    # base64 변환
+    import base64
+    from io import BytesIO
+    buffer = BytesIO()
+    store_qr_file.open()  # File 객체 열기
+    buffer.write(store_qr_file.read())
+    buffer.seek(0)
+    qr_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    store_qr_url = f"data:image/png;base64,{qr_base64}"
+
+    return render(request, 'stores/owner-qr.html', {
+        'store': store,
+        'store_qr_url': store_qr_url,
+        'qr_url': qr_url,  # 필요하면 JS fetch용
+    })
