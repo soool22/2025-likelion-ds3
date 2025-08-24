@@ -1,0 +1,150 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+a{
+    text-decoration: none;
+}
+header{
+    display: flex;
+    margin-top: 32px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 54px;
+    margin-bottom: 30px;
+}
+
+.back-img{
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+.tittle-text{
+    color: #000;
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.back-img{
+    width: 8px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 2px;
+    stroke: #000;
+}
+
+.list{
+    margin-left: 50px;
+    margin-top: 32px;
+    
+}
+
+.food-list{
+    margin-left: 39px;
+}
+.menu-box{
+    width: 319px;
+flex-shrink: 0;
+border-radius: 22px;
+background: #FFF;
+box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+padding: 18px 14px 17px 14px;
+}
+
+.first-line{
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    justify-content: space-between;
+}
+
+.main-menu {
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    width: 24px;
+    height: 12px;
+    line-height: 12px;   /* 높이랑 똑같이 맞추기 */
+    color: #CCC;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+
+.menu-name{
+    color: #000;
+text-align: center;
+font-family: Pretendard;
+font-size: 15px;
+font-style: normal;
+font-weight: 600;
+margin-left: 8px;
+line-height: normal;
+}
+
+.menu-description{
+    color: #7B7B7B;
+font-family: Pretendard;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+
+.btn{
+    display: flex;
+    align-items: center;
+}
+
+.third-line{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap:10px;
+}
+
+.btn-text{
+text-align: center;
+font-family: Pretendard;
+font-size: 11px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+.font13{
+    font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+color: #FFB635;
+
+}
+
+.new-box{
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    align-self: center;
+    margin-top: 25px;
+}
