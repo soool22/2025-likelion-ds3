@@ -323,7 +323,8 @@ def store_search(request):
     stores = Store.objects.all().order_by('-id')
 
     # 사용자 위치
-    user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
+    #user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
+    user_lat, user_lng, gu_name = [37.5665, 126.9780,'도봉구']
     
     # 지역구 기준 필터링
     stores = Store.objects.all().order_by('-id')
