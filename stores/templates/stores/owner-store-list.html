@@ -142,11 +142,12 @@
                     </div>
                 </div>
             </div>
-            <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
         {% empty %}
             <br/>
-                <a href="{% url 'stores:store-create' %}" >새 가게 등록하기</a>
+                <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
         {% endfor %}
+        <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
+
         {% for data in store_data %}
     {% if forloop.first %}
         <div id="tapBar">
