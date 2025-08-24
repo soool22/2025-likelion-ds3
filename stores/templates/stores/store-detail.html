@@ -180,8 +180,8 @@
                     <div class="containerSmallContentBox">
                         {% for mission in missions %}
                         <p class="containerSmallContent">
-                            -{{ mission.title }}&nbsp;
-                            {% comment %} {{ mission.description }} {% endcomment %}
+                            -{{ mission.title }}&nbsp;<br/>
+                            {{ mission.description }}
                             ({{ mission.mission_type.name }} {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }})
                             {% comment %} 보상: {{ mission.reward_description }}<br/> {% endcomment %}
                             {% comment %} {{ mission.start_date|date:"Y-m-d H:i" }} {% endcomment %}
