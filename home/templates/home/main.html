@@ -27,7 +27,7 @@
                         <a href="{% url 'visit_rewards:my_character' %}">
                             <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
                         </a>
-                        <a href="../html/AlarmCenterPage.html">
+                        <a href="{% static 'html/AlarmCenterPage.html' %}">
                             <img id="alarmIcon" src="{% static 'img/alarm.svg'%}"/>
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                     <div class="tabContainer">
                         <div class="recommendstoreBox">
                             <img class="recommendstoreIcon" src="{% static 'img/recommendstore.svg'%}" alt="">
-                            <p class="recommendstoreText">추천 가게</p>
+                            <p class="recommendstoreText">AI 추천 가게</p>
                         </div>
                         <div class="topBox">
                             <img class="topIcon" src="{% static 'img/top.svg'%}" alt="">
