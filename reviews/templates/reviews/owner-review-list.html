@@ -117,13 +117,15 @@
                                 <p class="date">{{ review.created_at|date:"Y-m-d" }} ({{ review.natural_days }})</p>
                             </div>
                             <p class="reviewContent">{{ review.comment|linebreaks }}</p>
-                            {% for img in review.images.all %}
-                                {% if img.image %}
-                                    <a href="{{ img.image.url }}" target="_blank">
-                                        <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
-                                    </a>
-                                {% endif %}
-                            {% endfor %}
+                            <div class="review-images">
+                                {% for img in review.images.all %}
+                                    {% if img.image %}
+                                        <a href="{{ img.image.url }}" target="_blank">
+                                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                             <div class="reviewLastBox">
                                 {% if review.helpful_count > 0 %}
                                 <p class="helpMent">{{ review.helpful_count }}명이 이 리뷰를 추천해요</p>
