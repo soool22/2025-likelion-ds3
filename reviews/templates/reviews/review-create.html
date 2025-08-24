@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/WriteReview.css'%}" />
 </head>
 <body>
     <main>
         <header>
             <a href="./MyReviewWrite.html" style="text-decoration: none;">
-            <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
+            <img src="{% static 'img/x.svg'%}" class="back-img"></img>
             </a>
             <div class="title text" > 평가 및 리뷰 작성 </div>
             <p> </p>
@@ -32,7 +32,6 @@
                             <img data-value="4" src="{% static 'img/stargray.svg' %}" class="star"/>
                             <img data-value="5" src="{% static 'img/stargray.svg' %}" class="star"/>
                         </div>
-<<<<<<< HEAD
                         <input type="hidden" name="rating" id="rating-input" required>
                                             </div>
                     {% if store.image %}
@@ -41,21 +40,20 @@
                     <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
                     {% endif %}
 
-=======
                     </div>
                     <div class="evaluation-service">
                         <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
                         <div class="evaluation-service-star">
-                            <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
-                            <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}" class="s-star1">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star2">
+                            <img src="{% static 'img/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star3">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star4">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star5">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
                         </div>
                     </div>
                     <!-- ⭐ 숨겨진 input들 추가 -->
@@ -79,14 +77,13 @@
                 ></textarea>
                 <div class="input-area">
                     <div class="upload-content">
-                        <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
+                        <img src="{% static 'img/camera.png'%}" alt="업로드" class="upload-icon">
                         <span class="upload-text">사진 추가</span>
                     </div>
                     <input type="file" class="file-input" id="fileInput" name="images" accept="image/*" multiple>
                 </div>
                 <div class="stemp-area">
                     <button type="submit" class="stemp-area-text">완료</button>
->>>>>>> 5834bfc3fc6d35b5d0866c0e4d2eefd5a5f252ec
                 </div>
             </div>
             <div id="containerBottom">

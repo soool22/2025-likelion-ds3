@@ -7,13 +7,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/product-list.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/product-list.css'%}" />
 </head>
 <body>
     <main>
         <header>
             <a href="{% url 'stores:owner-store-list' %}">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+                <img src="{% static 'img/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-text"> 상품/메뉴 목록 </div>
         </header>
@@ -32,7 +32,7 @@
                     <div class="menu-description">{{ product.description }}</div>
                     <div class="third-line">
                         <a href="{% url 'products:product-update' product.id %}" class="btn">
-                            <img src="{% static 'IMG/blue-edit.svg'%}">
+                            <img src="{% static 'img/blue-edit.svg'%}">
                             <div class="btn-text" style="color: #1DAEEF;">수정</div>
                         </a>
                         <a href="{% url 'products:product-delete' product.id %}" class="btn">

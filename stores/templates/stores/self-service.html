@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="{% static 'CSS/OwnerSelfservicePage.css'%}" />
+        <link rel="stylesheet" href="{% static 'css/OwnerSelfservicePage.css'%}" />
     </head>
     <body>
         <main>
@@ -50,7 +50,7 @@
                             <a class="aBox" href="{% url 'stores:store-delete' store.id %}">
                                 <div class="serviceContentSmallBox">
                                     <div class="serviceIconBox">
-                                        <img class="icon" src="{% static 'IMG/delete-black.svg' %}"/>
+                                        <img class="icon" src="{% static 'img/delete-black.svg' %}"/>
                                     </div>
                                     <div class="contentSmallBox">
                                         <p class="serviceContent">매장 삭제</p>
@@ -99,7 +99,7 @@
                             <a class="aBox" href="{% url 'coupons:coupon_list' store.id %}">
                                 <div class="serviceContentSmallBox">
                                     <div class="serviceIconBox">
-                                        <img class="icon"  style="width: 18px;" src="{% static 'IMG/black-coupon-owner.svg' %}"/>
+                                        <img class="icon"  style="width: 18px;" src="{% static 'img/black-coupon-owner.svg' %}"/>
                                     </div>
                                     <div class="contentSmallBox">
                                         <p class="serviceContent">쿠폰</p>

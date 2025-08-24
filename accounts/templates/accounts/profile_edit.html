@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/MyEditPage.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/MyEditPage.css'%}" />
 </head>
 <body>
     <main>
         <header>
             <a href="{% url 'accounts:mypage'%}">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img" ></img>
+                <img src="{% static 'img/edit-back.png'%}" class="back-img" ></img>
             </a>
             <div class="tittle text"> 내 정보 관리 </div>
         </header>
@@ -20,9 +20,9 @@
                 <div class="connect-tittle">SNS 연동</div>
                 <div class="connect-text">연동된 계정으로 로그인할 수 있어요.</div>
                 <div class="connect-account">
-                    <img src="{% static 'IMG/account-yellow.png'%}" class="account-img">
-                    <img src="{% static 'IMG/account-gray.png'%}" class="account-img">
-                    <img src="{% static 'IMG/account-gray.png'%}" class="account-img">
+                    <img src="{% static 'img/account-yellow.png'%}" class="account-img">
+                    <img src="{% static 'img/account-gray.png'%}" class="account-img">
+                    <img src="{% static 'img/account-gray.png'%}" class="account-img">
                 </div>
             </div>
         </div>
@@ -31,28 +31,28 @@
             <div class="edit-tittle">닉네임</div>
             <div class="edit-content">
                 <div class="edit-text">{{ request.user.nickname }}</div>
-                <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow1">
+                <img src="{% static 'img/account-arrow.png'%}" class="account-arrow1">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">이메일</div>
             <div class="edit-content">
                 <div class="edit-text">{{ request.user.email }}</div>
-                <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow2">
+                <img src="{% static 'img/account-arrow.png'%}" class="account-arrow2">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">연락처</div>
             <div class="edit-content">
                 <div class="edit-text">연락처 남기기</div>
-                <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow3">
+                <img src="{% static 'img/account-arrow.png'%}" class="account-arrow3">
             </div>
         </div>
         <div class="edit-box">
             <div class="edit-tittle">비밀번호</div>
             <div class="edit-content">
                 <div class="edit-text">새로운 비밀번호로 변경 가능</div>
-                <img src="{% static 'IMG/account-arrow.png'%}" class="account-arrow4">
+                <img src="{% static 'img/account-arrow.png'%}" class="account-arrow4">
             </div>
         </div>
         <div class="bottom">
@@ -72,7 +72,7 @@
             <div class="nick-name-box">
                 <div class="nick-name-tittle">
                     <div class="text">닉네임 수정</div>
-                    <img src="{% static 'IMG/MY-X.png' %}" style="cursor: pointer;">
+                    <img src="{% static 'img/MY-X.png' %}" style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
                 <form  method="post" enctype="multipart/form-data">
@@ -86,7 +86,7 @@
             <div class="nick-name-box">
                 <div class="num-tittle">
                     <div class="text">전화번호 수정</div>
-                    <img src="{% static 'IMG/MY-X.png'%}"style="cursor: pointer;">
+                    <img src="{% static 'img/MY-X.png'%}"style="cursor: pointer;">
                 </div>
                 <div class="separation-box"></div>
                 <form  method="post" enctype="multipart/form-data">
@@ -97,7 +97,7 @@
         </div>
         <div class="email hidden">
             <div class="email-box">
-                <img src="{% static 'IMG/my-back.png'%}" class="back"style="cursor: pointer;">
+                <img src="{% static 'img/my-back.png'%}" class="back"style="cursor: pointer;">
                 <div class="email-tittle">이메일을 입력해주세요.</div>
                 <div class="email-input">
                     <form method="post"enctype="multipart/form-data">
@@ -109,7 +109,7 @@
         </div>
         <div class="password hidden">
             <div class="password-box">
-                <img src="{% static 'IMG/my-back.png'%}" class="back"style="cursor: pointer;">
+                <img src="{% static 'img/my-back.png'%}" class="back"style="cursor: pointer;">
                 <div style="margin-left: 58px; margin-top: 36px;">
                     <div class="password-tittle text">비밀번호 설정</div>
                     <div class="password-subtittle text">비밀번호가 설정되어 있지 않습니다.<br>비밀번호 설정 시 이메일을 통해 로그인할 수 있습니다.</div>

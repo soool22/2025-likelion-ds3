@@ -11,10 +11,10 @@
     <main>
         <header>
             <a href="{% url 'home:main' %}" style="text-decoration: none;">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+                <img src="{% static 'img/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-box">
-                <img src="{% static 'IMG/recommendstorepicked.svg'%}">
+                <img src="{% static 'img/recommendstorepicked.svg'%}">
                 <div class="tittle text">모든 가게</div>
             </div>
         </header>
@@ -47,7 +47,7 @@
                         <div class="third-line">
                             <div class="position text">📍{{ store.distance|default_if_none:"-" }}</div>
                             <div class="operation">
-                            <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+                            <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6">
                             {% if store.is_open %}                                
                                 <div class="time text" style="color:#0094D6">영업중</div>
                             {% else %}
