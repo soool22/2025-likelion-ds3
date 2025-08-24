@@ -192,12 +192,28 @@ def user_preferences(request):
 # -----------------------------
 # 찜한 가게 보기
 # -----------------------------
+
+from stores.views import filter_stores
 @login_required
 def favorite_stores(request):
+    # 찜한 가게들 가져오기
     favorites = FavoriteStore.objects.filter(user=request.user).select_related('store')
-    return render(request, 'accounts/favorite_stores.html', {'favorites': favorites})
 
+    # 찜한 가게들의 Store만 추출
+    stores = Store.objects.filter(id__in=favorites.values_list('store_id', flat=True))
 
+    # public_store_list와 동일하게 필터링 적용
+    stores, categories, user_lat, user_lng, selected_gu, selected_category = filter_stores(request, stores)
+
+    return render(request, 'accounts/favorite_stores.html', {
+        'favorites': favorites,   # 기존 찜 정보 (찜 ID 등 필요할 수 있어서 유지)
+        'stores': stores,         # 필터된 스토어들
+        'categories': categories,
+        'selected_category': selected_category,
+        'selected_gu': selected_gu,
+        'user_lat': user_lat,
+        'user_lng': user_lng,
+    })
 # -----------------------------
 # 찜/해제 Ajax
 # -----------------------------

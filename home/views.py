@@ -121,3 +121,7 @@ def main(request):
     }
 
     return render(request, "home/main.html", context)
+
+def alarm_center(request):
+    
+    return render(request, 'home/alarmcenter.html')
