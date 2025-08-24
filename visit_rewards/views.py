@@ -18,40 +18,19 @@ from coupons.models import UserCoupon
 def visit_check(request, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    # QR 토큰 생성
-    if not store.qr_token:
-        store.qr_token = uuid.uuid4().hex
-        store.save()
-
-    # 방문 인증 API URL 생성
-    qr_url = f"{request.scheme}://{request.get_host()}/visit_rewards/visit/?token={store.qr_token}&test=1"
-
-    # QR 코드 생성
-    qr = qrcode.QRCode(version=1, box_size=10, border=5)
-    qr.add_data(qr_url)
-    qr.make(fit=True)
-    img = qr.make_image(fill='black', back_color='white')
-    buf = BytesIO()
-    img.save(buf, format='PNG')
-    buf.seek(0)
-    qr_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    store_qr_url = f"data:image/png;base64,{qr_base64}"
-    
-    # 누적 금액 챌린지
     now = timezone.now()
     has_amount_mission = Mission.objects.filter(
         store=store,
-        mission_type__key='amount',  # 누적 금액 챌린지
+        mission_type__key='amount',
         start_date__lte=now,
         end_date__gte=now,
     ).exists()
 
     return render(request, 'visit_rewards/visit_checking.html', {
         'store': store,
-        'store_qr_url': store_qr_url,
-        'qr_url': qr_url,  # JS fetch용
         'has_amount_mission': has_amount_mission,
     })
+
 
 @login_required
 def visit_store(request):
