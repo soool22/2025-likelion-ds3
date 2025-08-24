@@ -129,13 +129,14 @@ header{
     gap: 100px;
     margin-top: 173px;
 }
-.membership,.logout{
+.membership a,.logout a{
     color: #5C5C5C;
-font-family: Pretendard;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration: none;
 }
 .hidden{
     display: none;

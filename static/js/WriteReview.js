@@ -1,12 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 음식 평가 별점
+    // 단일 별점 설정
     setupStarRating(".evaluation-food-star", 5, "star", "y-star");
-    // 서비스 평가 별점
-    setupStarRating(".evaluation-service-star", 5, "s-star", "s-y-star");
+
+    // 사진 업로드 preview
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    let filesArray = [];
+
+    fileInput.addEventListener('change', (e) => {
+        filesArray = Array.from(e.target.files);
+        preview.innerHTML = filesArray.map(f => `<p>${f.name}</p>`).join('');
+    });
 });
 
 /**
- * 별점 클릭 기능
+ * 단일 별점 클릭 기능
  * @param {string} containerSelector - 별들이 들어있는 부모 div
  * @param {number} count - 별 개수
  * @param {string} normalClass - 흰 별 class prefix
@@ -14,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function setupStarRating(containerSelector, count, normalClass, yellowClass) {
     const container = document.querySelector(containerSelector);
+    const ratingInput = document.getElementById("rating-input");
 
     for (let i = 1; i <= count; i++) {
         const normalStar = container.querySelector(`.${normalClass}${i}`);
@@ -36,5 +45,6 @@ function setupStarRating(containerSelector, count, normalClass, yellowClass) {
                 yellowStar.style.display = "none";
             }
         }
+        ratingInput.value = index;
     }
 }

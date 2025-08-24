@@ -6,10 +6,11 @@ from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
 from django.http import JsonResponse
 from collections import defaultdict
 from django.db import models
+import datetime
 
 from .models import Store, Category
 from .forms import StoreForm
-from .utils import haversine, get_user_location, annotate_distance, calculate_visit_counts
+from .utils import haversine, get_user_location, annotate_distance, calculate_visit_counts, format_distance
 from visit_rewards.models import Visit
 from ai_services.services import summarize_reviews  # ai_services에서 요약 함수
 from datetime import timedelta
@@ -69,6 +70,8 @@ def store_location(request):
 def owner_store_list(request):
     stores = request.user.store_set.all()
     today = timezone.localdate()
+    now = timezone.localtime()  # 현재 시간
+
     store_data = []
 
     for store in stores:
@@ -79,16 +82,29 @@ def owner_store_list(request):
         # 챌린지 통계 가져오기 (utils.py 함수 사용)
         challenge_stats = challenge_summary(store)
 
+        # 운영 시간 체크
+        if store.open_time and store.close_time:
+            open_time_today = timezone.make_aware(
+                datetime.datetime.combine(today, store.open_time)
+            )
+            close_time_today = timezone.make_aware(
+                datetime.datetime.combine(today, store.close_time)
+            )
+            is_open = open_time_today <= now <= close_time_today
+        else:
+            is_open = False
+
         store_data.append({
             'store': store,
             'today_visits': today_visits,
             'total_visits': total_visits,
-            **challenge_stats,  # challenge_summary에서 나온 모든 값 포함
+            'is_open': is_open,
+            **challenge_stats,
         })
 
     return render(request, 'stores/owner-store-list.html', {
         'store_data': store_data,
-        'now': timezone.now()
+        'now': now
     })
 
 # 등록한 가게 삭제
@@ -127,7 +143,26 @@ def store_update(request, store_id):
 # 셀프 서비스
 def self_service(request,store_id):
     store = get_object_or_404(Store, id=store_id, owner=request.user)
-    return render(request, 'stores/self-service.html', {'store': store})
+    
+    is_open = False
+    now = timezone.localtime()  # aware datetime
+
+    if store.open_time and store.close_time:
+        # 오늘 날짜와 시간 결합
+        open_dt = datetime.datetime.combine(now.date(), store.open_time)
+        close_dt = datetime.datetime.combine(now.date(), store.close_time)
+
+        # aware datetime으로 변환
+        open_dt = timezone.make_aware(open_dt, timezone.get_current_timezone())
+        close_dt = timezone.make_aware(close_dt, timezone.get_current_timezone())
+
+        if open_dt <= now <= close_dt:
+            is_open = True
+
+    return render(request, 'stores/self-service.html', {
+        'store': store,
+        'is_open': is_open
+    })
 
 # 가게 상세 페이지
 def owner_store_detail(request, store_id):
@@ -161,7 +196,7 @@ def filter_stores(request, stores):
     else:
         stores = stores.filter(gu_name__icontains=user_gu)
 
-    stores = annotate_distance(stores, user_lat, user_lng)
+    stores = list(annotate_distance(stores, user_lat, user_lng))
     categories = Category.objects.all()
 
     return stores, categories, user_lat, user_lng, gu or user_gu, category_slug
@@ -170,6 +205,15 @@ def filter_stores(request, stores):
 def public_store_list(request):
     stores = Store.objects.all().order_by('-id')
     stores, categories, user_lat, user_lng, selected_gu, selected_category = filter_stores(request, stores)
+    
+    for store in stores:
+        if store.latitude and store.longitude:
+            distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            store.distance_m = distance_m
+            store.distance = format_distance(distance_m)
+        else:
+            store.distance_m = None
+            store.distance = None
 
     return render(request, 'stores/public-store-list.html', {
         'stores': stores,
@@ -182,8 +226,24 @@ def public_store_list(request):
 
 # 인기 가게 (방문자 수)
 def popular_store_list(request):
+    # 사용자 위치
+    if request.user.is_authenticated:
+        user_lat, user_lng, _ = get_user_location(request.user)
+    else:
+        user_lat, user_lng = 37.5665, 126.9780  # 서울시청 기본값
+
     # 전체 Store 조회
     stores = Store.objects.all()
+
+    # 거리 계산
+    for store in stores:
+        if store.latitude and store.longitude:
+            distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            store.distance_m = distance_m
+            store.distance = format_distance(distance_m)
+        else:
+            store.distance_m = None
+            store.distance = None
 
     stores, categories, user_lat, user_lng, selected_gu, selected_category = filter_stores(request, stores)
 
@@ -211,6 +271,25 @@ def popular_store_list(request):
 
 # 리뷰 Best
 def review_best_list(request):
+    # 사용자 위치
+    if request.user.is_authenticated:
+        user_lat, user_lng, _ = get_user_location(request.user)
+    else:
+        user_lat, user_lng = 37.5665, 126.9780  # 서울시청 기본값
+
+    # 전체 Store 조회
+    stores = Store.objects.all()
+
+    # 거리 계산
+    for store in stores:
+        if store.latitude and store.longitude:
+            distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            store.distance_m = distance_m
+            store.distance = format_distance(distance_m)
+        else:
+            store.distance_m = None
+            store.distance = None
+            
     a, b = 0.7, 0.3
     category_slug = request.GET.get('category')
     gu = request.GET.get('gu')
@@ -239,38 +318,57 @@ def review_best_list(request):
 def store_search(request):
     query = request.GET.get('q')
     sort = request.GET.get('sort')
+    category_slug = request.GET.get('category')
+    
     stores = Store.objects.all().order_by('-id')
 
+    # 사용자 위치
+    user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
+    
+    # 지역구 기준 필터링
+    stores = Store.objects.all().order_by('-id')
+    if gu_name:
+        stores = stores.filter(gu_name=gu_name)
+    
     if query:
         stores = stores.filter(name__icontains=query)
+    
+    if category_slug:
+        stores = stores.filter(category__slug=category_slug)
 
-    stores, categories, user_lat, user_lng, selected_gu, selected_category = filter_stores(request, stores)
-
+    # 거리 계산 (상세 페이지처럼 직접 처리)
+    for store in stores:
+        if store.latitude and store.longitude:
+            distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+            store.distance_m = distance_m        # 계산용 숫자
+            store.distance = format_distance(distance_m)  # 출력용 문자열
+        else:
+            store.distance_m = None
+            store.distance = None
+    
     # 정렬
     if sort == "rating":
-        # 기존 distance 값은 그대로 두고 평점 기준 정렬
         stores = sorted(stores, key=lambda s: (-s.rating, s.id))
     elif sort == "visit":
-        # 방문자순: distance 유지
-        # 먼저 visit_count 속성 계산
         visit_counts = {v['store_id']: v['count'] for v in Visit.objects.values('store_id').annotate(count=Count('id'))}
         for s in stores:
             s.visit_count = visit_counts.get(s.id, 0)
-
         stores = sorted(stores, key=lambda s: (-getattr(s, 'visit_count', 0), s.id))
     elif sort == "distance":
         stores = sorted(stores, key=lambda s: s.distance_m if s.distance_m is not None else float('inf'))
 
+    categories = Category.objects.all()
+    
     return render(request, "stores/store-search.html", {
         "stores": stores,
         "categories": categories,
-        "selected_gu": selected_gu,
         "query": query or "",
-        "selected_category": selected_category,
+        "selected_category": category_slug,
         "user_lat": user_lat,
         "user_lng": user_lng,
         "sort": sort,
     })
+
 
 
 # 가게 상세 페이지
@@ -286,7 +384,13 @@ def store_detail(request, store_id):
         user_lat, user_lng = 37.5665, 126.9780  # 서울시청
 
     # 거리 계산 (annotate_distance 활용)
-    store = annotate_distance([store], user_lat, user_lng)[0]
+    if store.latitude and store.longitude:
+        distance_m = haversine(user_lat, user_lng, store.latitude, store.longitude)
+        store.distance_m = distance_m           # 숫자(m)
+        store.distance = format_distance(distance_m)  # 문자열(km/m)
+    else:
+        store.distance_m = None
+        store.distance = None
 
     # 마지막 요약 갱신 30분 이상 지났으면 새로 호출
     if not store.review_summary_updated or timezone.now() - store.review_summary_updated > timedelta(minutes=30):
@@ -314,6 +418,8 @@ def store_detail(request, store_id):
         'snippet': store.review_snippet,
         'is_favorite': is_favorite,
         'user_can_access_amount': user_can_access_amount,
+        'user_lat': user_lat,
+        'user_lng': user_lng,
     }
 
     return render(request, 'stores/store-detail.html', context)

@@ -56,8 +56,16 @@
             </div>
         </div>
         <div class="bottom">
-            <div class="membership">회원탈퇴</div>
-            <div class="logout">로그아웃</div>
+            <div class="membership">
+                <a href="{% url 'accounts:delete_account'%}">
+                    회원탈퇴
+                </a>
+            </div>
+            <div class="logout">
+                <a href="{% url 'accounts:logout'%}">
+                    로그아웃
+                </a>
+            </div>
         </div>
         <div class="nick-name hidden">
             <div class="over-layer"></div>

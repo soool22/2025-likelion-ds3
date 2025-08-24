@@ -12,8 +12,16 @@
             <header>
                 <div id="headerBox">
                     <div id="headerSmallBox">
-                        <p id="openState">오픈 예정</p>
-                        <p id="openTime"> {{ data.store.open_time|time:"H:i" }}</p>
+                        {% if store.open_time and store.close_time %}
+                            {% if is_open %}
+                                <p id="openState" style="color:green;">영업 중</p>
+                            {% else %}
+                                <p id="openState" style="color:gray;">오픈 예정</p>
+                            {% endif %}
+                            <p id="openTime">
+                                {{ store.open_time|time:"H:i" }} ~ {{ store.close_time|time:"H:i" }}
+                            </p>
+                        {% endif %}
                     </div>
                     <a href="{% url 'stores:store-update' store.id %}" id="change">
                         변경
