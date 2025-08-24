@@ -87,7 +87,8 @@ def owner_store_list(request):
         })
 
     return render(request, 'stores/owner-store-list.html', {
-        'store_data': store_data
+        'store_data': store_data,
+        'now': timezone.now()
     })
 
 # 등록한 가게 삭제
