@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/GrowCharacter.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <a href="{% url 'home:main' %}">
+                    <img id="backBtn" src="{% static 'img/leftside.svg'%}"/>
+                </a>
+                <div id="achievementBox">
+                    <div id="achievementSmallBox">
+                        <p id="achievementTitle">꾸밈지수</p>
+                        <p id="percent">75%</p>
+                    </div>
+                    <div id="totalAchievement">
+                        <div id="achievement"></div>
+                    </div>
+                </div>
+                <img id="character" src="{% static 'img/character1.svg'%}"/>
+                <img id="hat" src="{% static 'img/hat.svg'%}"/>
+                <img id="pot" src="{% static 'img/pot.svg'%}" />
+                <img id="chair" src="{% static 'img/chair.svg'%}" />
+                <div id="ground">
+                    <div id="bar">
+                        <div class="card">
+                            <div class="itemBigBox">
+                                <img class="item" src="{% static 'img/hat.svg'%}"/>
+                                <div class="itemValue">무료</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="itemBigBox">
+                                <img class="item" src="{% static 'img/pot.svg'%}"/>
+                                <div class="itemBox">
+                                    <img class="medal" src="{% static 'img/medal.svg'%}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="itemBigBox">
+                                <img class="item" src="{% static 'img/chair.svg'%}"/>
+                                <div class="itemBox">
+                                    <img class="medal" src="{% static 'img/medal.svg'%}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="{% static 'js/GrowCharacter.js'%}"></script>
+</html>

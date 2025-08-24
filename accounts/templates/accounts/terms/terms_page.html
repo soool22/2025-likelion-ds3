@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div id="wrap">
+    <h1>{{ title }}</h1>
+    <pre style="white-space: pre-wrap;">{{ content }}</pre>
+    <br>
+    <a href="{% url 'accounts:mypage' %}">← 마이페이지로 돌아가기</a>
+    </div>
+</body>
+</html>

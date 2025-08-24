@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/SignupPage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <img id="logo" src="{% static 'img/logo.svg'%}"/>
+                <div id="containerBox">
+                    <p id="title">회원가입</p>
+                    <form method="POST" action="{% url 'accounts:signup'%}">
+                        {%csrf_token%}
+                        <input type="text" placeholder="아이디 입력" name="username" class="inputBox" id="id"/>
+                        {{form.username.errors}}
+                        <input type="email" placeholder="이메일 입력" name="email" class="inputBox" id="email"/>
+                        {{form.email.errors}}
+                        <input type="text" placeholder="닉네임 입력" name="nickname" class="inputBox" id="nickname"/>
+                        {{form.nickname.errors}}
+                        <input type="password" placeholder="비밀번호 입력" name="password1" class="inputBox" id="repassword"/>
+                        {{form.password1.errors}}
+                        <input type="password" placeholder="비밀번호 확인" name="password2" class="inputBox" id="password"/>
+                        {{form.password2.errors}}
+                        <button type="submit" class="btn" id="btn">회원가입</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="{% static 'js/SignupPage.js'%}"></script>
+</html>

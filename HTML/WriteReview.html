@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
+</head>
+<body>
+    <main>
+        <header>
+            <a href="./MyReviewWrite.html" style="text-decoration: none;">
+            <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
+            </a>
+            <div class="title text" > 평가 및 리뷰 작성 </div>
+            <p> </p>
+        </header>
+        <div id="container">
+            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form"></form>
+            {% csrf_token %}
+            <div id="containerTop">
+                <p class="storeName">산책</p>
+                <div class="storeScore">
+                    <div class="scoreBox">
+                        <p class="scoreComment">음식은 어떠셨나요?</p>
+                        
+                        <div class="starBox" id="rating">
+                            <img data-value="1" src="{% static 'img/stargray.svg' %}" class="star"/>
+                            <img data-value="2" src="{% static 'img/stargray.svg' %}" class="star"/>
+                            <img data-value="3" src="{% static 'img/stargray.svg' %}" class="star"/>
+                            <img data-value="4" src="{% static 'img/stargray.svg' %}" class="star"/>
+                            <img data-value="5" src="{% static 'img/stargray.svg' %}" class="star"/>
+                        </div>
+                        <input type="hidden" name="rating" id="rating-input" required>
+                                            </div>
+                    {% if store.image %}
+                    <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="storeImg" />
+                    {% else %}
+                    <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div id="containerBottom">
+                <p class="storeName">자세한 음식 리뷰를 작성해주세요</p>
+                <textarea class="review" name="comment" placeholder="">주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히
+써주시면 다른 사람들에게 유용한 리뷰가 돼요.</textarea>
+                <label class="image" type="image">
+                    <input type="file" id="fileInput" name="images" accept="image/*" multiple hidden>
+                    <div class="box">
+                        <img src="{% static 'img/camera.png'%}"/>
+                        <p class="innerBox">사진 추가(0/3)</p>
+                    </div>
+                </label>
+                <button class="QR" type="submit">
+                    <div class="box">
+                        <img src="{% static 'img/my-qr.png'%}"/>
+                        <p class="innerBox">리뷰 작성</p>
+                    </div>
+                </button>
+            </div>
+            </form>
+        </div>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const stars = document.querySelectorAll('#rating .star');
+        const ratingInput = document.getElementById('rating-input');
+        let selectedRating = 0;
+
+        const graySrc   = "{% static 'img/stargray.svg' %}";
+        const pickedSrc = "{% static 'img/starpicked.svg' %}";
+
+        // 별 이미지 업데이트
+        function updateStars(hoverIndex = -1) {
+            stars.forEach((star, i) => {
+                if (hoverIndex >= 0) {
+                    // hover 상태 → hoverIndex까지 전부 picked
+                    star.src = i <= hoverIndex ? pickedSrc : graySrc;
+                } else {
+                    // 클릭 확정 상태 → selectedRating까지만 picked
+                    star.src = i < selectedRating ? pickedSrc : graySrc;
+                }
+            });
+        }
+
+        stars.forEach((star, idx) => {
+            star.addEventListener('mouseover', () => updateStars(idx));
+            star.addEventListener('mouseout', () => updateStars(-1));
+            star.addEventListener('click', () => {
+                selectedRating = idx + 1;
+                ratingInput.value = selectedRating;
+                updateStars(-1);
+            });
+        });
+
+        // 별점 미선택 시 제출 방지
+        document.getElementById('review-form').addEventListener('submit', (e) => {
+            if (!ratingInput.value) {
+                e.preventDefault();
+                alert("별점을 선택해주세요.");
+            }
+        });
+    });
+    </script>
+</body><script src="{% static 'JS/WriteReview.js'%}"></script>
+</html>

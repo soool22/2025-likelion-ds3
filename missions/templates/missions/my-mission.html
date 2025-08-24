@@ -1,0 +1,132 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DDAL-LANG</title>
+  <link rel="stylesheet" href="{% static 'css/PrograssChallengePage.css' %}" />
+</head>
+<body>
+  <main>
+    <div id="container">
+      <header>
+        <div id="headerBox">
+          <a id="sideClickBox" href="{% url 'home:main' %}">
+            <img id="sideClick" src="{% static 'img/leftside.svg' %}" alt="사이드클릭" />
+          </a>
+          <p id="appTitle">진행 중인 챌린지</p>
+          <p></p>
+        </div>
+      </header>
+
+      <div id="containerBody">
+        <!-- 상단: 내가 참여 중인 챌린지 -->
+        <div id="containerBodyTop">
+          <div class="titleBtnBox">
+            <p class="containerBodyTitle">내가 참여 중인 챌린지</p>
+            <div class="filterBtnBox">
+              <a href="?status=active"
+                 class="sheetHeaderBox {% if status == 'active' %}is-active{% endif %}">
+                <p class="sheetHeaderContent">진행중</p>
+              </a>
+              <a href="?status=past"
+                 class="sheetHeaderBox {% if status == 'past' %}is-active{% endif %}">
+                <p class="sheetHeaderContent">과거</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="containerBodyContent" id="progressList">
+            {% if progresses %}
+              {% for progress in progresses %}
+                <div class="prograssChallengeBox" data-mission-id="{{ progress.mission.id }}">
+                  <div class="challengeTitleBox">
+                    <p class="challengeTitle">{{ progress.mission.title }}</p>
+                    <a href="{% url 'stores:store-detail' progress.mission.store.id %}">
+                      <img class="rightSideClick" src="{% static 'img/rightside.svg' %}" alt="상세보기" />
+                    </a>
+                  </div>
+
+                  <div class="challengeMiddleBox">
+                    <div class="challengeMiddleSmallBox">
+                      <div class="state">
+                        {% if progress.is_completed %}
+                          <a href="{% url 'missions:mission-complete' progress.mission.id %}">완료</a>
+                        {% else %}
+                          진행 중
+                        {% endif %}
+                      </div>
+                      <p class="storeName">{{ progress.mission.store.name }}</p>
+                      <p class="storeDetail">
+                        {% if progress.mission.reward_type == "POINT" %}
+                          포인트 {{ progress.mission.reward_points|intcomma }}점
+                        {% elif progress.mission.reward_type == "CUSTOM" %}
+                          {{ progress.mission.reward_description }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </p>
+                    </div>
+                    <p class="date">~{{ progress.mission.end_date|date:"Y-m-d H:i" }}</p>
+                  </div>
+
+                  <div class="challengeLastBox">
+                    <div class="prograssBar">
+                      <div class="prograss"></div>
+                    </div>
+                    <div class="scoreBigBox" style="display:none;">
+                      <p class="nowScoreCount">1</p>
+                      <p class="totalScoreCount">3</p>
+                    </div>
+                    <p class="nowScore">{{ progress.percent }}%</p>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="challengeTitle emptyMsg">챌린지가 없습니다.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 하단: 오늘의 추천 챌린지 -->
+        <div id="containerBodyBottom">
+          <p class="containerBodyTitle">오늘의 추천 챌린지</p>
+          {% if recommended %}
+            <div class="containerBodyContent" id="recommendedList">
+              {% for mission in recommended %}
+                <div class="joinChallengeBox" data-mission-id="{{ mission.id }}">
+                  <div class="challengeTitleBox">
+                    <p class="challengeTitle">{{ mission.title }}</p>
+                    <a href="{% url 'stores:store-detail' mission.store.id %}">
+                      <img class="rightSideClick" src="{% static 'img/rightside.svg' %}" alt="상세보기" />
+                    </a>
+                  </div>
+
+                  <div class="challengeMiddleBox">
+                    <div class="challengeMiddleSmallBox">
+                      <div class="state yet">참여가능</div>
+                      <p class="storeName">{{ mission.store.name }}</p>
+                      <p class="storeDetail"></p>
+                    </div>
+                    <p class="date">~{{ mission.end_date|date:"Y-m-d H:i" }}</p>
+                  </div>
+
+                  <div class="challengeLastBox">
+                    <button class="joinBtn" type="button">참여하기</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>추천 챌린지가 없습니다.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="{% static 'js/PrograssChallengePage.js' %}"></script>
+</body>
+</html>

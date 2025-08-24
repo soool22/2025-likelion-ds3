@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 삭제</title>
+</head>
+<body>
+    <h2>리뷰 삭제</h2>
+    <h3>{{ review.store.name }} > </h3> 
+
+    {{ review.stars }}
+    {{ review.created_at|date:"Y-m-d" }}
+    {{ review.comment|linebreaks }}
+
+
+    {% if review.images.all %}
+        {% for img in review.images.all %}
+            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+        {% endfor %}
+        <br/>
+    {% endif %}
+
+    정말 삭제하시겠습니까?
+    <form method="POST" action="{% url 'reviews:review-delete' review.id %}">
+        {% csrf_token %}
+        <button type="submit">삭제</button>
+        <a href="{% url 'reviews:review-list' review.store.id %}">취소</a>
+    </form>
+</body>
+</html>

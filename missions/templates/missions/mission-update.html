@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>챌린지 수정(점주)</title>
+</head>
+<body>
+    <h2>{{ store.name }} - 챌린지 수정</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            챌린지 제목:<br/>
+            {{ form.title }}
+        </div>
+
+        <div>
+            챌린지 설명:<br/>
+            {{ form.description }}
+        </div>
+
+        <!--################보상################-->
+        <div>
+            <label>보상 종류:</label>
+            {{ form.reward_type }}
+        </div>
+
+        <div id="reward-points-field">
+            <label>포인트:</label>
+            {{ form.reward_points }}
+        </div>
+
+        <div id="reward-custom-field">
+            <label>직접 입력 보상:</label>
+            {{ form.reward_description }}
+        </div>
+        <!---####################################-->
+
+        <div>
+            챌린지 종류:<br/>
+            {{ form.mission_type }}
+        </div>
+
+        <div>
+            목표치:<br/>
+            {{ form.target_value }}
+        </div>
+
+        <div>
+            시작일:<br/>
+            {{ form.start_date }}
+        </div>
+
+        <div>
+            종료일:<br/>
+        {{ form.end_date }}
+        </div>
+        <br/>
+
+        <button type="submit">완료</button>
+    </form>
+
+    <a href="{% url 'missions:mission-list' store.id %}">미션 목록</a>
+
+    <!--################ JS(보상 관련) ################-->
+    <script>
+const rewardSelect = document.getElementById("id_reward_type");
+const pointsField = document.getElementById("reward-points-field");
+const customField = document.getElementById("reward-custom-field");
+
+function toggleRewardFields() {
+    if (rewardSelect.value === "POINT") {
+        pointsField.style.display = "block";
+        customField.style.display = "none";
+    } else {
+        pointsField.style.display = "none";
+        customField.style.display = "block";
+    }
+}
+
+rewardSelect.addEventListener("change", toggleRewardFields);
+toggleRewardFields();
+</script>
+
+</body>
+</html>

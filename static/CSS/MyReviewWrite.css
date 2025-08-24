@@ -1,0 +1,150 @@
+
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+
+}
+
+header{
+    display: flex;
+    margin-top: 32px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 54px;
+}
+
+.back-img{
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.tittle{
+    font-size: 22px;
+    font-weight: 600;
+}
+.text{
+    color: #000;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+.tittle-text{
+    color: #000;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-size: 22px;
+    font-weight: 600;
+
+}
+.back-img{
+    width: 8px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 2px;
+    stroke: #000;
+}
+.short-review{
+    font-weight: 550;
+    font-size: 15px;
+}
+.bar{
+    display: flex;
+    align-items: centers;
+}
+.my-review{
+    color: #7B7B7B;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 22px 67px 18px 67px;
+    border-bottom: 1.2px solid #7B7B7B;;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.picked{
+    border-bottom: 1.5px solid #000;
+    color: #000;
+}
+.review-box{
+    width: 316px;
+    height: 192px;
+    flex-shrink: 0;
+    border-radius: 19px;
+    border: 1px solid #CCC;
+    background: #FFF;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    margin-left: 55px;
+    margin-top: 28px;
+}
+.tittle{
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    margin-left: 27px;
+    justify-content: space-between;
+}
+.store-name{
+    font-size: 18px;
+}
+.date{
+    font-size: 12px;
+    color: #7B7B7B;
+}
+.confirm{
+    color: #FFB635;
+    font-size: 13px;
+    margin-right: 22px;
+}
+
+.content{
+    margin: 19px 0px 13px 27px;
+    font-weight: 600;
+}
+
+.review-btn{
+    border-radius: 8px;
+    width: 267px;
+    height: 35px;
+    flex-shrink: 0;
+    margin-left: 27px;
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    line-height: 35px;    
+}
+.time-left{
+    color: #CCC;
+font-family: Pretendard;
+font-size: 11px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-left: 27px;
+margin-top: 8px;
+}
+
+.able{
+    background-color: #FFB635;
+}
+
+.disable{
+    background: rgba(255, 182, 53, 0.50);
+}

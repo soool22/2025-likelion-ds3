@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>챌린지 삭제 확인(점주)</title>
+</head>
+<body>
+    <h2>챌린지 삭제</h2>
+    정말 이 챌린지를 삭제하시겠습니까?<hr/>
+    <h3>{{ mission.title }}</h3>
+    {{ mission.description }}
+    <br/>
+    {{ mission.mission_type.name }} - {{ mission.target_value }}{{ mission.mission_type.unit }}
+    <br/>
+    보상: {{ mission.reward_description }}
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">삭제</button>
+        <a href="{% url 'missions:mission-list' mission.store.id %}">취소</a>
+    </form>
+</body>
+</html>

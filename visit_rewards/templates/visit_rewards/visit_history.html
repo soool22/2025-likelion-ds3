@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/RecentView.css'%}" />
+</head>
+<body>
+    <main>
+        <header>
+            <a href="{% url 'home:main' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle text" style="color:#000; font-size:22px
+            "> 최근 본 매장 </div>
+        </header>
+        <div class="list">
+            {% if most_visited %}
+            <img src="{% static 'IMG/most-visited.png'%}"  class="top-img">
+            <a href="{% url 'stores:store-detail' most_visited.store__id %}" class="store-link" style="text-decoration: none;">
+                <img src="{% static 'IMG/store-img.png'%}" class="store-img"> 
+                <div class="store-text">
+                    <div class="store-name">{{ most_visited.store__name }}</div>
+                    <div class="text"  style="margin-top:5px">(방문 횟수: {{ most_visited.visits_count }}회)</div>
+                </div>
+            </a>
+            {% endif %}
+
+            {% if latest_visit %}
+            <img src="{% static 'IMG/lastest-visit.png'%}">
+            <a href="{% url 'stores:store-detail' latest_visit.store.id %}" class="store-link" style="text-decoration: none;">
+                <img src="{% static 'IMG/store-img.png'%}" class="store-img">
+                <div class="store-text">
+                    <div class="store-name"> {{ latest_visit.store.name }}</div>
+                        <div class="text" style="margin-top:5px">(방문 시간: {{ latest_visit.visit_time|date:"Y-m-d H:i" }})</div>
+                </div>
+            </a>
+            {% endif %}
+        </div>
+        <div class="separation-box"></div>
+        <div class="list" style="margin-top:0px">
+            {% if visits %}
+                {%  for visit in visits %}
+                <a href="{% url 'stores:store-detail' latest_visit.store.id %}" class="store-link" style="text-decoration: none;margin-top:30px">
+                    <img src="{% static 'IMG/store-img.png'%}" class="store-img">
+                    <div class="store-text">
+                        <div class="store-name">{{ visit.store.name }}</div>
+                        <div class="text" style="display:flex; gap:10px;margin-top:5px">{{ visit.visit_time|date:"Y-m-d H:i" }}          
+                            {% with visit.reward_set.first as r %}
+                                ({% if r %}{{ r.amount }}P{% else %}-{% endif %})</div>
+                            {% endwith %}
+                        </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p>아직 방문한 가게가 없습니다.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

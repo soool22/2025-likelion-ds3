@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/StoreDelete.css'%}" />
+    </head>
+    <body>
+        <main>
+            <p id="really">
+                {{ store.name }} 삭제하시겠습니까?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <div id="btnBox">
+                    <button id="delete" type="submit" class="btn">삭제하기</button>
+                    <a href="{% url 'stores:self-service' store.id %}">
+                        <div id="no" class="btn">뒤로 가기</div>
+                    </a>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

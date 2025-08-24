@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="/static/css/AlarmCenterPage.css" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <div id="headerBox" href="">
+                        <a id="sideClickBox" href="{% url 'home:main' %}">
+                            <img id="sideClick" src="/static/img/leftside.svg" alt="사이드클릭" />
+                        </a>
+                        <p id="appTitle">알림 센터</p>
+                        <p> </p>
+                    </div>
+                </header>
+                <div id="containerBody">
+                    <div id="alarmChoose">
+                        <div id="alarmChooseBox">
+                            <img id="chooseIcon" src="/static/img/mycoupon.svg" alt="알림 아이콘"/>
+                            <p id="alarmChooseContent">QR 인증 안내/혜택 제공 알림 받기</p>
+                        </div>
+                        <div class="switchBtn">
+                            <div class="switchBtnCircle"></div>
+                        </div>
+                        <div class="switchBtn picked">
+                            <div class="switchBtnCircle picked"></div>
+                        </div>
+                    </div>
+                    <div class  ="alarmBox">
+                        <div class="alarmSmallBox">
+                            <p class="alarmTitle">방문하셨던 매장에서 다른 미션이 시작됐어요!</p>
+                            <p class="alarmDate">2025.7.30</p>
+                        </div>
+                        <a class="alarmSidePart" href="">
+                            <img class="alarmSideClick" src="/static/img/rightside.svg"/>
+                        </a>
+                    </div>
+                </div>
+            </div>   
+        </main>
+    </body>
+    <script src="{% static 'js/AlarmCenterPage.js'%}"></script>
+</html>

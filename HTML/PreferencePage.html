@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/PreferencePage.css'%}" />    
+</head>
+<body>
+    <main>
+        <header>
+            <div id="header">
+                <a href="{% url 'accounts:mypage' %}">
+                    <img src="{% static 'IMG/leftside.svg'%}" class="backImg"></img>
+                </a>
+                <div class="title"> 관심 설정 </div>
+                <p></p>
+            </div>
+        </header>
+
+        <div id="container">
+            <form method="post" action="{% url 'accounts:user_preferences' %}">
+                {% csrf_token %}
+                <div id="containerBody">
+
+                    <!-- 선호 음식 (2개/줄) -->
+                    <div class="checkboxBigBox">
+                        <p class="checkboxBoxTitle">선호 음식</p>
+                        <div class="checkboxSmallBox">
+                            {% for option in categories %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                    <div class="checkboxTinyBox">
+                                {% endif %}
+
+                                <div class="checkboxStyle small{% if option in selected_categories %} picked{% endif %}"
+                                    data-name="preferred_categories" data-value="{{ option }}" tabindex="0">
+                                    {{ option }}
+                                </div>
+                                <input type="checkbox"
+                                    class="realCheckBox"
+                                    name="preferred_categories"
+                                    value="{{ option }}"
+                                    {% if option in selected_categories %}checked{% endif %}/>
+
+                                {% if forloop.counter|divisibleby:2 or forloop.last %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 선호 맛 (2개/줄) -->
+                    <div class="checkboxBigBox">
+                        <p class="checkboxBoxTitle">선호 맛</p>
+                        <div class="checkboxSmallBox">
+                            {% for option in tastes %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                    <div class="checkboxTinyBox">
+                                {% endif %}
+
+                                <div class="checkboxStyle small{% if option in selected_tastes %} picked{% endif %}"
+                                    data-name="preferred_tastes" data-value="{{ option }}" tabindex="0">
+                                    {{ option }}
+                                </div>
+                                <input type="checkbox"
+                                    class="realCheckBox"
+                                    name="preferred_tastes"
+                                    value="{{ option }}"
+                                    {% if option in selected_tastes %}checked{% endif %}/>
+
+                                {% if forloop.counter|divisibleby:2 or forloop.last %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 선호 가격대 (1개/줄, big) -->
+                    <div class="checkboxBigBox">
+                        <p class="checkboxBoxTitle">선호 가격대</p>
+                        <div class="checkboxSmallBox">
+                            {% for option in price_ranges %}
+                                <div class="checkboxTinyBox">
+                                    <div class="checkboxStyle big{% if option in selected_price_ranges %} picked{% endif %}"
+                                        data-name="preferred_price_ranges" data-value="{{ option }}" tabindex="0">
+                                        {{ option }}
+                                    </div>
+                                    <input type="checkbox"
+                                        class="realCheckBox"
+                                        name="preferred_price_ranges"
+                                        value="{{ option }}"
+                                        {% if option in selected_price_ranges %}checked{% endif %}/>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 선호 건강요소 (1개/줄, big) -->
+                    <div class="checkboxBigBox">
+                        <p class="checkboxBoxTitle">선호 건강요소</p>
+                        <div class="checkboxSmallBox">
+                            {% for option in health_options %}
+                                <div class="checkboxTinyBox">
+                                    <div class="checkboxStyle big{% if option in selected_health %} picked{% endif %}"
+                                        data-name="preferred_health" data-value="{{ option }}" tabindex="0">
+                                        {{ option }}
+                                    </div>
+                                    <input type="checkbox"
+                                        class="realCheckBox"
+                                        name="preferred_health"
+                                        value="{{ option }}"
+                                        {% if option in selected_health %}checked{% endif %}/>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button class="saveBtn" type="submit">저장</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+<script src="{% static 'js/PreferencePage.js'%}"></script>
+</html>

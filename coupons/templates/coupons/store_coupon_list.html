@@ -1,0 +1,96 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/store_coupon_list.css'%}" />
+</head>
+<body>
+    <main>
+        <header>
+            <a href="{% url 'stores:owner-store-list' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle-text" > 쿠폰 목록 </div>
+        </header>
+        <div class="btn-line">
+            <a href="?status=active">
+                <button 
+                class="c-btn"
+                style="
+                width:46px; height:22px;
+                padding: 4px 7px 4px 7px;
+                border-radius: 40px; white-space: nowrap;"
+                {% if status == "active" %}
+                    id="active-btn"
+                {% endif %}>진행중</button>
+            </a>
+            <a href="?status=past">
+                <button 
+                class="c-btn"
+                style="
+                width:33px; height:22px;
+                padding: 4px 5px 4px 7px;
+                border-radius: 9px;
+                margin-right:45px white-space: nowrap;;"
+                {% if status == "past" %}
+                    id="active-btn"
+                {% endif %}>과거</button>
+            </a>
+        </div>
+        {% for coupon in coupons %}
+            <div class="food-list">
+                <div class="menu-box">
+                    <div class="content-box">
+                        <div class="menu-name" style="font-size:20px; margin-bottom:8px;">{{ coupon.name }}</div>
+                        <div class="menu-name">{{ coupon.get_coupon_type_display }}</div>
+                        <div class="menu-name">
+                            {% if coupon.coupon_type == "amount" %}
+                                금액 할인 - {{ coupon.discount_amount|floatformat:0|intcomma }}원
+                            {% elif coupon.coupon_type == "percent" %}
+                                비율 할인 - {{ coupon.discount_percent|floatformat:1 }}%
+                            {% elif coupon.coupon_type == "gift" %}
+                                증정 이벤트 - {{ coupon.gift_item }}
+                            {% elif coupon.coupon_type == "custom" %}
+                                설명 - {{ coupon.custom_text }}
+                            {% endif %}
+                        </div>
+                        <div class="line">
+                            <div class="left-box">
+                                <div class="menu-name">코드 - {{ coupon.code }}</div>
+                                <div class="menu-name" style="margin-bottom:0px;">발급일 - {{ coupon.created_at|date:"Y-m-d" }}</div>
+                                {% if coupon.expire_at %}
+                                    <div class="menu-name" style="margin-top:7px">만료일 - {{ coupon.expire_at|date:"Y-m-d H:i" }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="right-box">
+                            {% if status != "past" %}
+                                <a href="{% url 'coupons:update_coupon' coupon.id %}" class="btn">
+                                    <img src="{% static 'IMG/gray-edit.svg'%}">
+                                    <div class="btn-text">수정</div>
+                                </a>
+                            {% endif %}
+                                <a href="{% url 'coupons:delete_coupon' coupon.id %}" class="btn">
+                                    <img src="{% static "img/gray-trash.svg" %}">
+                                    <div class="btn-text">삭제</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div style="display:flex; align-self:center">등록된 상품이 없습니다.</div>
+        {% endfor %}
+        <!-- 새 상품 등록 버튼 -->
+        <a href="{% url 'coupons:create_coupon_store' store.id %}"  class="new-box">
+            <img src="{% static "img/yellow-plus.svg" %}">
+            <div class="font13">새 쿠폰 발급</div>
+        </a>
+    </main>
+</body>
+</html>

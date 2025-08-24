@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'css/HomePage.css'%}" />
+    </head>
+    <body>
+        <main>
+            {% if request.user.is_authenticated %}
+            <header>
+                <div id="headerBox">
+                    <div id="headerSmallBox">
+                        <img id="locationIcon" src="{% static 'img/location.svg'%}"/>
+                        {% if user_location and user_location.gu_name %}
+                            <a href="{% url 'accounts:user_location' %}">
+                                <p id="locationName">{{ user_location.gu_name }}</p>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'accounts:user_location' %}">
+                                <p id="locationName">위치 설정</p>
+                            </a>
+                        {% endif %}
+                        <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
+                    </div>
+                    <div id="headerLastBox">
+                        <a href="{% url 'visit_rewards:my_character' %}">
+                            <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
+                        </a>
+                        <a href="{% url 'home:alarmcenter' %}">
+                            <img id="alarmIcon" src="{% static 'img/alarm.svg'%}"/>
+                        </a>
+                        
+                    </div>
+                </div>
+            </header>
+            {% if gu_name %}
+            <div id="container">
+                <div id="banner">
+                    <div id="bannerBox">
+                        <p id="bannerTitle">7월 동네 인기 맛집<br/>업데이트 완료</p>
+                        <p id="bannerContent">이용자들이 가장 많이 재방문한 <br/>인기 맛집을 확인해 보세요!</p>
+                    </div>
+                    <img id="bannerCharacter" src="{% static 'img/characterBell.svg'%}"/>
+                </div>
+                <form>
+                    <div class="tabContainer">
+                        <div class="recommendstoreBox">
+                            <img class="recommendstoreIcon" src="{% static 'img/recommendstore.svg'%}" alt="">
+                            <p class="recommendstoreText">AI 추천 가게</p>
+                        </div>
+                        <div class="topBox">
+                            <img class="topIcon" src="{% static 'img/top.svg'%}" alt="">
+                            <p class="topText">오늘의 HOT</p>
+                        </div>
+                        <div class="reviewbestBox">
+                            <img class="reviewbestIcon" src="{% static 'img/reviewbest.svg'%}" alt="">
+                            <p class="reviewbestText">리뷰 BEST</p>
+                        </div>
+                    </div>
+                </form>
+                <form>
+                    <div id="storeContainer">
+                        {% comment %} 추천 {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-recommend" >
+                            {% if recommended_stores %}
+                            {% for store in recommended_stores %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                                <p class="challenge" style="margin-left:16px;">추천 가게를 불러오는 중입니다...</p>
+                            {% endif %}
+                        </div>
+                        
+                        {% comment %} top100 {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-top" >
+                            {% for store in top_visits %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        {% comment %} 리뷰best {% endcomment %}
+                        <div class="storeCardBox" id="storeCardBox-review">
+                            {% for store in review_best %}
+                            <a href="{% url 'stores:store-detail' store.id %}">
+                                <div class="storeCard">
+                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    <div class="storeInfoBox">
+                                        <div class="storeInfoMediumBox">
+                                            <div class="storeInfoSmallBox">
+                                                <p class="storeCategory">{% for c in store.category.all %}{{ c.name }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+                                                <p class="storeName">{{ store.name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="commentBox">
+                                        <div class="distanceTimeBox">
+                                            <div class="distanceTime">
+                                                {% if store.distance %}
+                                                <p class="distanceTimeContent">{{ store.distance }}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent">거리 정보 없음</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="distanceTime">
+                                                {% if store.open_time and store.close_time %}
+                                                <p class="distanceTimeContent"style="color: #0094D6;">{% if store.is_open %}(영업 중){% else %}(영업 종료){% endif %}</p>
+                                                {% else %}
+                                                    <p class="distanceTimeContent"style="color: #0094D6;">영업시간 미정</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div id="btnBox">
+                            <a href="{% url 'stores:store-search' %}">
+                                <div id="mapBtn">
+                                    <div id="mapBtnBox">
+                                        <img id="mapIcon" src="{% static 'img/map.svg'%}"/>
+                                        <p id="mapTitle">지도로 보기</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="">
+                                <div id="plusBtn">
+                                    <div id="plusBtnBox">
+                                        <img id="plusIcon" src="{% static 'img/plus.svg'%}"/>
+                                        <p id="plusTitle">더보기</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div id="challengeBox">
+                            <a href="{% url 'missions:my-mission' %}">
+                                <p id="challengeTitle">🔥 오늘의 인기 챌린지</p>
+                            </a>
+                            <div id="challengeRanking">
+                                {% if rankings %}
+                                    {% for r in rankings %}
+                                        <a href="{% url 'stores:store-detail' r.mission.store.id %}">
+                                            <p class="challenge">[{{ r.mission.store.name }}] {{ r.mission.title }} ▶ 참여자 {{ r.participant_count }}명</p>
+                                        </a>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="challenge">오늘의 인기 챌린지가 없습니다.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/homepicked.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel picked">홈</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel">가게 검색</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
+                    <p class="tapBarLabel">관심 매장</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
+                    <p class="tapBarLabel">내 정보</p>
+                </a>
+            </div>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">로그인</a>
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+            {% endif %}
+        </main>
+        <script>
+        (() => {
+        const tabs = document.querySelectorAll(
+            '.recommendstoreBox, .topBox, .reviewbestBox'
+        );
+        if (!tabs.length) return;
+
+        const plusLink = document.getElementById('plusBtn')?.closest('a');
+
+        const ROUTES = {
+            recommend: '{% url 'stores:public-store-list' %}',
+            top: '{% url 'stores:popular-store-list' %}',
+            review: '{% url 'stores:review-best-list' %}',
+        };
+
+        // 박스 3개를 순서대로 잡음: [추천, top, review]
+        const boxes = document.querySelectorAll('#storeContainer .storeCardBox');
+        const KEYS  = ['recommend', 'top', 'review'];
+        const BOXES = {};
+        boxes.forEach((box, i) => { BOXES[KEYS[i]] = box; });
+
+        function tabKey(el) {
+            if (el.classList.contains('recommendstoreBox')) return 'recommend';
+            if (el.classList.contains('topBox'))           return 'top';
+            return 'review';
+        }
+
+        function showBox(key) {
+            Object.entries(BOXES).forEach(([k, el]) => {
+            if (!el) return;
+            el.style.display = (k === key) ? '' : 'none';
+            el.hidden = (k !== key);
+            el.setAttribute('aria-hidden', String(k !== key));
+            });
+        }
+
+        function setActiveTab(selected) {
+            tabs.forEach(tab => {
+            tab.classList.remove('active');
+            const img = tab.querySelector('img');
+            if (img) img.src = img.src.replace('picked', '');
+            });
+
+            selected.classList.add('active');
+            const icon = selected.querySelector('img');
+            if (icon && !/picked\.svg$/.test(icon.src)) {
+            icon.src = icon.src.replace('.svg', 'picked.svg');
+            }
+
+            const key = tabKey(selected);
+            showBox(key);
+
+            if (plusLink) plusLink.href = ROUTES[key] || '#';
+        }
+
+        // 초기: 첫 탭
+        setActiveTab(tabs[0]);
+
+        tabs.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab)));
+        })();
+        </script>
+    </body>
+    <script src="{% static 'js/HomePage.js'%}"></script>
+</html>

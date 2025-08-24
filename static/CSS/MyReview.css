@@ -1,0 +1,155 @@
+
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+a{
+    text-decoration: none;
+}
+
+header{
+    display: flex;
+    margin-top: 32px;
+    gap: 101px;
+    align-items: center;
+    height: 29px;
+    margin-left: 54px;
+}
+
+.back-img{
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.tittle{
+    font-size: 22px;
+    font-weight: 600;
+}
+.text{
+    color: #000;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+.back-img{
+    width: 8px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 2px;
+    stroke: #000;
+}
+
+.bar{
+    display: flex;
+    align-items: centers;
+}
+.my-review{
+    color: #7B7B7B;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 22px 67px 18px 67px;
+    border-bottom: 1.2px solid #7B7B7B;;
+    white-space: nowrap;
+    text-decoration: none ;
+}
+
+.picked{
+    border-bottom: 1.5px solid #000;
+    color: #000;
+}
+.review-box{
+    margin-left: 46px;
+    margin-top: 19px;
+}
+.store-name{
+    font-size: 20px;
+    margin-bottom: 7px;
+}
+.date{
+    color: #7B7B7B;
+    font-size: 11px;
+    margin-left: 12px;
+}
+.delete-box,.modification-box,.fourth-line,.second-line,.first-line{
+    display: flex;
+    align-items: center;
+}
+.delete-box{
+    margin-left: 241px;
+    cursor: pointer;
+}
+.delete{
+    color: #FFB635;
+    font-size: 11px;
+}
+.modification{
+    color: #7B7B7B;
+    font-size: 11px;
+}
+.text-box{
+    background-image: url("../IMG/text-box.png");
+    width: 342px;
+    height: 90px;
+    margin-top: 9px;
+}
+.user-name{
+    font-size: 12px;
+}
+.date-answer{
+    font-size: 9px;
+    color:#7B7B7B;
+    margin-left: 3.24px;
+}
+.answer-text{
+   color: #000;
+font-family: Pretendard;
+font-size: 9px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-top: 5px;
+margin-left: 8px;
+}
+.separation-box{
+    width: 100%;
+    height: 2px;
+    background-color: #d9d9d9;
+    margin-top: 25px;
+}
+.short-review{
+    color: #000;
+font-family: Pretendard;
+font-size: 15px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin: 9px 0px;
+}
+.recommend-num{
+    color: #7B7B7B;
+font-family: Pretendard;
+font-size: 10px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}

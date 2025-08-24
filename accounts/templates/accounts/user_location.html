@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/LocationSet.css'%}" />    
+</head>
+<body>
+    <main>
+        <header>
+            <div id="header">
+                <a href="{% url 'home:main'%}">
+                    <img src="{% static 'IMG/x.svg'%}" class="backImg"></img>
+                </a>
+                <div class="title"> 내 위치 설정 </div>
+                <p></p>
+            </div>
+        </header>
+        <div id="container">
+            <form method="POST" action="{% url 'accounts:user_location' %}">
+                {% csrf_token %}
+                <div id="containerBody">
+                    <div id="searchBox">
+                        <input class="search" type="text" id="address" name="address" value="{{ saved_address }}" placeholder="도로명, 지번"/>
+                        <img id="searchIcon" src="{% static 'img/search.svg'%}" />
+                        <button id="search-address" class="realSearchBtn" type="button"></button>
+                    </div>
+                    <input type="hidden" name="latitude" id="latitude" value="{{ saved_lat }}">
+                    <input type="hidden" name="longitude" id="longitude" value="{{ saved_lng }}">
+                    <input type="hidden" name="gu_name" id="gu_name" value="{{ saved_gu }}">
+                    <div id="map">
+                        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7e2e7e424a6b7b49922a592ab416600c&libraries=services,clusterer"></script>
+                    </div>
+                    <div id="nowLocationBox">
+                        <img id="locationIcon" src="{% static 'img/locationgray.svg'%}"/>
+                        <button class="locationBtn" id="current-location" type="button">현위치 가져오기</button>
+                    </div>
+                    <button class="saveBtn" type="submit">위치 저장</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script>
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+            center: new kakao.maps.LatLng(
+                {{ saved_lat|default:"37.5665" }},
+                {{ saved_lng|default:"126.9780" }}
+            ),
+            level: 3
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var geocoder = new kakao.maps.services.Geocoder();
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: map.getCenter()
+        });
+
+        // 지도 클릭 시 마커 이동 & 주소 업데이트
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            var latlng = mouseEvent.latLng;
+            marker.setPosition(latlng);
+            map.setCenter(latlng);
+            document.getElementById('latitude').value = latlng.getLat();
+            document.getElementById('longitude').value = latlng.getLng();
+
+            // 좌표 -> 주소 변환 (Reverse Geocoding)
+            geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var address = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+                    document.getElementById('address').value = address;
+
+                    // 구 추출
+                    var gu = address.split(" ")[1]; 
+                    document.getElementById('gu_name').value = gu;
+                }
+            });
+        });
+
+        // 주소 검색
+        document.getElementById('search-address').addEventListener('click', function() {
+            var address = document.getElementById('address').value;
+            geocoder.addressSearch(address, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var lat = result[0].y;
+                    var lng = result[0].x;
+                    var coords = new kakao.maps.LatLng(lat, lng);
+
+                    marker.setPosition(coords);
+                    map.setCenter(coords);
+
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+
+                    // 구 추출
+                    var gu = result[0].address_name.split(" ")[1];
+                    document.getElementById('gu_name').value = gu;
+                } else {
+                    alert('주소를 찾을 수 없습니다.');
+                }
+            });
+        });
+
+        // 현재 위치 가져오기
+        document.getElementById('current-location').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    var coords = new kakao.maps.LatLng(lat, lng);
+
+                    marker.setPosition(coords);
+                    map.setCenter(coords);
+
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+
+                    geocoder.coord2Address(lng, lat, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var address = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+                            document.getElementById('address').value = address;
+                            var gu = address.split(" ")[1];
+                            document.getElementById('gu_name').value = gu;
+                        }
+                    });
+                }, function(error) {
+                    alert('위치 정보를 가져올 수 없습니다.');
+                });
+            } else {
+                alert('이 브라우저는 위치 정보를 지원하지 않습니다.');
+            }
+        });
+    </script>
+</body>
+<script src="{% static 'js/LocationSet.js'%}"></script>
+</html>

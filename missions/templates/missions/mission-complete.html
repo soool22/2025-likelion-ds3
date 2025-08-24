@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 완료 안내</title>
+</head>
+<body>
+    <a href="{% url 'missions:my-mission' %}">이전</a>
+    <h2>"{{ mission.title }}" 챌린지 완료!</h2>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- 리뷰 작성 버튼 -->
+    <a href="{% url 'reviews:review-create' mission.store.id %}">리뷰 작성</a>
+    <br/>
+</body>
+</html>

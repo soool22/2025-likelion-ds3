@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'CSS/self-service.css' %}" />
+    </head>
+    <body>
+        <main>
+        {% for data in store_data %}
+
+            <header>
+                <div id="headerBox">
+                    <div id="headerSmallBox">
+                        {% if data.store.open_time and data.store.close_time %}
+                            {% if data.is_open %}
+                                <p id="openState" style="color:green;">영업 중</p>
+                            {% else %}
+                                <p id="openState" style="color:gray;">오픈 예정</p>
+                            {% endif %}
+                            <p id="openTime">
+                                {{ data.store.open_time|time:"H:i" }} ~ {{ data.store.close_time|time:"H:i" }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'accounts:start-page' %}" id="change">
+                        변경
+                    </a>
+                </div>
+            </header>
+            <div id="container">
+                <div class="title-box">
+                    <div class="left-box">
+                        <a href="{% url 'stores:owner-store-detail' data.store.id %}" class="store title">{{ data.store.name }}</a>
+                        <img src="{% static 'IMG/star-yellow.png' %}" class="star-img">
+                        <div class="title">{{ data.store.rating|floatformat:1 }} ({{ data.store.reviews.count }})</div>
+                    </div>
+                    <div id="store-id">매장ID {{ data.store.id }}</div>
+                </div>
+                <div id="containerBody">
+                    <div class="serviceBox">
+                        <div class="firstTitle">
+                            <div class="text" style="font-size: 14px;">오늘의 현황</div>
+                            <div class=" text" style="font-size: 11px; color: #7b7b7b;">{{ now|time:"H" }}시 기준</div>
+                        </div>
+                        <div class="serviceContentBox">
+                            <div>
+                                <div class="font11">오늘 방문</div>
+                                <p class="serviceContent">{{ data.today_visits }}명</p>
+                                
+                            </div>
+                            <div>
+                                <div class="font11" style="margin-top: 9px;">오늘 챌린지</div>
+                                <p class="serviceContent">{{ data.today_challenges }}명</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="serviceBox" style="gap:7px;">
+                        <div class="line">
+                            <div class="font13">가게 이름</div>
+                            <div class="font16">{{ data.store.name }}</div>
+                        </div>
+                        <div class="line">
+                            <div class="font13">주소</div>
+                            <div class="font16"> {{ data.store.address }}</div>
+                        </div>
+                        <div class="line">
+                            <div class="font13">카테고리</div>
+                            <div class="font16">
+                                {% for category in data.store.category.all %}
+                                    {{ category.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="line">
+                            <div class="font13">가게 전화</div>
+                            <div class="font16">
+                                {% if data.store.number %}
+                                    <a href="tel:{{ data.store.number }}"  style="color:#000">{{ data.store.number }}</a>
+                                {% else %}
+                                    정보 없음
+                                {% endif %} </div>
+                        </div>
+                        <div class="line">
+                            <div class="font13">운영 시간</div>
+                            <div class="font16">
+                                {% if data.store.open_time and data.store.close_time %}
+                                    {{ data.store.open_time|time:"H:i" }} ~ {{ data.store.close_time|time:"H:i" }}
+                                {% endif %}</div>
+                        </div>
+                        <div class="line">
+                            <div class="font13">점주 코드</div>
+                            <div class="font16"> {{ data.store.secret_code }}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="serviceBox">
+                        <div class="firstTitle">
+                            <div class="text" style="font-size: 14px;">매장 통계</div>
+                            <div class=" text" style="font-size: 11px; color: #7b7b7b;">( {{ data.store.created_at|date:"Y-m-d" }} ~ )</div>
+                        </div>
+                        <div class="serviceContentBox" style="display: inline; gap:7px;">
+                            <div>
+                                <div class="font11">누적 방문</div>
+                                <p class="serviceContent">{{ data.total_visits }}명</p>
+                                
+                            </div>
+                            <div>
+                                <div class="font11" style="margin-top: 9px;">누적 챌린지</div>
+                                <p class="serviceContent"> {{ data.total_challenges }}명</p>
+                                
+                            </div>
+                            <div>
+                                <div class="font11" style="margin-top: 9px;">인기 챌린지</div>
+                                <p class="serviceContent">
+                                    {% if data.most_participated_type %}
+                                    {% if data.most_participated_type == 'amount' %}누적 금액{% endif %}
+                                    {% if data.most_participated_type == 'visit_count' %}누적 방문{% endif %}
+                                    {% if data.most_participated_type == 'visit_period' %}기간 내 방문{% endif %}
+                                    ({{ data.most_participated_count }}명)
+                                    {% else %}
+                                        없음
+                                    {% endif %}
+                                </p>
+                                
+                            </div>
+                            <div>
+                                <div class="font11" style="margin-top: 9px;">챌린지별 누적 참여</div>
+                                <li class="font11">누적 금액</li>
+                                <p class="serviceContent" style="margin-left: 5px;">{{ data.challenge_participation.amount }}명</p>
+                                <li class="font11">누적 방문</li>
+                                <p class="serviceContent"style="margin-left: 5px;">{{ data.challenge_participation.visit_count }}명</p>
+                                <li class="font11">기간 내 방문</li>
+                                <p class="serviceContent" style="margin-left: 5px;"> {{ data.challenge_participation.visit_period }}명</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
+        {% empty %}
+            <br/>
+                <a href="{% url 'stores:store-create' %}" >새 가게 등록하기</a>
+        {% endfor %}
+        {% for data in store_data %}
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'stores:owner-store-list' %}">
+                    <img class="tapBarIcon" src="{% static 'img/ownerhomepicked.png' %}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel picked">홈</p>
+                </a>
+                <a class="tapBarBox" href="{%  url 'stores:self-service' data.store.id %}">
+                    <img class="tapBarIcon" src="{% static 'img/ownerselfservice.svg' %}" alt="셀프 서비스 아이콘" />
+                    <p class="tapBarLabel">셀프 서비스</p>
+                </a>
+                <a class="tapBarBox" href="">
+                    <img class="tapBarIcon" src="{% static 'img/setting.svg' %}" alt="셀프 서비스 아이콘" />
+                    <p class="tapBarLabel">설정</p>
+                </a>
+            </div>
+        {% endfor %}
+        </main>
+    </body>
+    <script src="../js/OwnerSelfservicePage.js"></script>
+</html>

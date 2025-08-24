@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'css/OwnerStoreRegistration.css'%}" />
+</head>
+<body>
+    <main>
+        <div id="container">
+            <header>
+                <a href="{% url 'stores:owner-store-list' %}">
+                    <img src="{% static 'img/leftside.svg'%}" class="sideClick"/>
+                </a>
+                <p id="title">챌린지 추가</p>
+                <p></p>
+            </header>
+
+            <div id="containerBox">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- 챌린지 제목 -->
+                    <input type="text" name="title" id="id_title"
+                           placeholder="챌린지 제목" class="inputBox"
+                           value="{{ form.instance.title|default_if_none:'' }}"/>
+
+                    <!-- 챌린지 설명 -->
+                    <textarea name="description" id="id_description"
+                              placeholder="챌린지 설명"
+                              class="inputBox" rows="3">{{ form.instance.description|default_if_none:'' }}</textarea>
+
+                    <!-- 미션 종류 -->
+                    <div class="box">
+                        <p class="boxTitle">미션 종류</p>
+                        <select name="mission_type" id="id_mission_type" class="timeStyle">
+                            <option value="">-- 선택하세요 --</option>
+                            {% for choice in form.fields.mission_type.choices %}
+                                <option value="{{ choice.0 }}"
+                                    {% if form.instance.mission_type and form.instance.mission_type.pk == choice.0 %}selected{% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- 목표치 -->
+                    <input type="number" name="target_value" id="id_target_value"
+                           placeholder="목표치" class="inputBox"
+                           value="{{ form.instance.target_value|default_if_none:'' }}"/>
+
+                    <!-- 보상 종류 -->
+                    <div class="box">
+                        <p class="boxTitle">보상 종류</p>
+                        <select name="reward_type" id="id_reward_type" class="timeStyle">
+                            <option value="">-- 선택하세요 --</option>
+                            {% for choice in form.fields.reward_type.choices %}
+                                <option value="{{ choice.0 }}"
+                                    {% if form.instance.reward_type == choice.0 %}selected{% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- 포인트 보상 -->
+                    <input type="number" name="reward_points" id="id_reward_points"
+                           placeholder="포인트 보상" class="inputBox"
+                           value="{{ form.instance.reward_points|default_if_none:'' }}"/>
+
+                    <!-- 직접 입력 보상 -->
+                    <input type="text" name="reward_description" id="id_reward_description"
+                           placeholder="직접 입력 보상" class="inputBox"
+                           value="{{ form.instance.reward_description|default_if_none:'' }}"/>
+
+                    <!-- 시작일 -->
+                    <div class="box">
+                        <p class="boxTitle">시작일</p>
+                        <input type="datetime-local" name="start_date" id="id_start_date"
+                               class="timeStyle"
+                               value="{{ form.instance.start_date|date:'Y-m-d\TH:i' }}"/>
+                    </div>
+
+                    <!-- 종료일 -->
+                    <div class="box">
+                        <p class="boxTitle">종료일</p>
+                        <input type="datetime-local" name="end_date" id="id_end_date"
+                               class="timeStyle"
+                               value="{{ form.instance.end_date|date:'Y-m-d\TH:i' }}"/>
+                    </div>
+
+                    <button type="submit" class="btn" id="btn">확인</button>
+
+                    {% if form.errors %}
+                        <div style="color:red; margin-top:10px;">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'js/OwnerChallengeRegistration.js'%}"></script>
+</body>
+</html>
