@@ -14,10 +14,12 @@
                     <div id="searchBox">
                         <div id="search">
                             <img id="searchIcon" src="{% static 'img/searchpicked.svg'%}" alt="검색 아이콘"/>
-                            <input id="searchInput" type="text" placeholder="매장, 메뉴로 검색해 보세요." />
+                            <input id="searchInput" type="text" name="q" placeholder="매장, 메뉴로 검색해 보세요." value="{{ query|default:'' }}" />
+                            <!-- 현재 선택값 hidden으로 같이 전송 -->
+                            <input type="hidden" name="category" value="{{ selected_category|default:'' }}">
                             <input type="hidden" name="gu" value="{{ selected_gu|default:'' }}">
-                            <button id="searchBtn" type="submit"></button> 
-                            <!-- 검색 아이콘 누르면 버튼 눌리게 js -->
+                            <input type="hidden" name="sort" value="{{ sort|default:'' }}">
+                            <button id="searchBtn" type="submit"></button>
                         </div>
                     </div>
                 </form>

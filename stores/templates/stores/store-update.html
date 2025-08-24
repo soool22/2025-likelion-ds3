@@ -27,7 +27,9 @@
                         <div id="searchBox">
                             <input  class="search" placeholder="주소" type="text" name="address"
                  id="id_address" value="{{ form.instance.address|default_if_none:'' }}" />
-                            <img id="searchIcon" src="{% static 'img/search.svg'%}" />
+                            <button type="button" id="btn-search">
+                                <img id="searchIcon" src="{% static 'img/search.svg'%}" />
+                            </button>
                             <button class="realSearchBtn"></button>
                         </div>
                         <input type="hidden" name="latitude" id="id_latitude" value="{{ form.latitude.value|default_if_none:'' }}">
