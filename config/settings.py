@@ -159,8 +159,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",  
 ]
 
-# collectstatic이 모아줄 경로 (서버에서 Nginx로 서빙)
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
