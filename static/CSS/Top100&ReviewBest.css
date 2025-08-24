@@ -125,3 +125,8 @@ header{
     border-radius: 12px;
     outline: none;
 }
+
+.category {
+    color: #534526; 
+    font-weight: 600; 
+}

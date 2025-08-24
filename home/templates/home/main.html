@@ -25,6 +25,9 @@
                         {% endif %}
                         <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
                     </div>
+                    <a href="{% url 'accounts:start-page' %}" id="change">
+                        변경
+                    </a>
                     <div id="headerLastBox">
                         <a href="{% url 'visit_rewards:my_character' %}">
                             <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>

@@ -372,3 +372,19 @@ flex-direction: column;
     font-size: 13px;
     font-weight: 600;
 }
+
+.mission-title {
+    font-weight: bold;      
+    color: #534526;         
+    font-size: 1.4em;   
+}   
+
+.reward-text, .date-text {
+    color: #9c9c9c;  
+}
+
+.challenge-type {
+    color: #f7a313; 
+    font-weight: bold; 
+}
+
