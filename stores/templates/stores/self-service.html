@@ -1,36 +1,168 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>셀프 서비스(점주용)</title>
-</head>
-<body>
-    <a href="{% url 'stores:owner-store-list' %}">이전</a><br/>
-
-    <h2>셀프 서비스</h2>
-
-    <!--매장 정보 수정/삭제-->
-    <a href="{% url 'stores:store-update' store.id %}">매장 정보 변경</a><br/>
-    <a href="{% url 'stores:store-delete' store.id %}">매장 삭제</a><br/>
-    <br/>
-
-    <!-- 챌린지 -->
-    <a href="{% url 'missions:mission-list' store.id %}">챌린지</a><br/>
-
-    <!-- 상품/메뉴 -->
-    <a href="{% url 'products:product-list' store.id %}">상품/메뉴</a><br/>
-
-    <!--리뷰-->
-    <a href="{% url 'reviews:owner-review-list' store.id %}">리뷰 목록</a><br/>
-    <br/>
-
-    <!--쿠폰-->
-    <a href="{% url 'coupons:coupon_list' store.id %}">쿠폰</a><br><br/>
-
-    <!--로그아웃-->
-    <a href="{% url 'accounts:logout' %}">로그아웃</a><br/>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'CSS/OwnerSelfservicePage.css'%}" />
+    </head>
+    <body>
+        <main>
+            <header>
+                <div id="headerBox">
+                    <div id="headerSmallBox">
+                        <p id="openState">오픈 예정</p>
+                        <p id="openTime"> {{ data.store.open_time|time:"H:i" }}</p>
+                    </div>
+                    <a href="{% url 'stores:store-update' store.id %}" id="change">
+                        변경
+                    </a>
+                </div>
+            </header>
+            <div id="container">
+                <div id="title">
+                    셀프서비스
+                </div>
+                <div id="containerBody">
+                    <div class="serviceBox">
+                        <div class="serviceTitle">매장 관리</div>
+                        <div class="serviceContentBox">
+                            <a class="aBox" href="{% url 'stores:store-update' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/storeinfo.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">매장 정보 변경</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg'%}"/>
+                            </a>
+                            <a class="aBox" href="{% url 'stores:store-delete' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'IMG/delete-black.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">매장 삭제</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="serviceBox">
+                        <div class="serviceTitle">서비스 관리</div>
+                        <div class="serviceContentBox">
+                            <a class="aBox" href="{% url 'reviews:owner-review-list' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/review.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">리뷰 목록</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                            <a class="aBox" href="{% url 'products:product-list' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/storeinfo.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">상품/메뉴</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                            <a class="aBox" href="{% url 'missions:mission-list' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/storetime.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">챌린지</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                            <a class="aBox" href="{% url 'coupons:coupon_list' store.id %}">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon"  style="width: 18px;" src="{% static 'IMG/black-coupon-owner.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">쿠폰</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="serviceBox">
+                        <div class="serviceTitle">서비스 안내</div>
+                        <div class="serviceContentBox">
+                            <a class="aBox" href="">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/settings.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">알림 설정</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                            <a class="aBox" href="">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/alarming.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">공지 사항</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                            <a class="aBox" href="">
+                                <div class="serviceContentSmallBox">
+                                    <div class="serviceIconBox">
+                                        <img class="icon" src="{% static 'img/help.svg' %}"/>
+                                    </div>
+                                    <div class="contentSmallBox">
+                                        <p class="serviceContent">파트너 센터</p>
+                                    </div>
+                                </div>
+                                <img class="sideClick" src="{% static 'img/rightside.svg' %}"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="lastBox">
+                    <a href="{% url 'accounts:logout' %}">
+                        <p id="logout">로그 아웃</p>
+                    </a>
+                    <p id="infomationPolicy">|</p>
+                    <p id="infomationPolicy">개인정보 처리방침</p>
+                </div>
+            </div>
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'stores:owner-store-list' %}">
+                    <img class="tapBarIcon" src="{% static 'img/ownerhome.png' %}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'stores:self-service'  data.store.id}">
+                    <img class="tapBarIcon" src="{% static 'img/ownerselfservicepicked.svg' %}" alt="셀프 서비스 아이콘" />
+                    <p class="tapBarLabel picked">셀프 서비스</p>
+                </a>
+                <a class="tapBarBox" href="">
+                    <img class="tapBarIcon" src="{% static 'img/setting.svg' %}" alt="셀프 서비스 아이콘" />
+                    <p class="tapBarLabel picked">설정</p>
+                </a>
+            </div>
+        </main>
+    </body>
+    <script src="../js/OwnerSelfservicePage.js"></script>
 </html>

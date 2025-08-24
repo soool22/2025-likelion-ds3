@@ -16,7 +16,6 @@ main{
     justify-self: center;
     min-width: 430px;
     min-height: 100dvh;
-    margin-bottom: 65px; 
     background-color: white;
     flex-direction:column;
 }
@@ -124,6 +123,7 @@ header{
     font-weight: 500;
     white-space: nowrap;
     background-color: #fff;
+    text-decoration: none;
 }
 
 #container{
@@ -227,7 +227,7 @@ header{
 }
 
 #lastBox{
-    margin-top: 22px;
+    margin-top: 83px;
     display: flex;
     gap: 5px;
 }
