@@ -77,7 +77,7 @@ def mission_delete(request, mission_id):
 
 ################ 소비자용 ################
 
-# 참여 중인 챌린지 조회
+# 참여 중인 챌린지 조회 
 @login_required
 def my_mission(request):
     now = timezone.now()
@@ -103,17 +103,18 @@ def my_mission(request):
         .order_by('mission__created_at')
 
     # 추천 챌린지 계산
-    user_lat, user_lon, _ = get_user_location(request.user)
+    user_lat, user_lon, user_gu = get_user_location(request.user)  # <-- gu_name까지 가져오기
 
     # 이미 진행 중이거나 완료한 챌린지 ID
     excluded_ids = MissionProgress.objects.filter(
         user=request.user
     ).values_list('mission_id', flat=True)
 
-    # 추천 후보
+    # 추천 후보 (현재 진행 가능 + 내 지역구 필터링)
     candidate_missions = Mission.objects.filter(
         start_date__lte=now,
-        end_date__gte=now
+        end_date__gte=now,
+        store__gu_name=user_gu   # 🔥 지역구 필터링 추가
     ).exclude(id__in=excluded_ids).select_related('store')
 
     # 거리 계산
@@ -133,6 +134,7 @@ def my_mission(request):
         "recommended": recommended,
         "status": status,
     })
+
 
 # 진행도 업데이트 (누적 방문/기간 내 방문)
 @login_required
