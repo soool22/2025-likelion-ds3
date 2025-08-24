@@ -14,8 +14,16 @@
             <header>
                 <div id="headerBox">
                     <div id="headerSmallBox">
-                        <p id="openState">오픈 예정</p>
-                        <p id="openTime"> {{ data.store.open_time|time:"H:i" }}</p>
+                        {% if data.store.open_time and data.store.close_time %}
+                            {% if data.is_open %}
+                                <p id="openState" style="color:green;">영업 중</p>
+                            {% else %}
+                                <p id="openState" style="color:gray;">오픈 예정</p>
+                            {% endif %}
+                            <p id="openTime">
+                                {{ data.store.open_time|time:"H:i" }} ~ {{ data.store.close_time|time:"H:i" }}
+                            </p>
+                        {% endif %}
                     </div>
                     <a href="{% url 'stores:store-update' data.store.id %}" id="change">
                         변경
@@ -39,14 +47,13 @@
                         </div>
                         <div class="serviceContentBox">
                             <div>
-                                <div class="font11">누적 방문</div>
-                                <p class="serviceContent">{{ data.total_visits }}명</p>
+                                <div class="font11">오늘 방문</div>
+                                <p class="serviceContent">{{ data.today_visits }}명</p>
                                 
                             </div>
                             <div>
-                                <div class="font11" style="margin-top: 9px;">누적 챌린지</div>
-                                <p class="serviceContent">{{ data.total_challenges }}명</p>
-                                
+                                <div class="font11" style="margin-top: 9px;">오늘 챌린지</div>
+                                <p class="serviceContent">{{ data.today_challenges }}명</p>
                             </div>
                             
                         </div>
@@ -86,7 +93,7 @@
                         </div>
                         <div class="line">
                             <div class="font13">점주 코드</div>
-                            <div class="font16"> {{ form.secret_code }}</div>
+                            <div class="font16"> {{ data.store.secret_code }}</div>
                         </div>
                         {% if store %}
                             <img src="{{ store_qr_url }}" alt="QR 코드" style="display: flex; align-self: center;">
@@ -129,7 +136,7 @@
                             <div>
                                 <div class="font11" style="margin-top: 9px;">챌린지별 누적 참여</div>
                                 <li class="font11">누적 금액</li>
-                                <p class="serviceContent" style="margin-left: 5px;">{{ data.challenge_participation.amount }}원</p>
+                                <p class="serviceContent" style="margin-left: 5px;">{{ data.challenge_participation.amount }}명</p>
                                 <li class="font11">누적 방문</li>
                                 <p class="serviceContent"style="margin-left: 5px;">{{ data.challenge_participation.visit_count }}명</p>
                                 <li class="font11">기간 내 방문</li>

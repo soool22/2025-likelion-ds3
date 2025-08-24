@@ -6,6 +6,7 @@ from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
 from django.http import JsonResponse
 from collections import defaultdict
 from django.db import models
+import datetime
 
 from .models import Store, Category
 from .forms import StoreForm
@@ -69,6 +70,8 @@ def store_location(request):
 def owner_store_list(request):
     stores = request.user.store_set.all()
     today = timezone.localdate()
+    now = timezone.localtime()  # 현재 시간
+
     store_data = []
 
     for store in stores:
@@ -79,16 +82,29 @@ def owner_store_list(request):
         # 챌린지 통계 가져오기 (utils.py 함수 사용)
         challenge_stats = challenge_summary(store)
 
+        # 운영 시간 체크
+        if store.open_time and store.close_time:
+            open_time_today = timezone.make_aware(
+                datetime.datetime.combine(today, store.open_time)
+            )
+            close_time_today = timezone.make_aware(
+                datetime.datetime.combine(today, store.close_time)
+            )
+            is_open = open_time_today <= now <= close_time_today
+        else:
+            is_open = False
+
         store_data.append({
             'store': store,
             'today_visits': today_visits,
             'total_visits': total_visits,
-            **challenge_stats,  # challenge_summary에서 나온 모든 값 포함
+            'is_open': is_open,
+            **challenge_stats,
         })
 
     return render(request, 'stores/owner-store-list.html', {
         'store_data': store_data,
-        'now': timezone.now()
+        'now': now
     })
 
 # 등록한 가게 삭제
@@ -127,7 +143,26 @@ def store_update(request, store_id):
 # 셀프 서비스
 def self_service(request,store_id):
     store = get_object_or_404(Store, id=store_id, owner=request.user)
-    return render(request, 'stores/self-service.html', {'store': store})
+    
+    is_open = False
+    now = timezone.localtime()  # aware datetime
+
+    if store.open_time and store.close_time:
+        # 오늘 날짜와 시간 결합
+        open_dt = datetime.datetime.combine(now.date(), store.open_time)
+        close_dt = datetime.datetime.combine(now.date(), store.close_time)
+
+        # aware datetime으로 변환
+        open_dt = timezone.make_aware(open_dt, timezone.get_current_timezone())
+        close_dt = timezone.make_aware(close_dt, timezone.get_current_timezone())
+
+        if open_dt <= now <= close_dt:
+            is_open = True
+
+    return render(request, 'stores/self-service.html', {
+        'store': store,
+        'is_open': is_open
+    })
 
 # 가게 상세 페이지
 def owner_store_detail(request, store_id):
@@ -286,6 +321,14 @@ def store_search(request):
     category_slug = request.GET.get('category')
     
     stores = Store.objects.all().order_by('-id')
+
+    # 사용자 위치
+    user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
+    
+    # 지역구 기준 필터링
+    stores = Store.objects.all().order_by('-id')
+    if gu_name:
+        stores = stores.filter(gu_name=gu_name)
     
     if query:
         stores = stores.filter(name__icontains=query)
@@ -293,9 +336,6 @@ def store_search(request):
     if category_slug:
         stores = stores.filter(category__slug=category_slug)
 
-    # 사용자 위치
-    user_lat, user_lng, _ = get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
-    
     # 거리 계산 (상세 페이지처럼 직접 처리)
     for store in stores:
         if store.latitude and store.longitude:
