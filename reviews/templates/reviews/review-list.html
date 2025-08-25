@@ -20,7 +20,7 @@
             <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form"></form>
             {% csrf_token %}
             <div id="containerTop">
-                <p class="storeName">산책</p>
+                <p class="storeName">{{ store.name }}</p>
                 <div class="storeScore">
                     <div class="scoreBox">
                         <p class="scoreComment">음식은 어떠셨나요?</p>

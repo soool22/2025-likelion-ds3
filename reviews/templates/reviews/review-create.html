@@ -8,25 +8,25 @@
     <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
 </head>
 <body>
-    <main>
-        <header>
-            <a href="{% url 'stores:store-detail' store.id %}" style="text-decoration: none;">
-            <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
-            </a>
-            <div class="title text" > 평가 및 리뷰 작성 </div>
-            <p> </p>
-        </header>
-        <div id="container">
-            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form">
+<main>
+    <header>
+        <a href="{% url 'stores:store-detail' store.id %}" style="text-decoration: none;">
+            <img src="{% static 'IMG/x.svg'%}" class="back-img">
+        </a>
+        <div class="title text">평가 및 리뷰 작성</div>
+        <p></p>
+    </header>
 
-
+    <div id="container">
+        <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form">
             {% csrf_token %}
+
+            <!-- 상단 별점 + 가게 이름 -->
             <div id="containerTop">
                 <p class="storeName">{{ store.name }}</p>
                 <div class="storeScore">
                     <div class="scoreBox">
                         <p class="scoreComment">음식은 어떠셨나요?</p>
-                        
                         <div class="starBox" id="rating">
                             <img data-value="1" src="{% static 'img/stargray.svg' %}" class="star"/>
                             <img data-value="2" src="{% static 'img/stargray.svg' %}" class="star"/>
@@ -35,75 +35,143 @@
                             <img data-value="5" src="{% static 'img/stargray.svg' %}" class="star"/>
                         </div>
                         <input type="hidden" name="rating" id="rating-input" required>
-                                            </div>
-                    {% if store.image %}
-                    <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="storeImg" />
-                    {% else %}
-                    <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
-                    {% endif %}
+                    </div>
 
+                    {% if store.image %}
+                        <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="storeImg" />
+                    {% else %}
+                        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150">
+                    {% endif %}
                 </div>
             </div>
+
+            <!-- 하단 리뷰 작성 -->
             <div id="containerBottom">
                 <p class="storeName">자세한 음식 리뷰를 작성해주세요</p>
                 <textarea class="review" name="comment" placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."></textarea>
-                <label class="image" type="image">
-                    <input type="file" id="fileInput" name="images" accept="image/*" multiple hidden>
-                    <div class="box">
-                        <img src="{% static 'img/camera.png'%}"/>
-                        <p class="innerBox">사진 추가(0/3)</p>
-                    </div>
-                </label>
+
                 <button class="QR" type="submit">
                     <div class="box">
                         <img src="{% static 'img/my-qr.png'%}"/>
                         <p class="innerBox">리뷰 작성</p>
                     </div>
                 </button>
+
+                <!-- 사진 추가 -->
+                <label class="image" type="image">
+                    <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    <div class="box">
+                        <img src="{% static 'img/camera.png'%}"/>
+                        <p class="innerBox">사진 추가(0/3)</p>
+                    </div>
+                </label>
+                <div id="preview"></div>
             </div>
-            </form>
-        </div>
-    </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        const stars = document.querySelectorAll('#rating .star');
-        const ratingInput = document.getElementById('rating-input');
-        let selectedRating = 0;
+        </form>
+    </div>
+</main>
 
-        const graySrc   = "{% static 'img/stargray.svg' %}";
-        const pickedSrc = "{% static 'img/starpicked.svg' %}";
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const stars = document.querySelectorAll('#rating .star');
+    const ratingInput = document.getElementById('rating-input');
+    let selectedRating = 0;
 
-        // 별 이미지 업데이트
-        function updateStars(hoverIndex = -1) {
-            stars.forEach((star, i) => {
-                if (hoverIndex >= 0) {
-                    // hover 상태 → hoverIndex까지 전부 picked
-                    star.src = i <= hoverIndex ? pickedSrc : graySrc;
-                } else {
-                    // 클릭 확정 상태 → selectedRating까지만 picked
-                    star.src = i < selectedRating ? pickedSrc : graySrc;
-                }
-            });
-        }
+    const graySrc   = "{% static 'img/stargray.svg' %}";
+    const pickedSrc = "{% static 'img/starpicked.svg' %}";
 
-        stars.forEach((star, idx) => {
-            star.addEventListener('mouseover', () => updateStars(idx));
-            star.addEventListener('mouseout', () => updateStars(-1));
-            star.addEventListener('click', () => {
-                selectedRating = idx + 1;
-                ratingInput.value = selectedRating;
-                updateStars(-1);
-            });
-        });
-
-        // 별점 미선택 시 제출 방지
-        document.getElementById('review-form').addEventListener('submit', (e) => {
-            if (!ratingInput.value) {
-                e.preventDefault();
-                alert("별점을 선택해주세요.");
+    // 별점 hover / 클릭
+    function updateStars(hoverIndex = -1) {
+        stars.forEach((star, i) => {
+            if (hoverIndex >= 0) {
+                star.src = i <= hoverIndex ? pickedSrc : graySrc;
+            } else {
+                star.src = i < selectedRating ? pickedSrc : graySrc;
             }
         });
+    }
+
+    stars.forEach((star, idx) => {
+        star.addEventListener('mouseover', () => updateStars(idx));
+        star.addEventListener('mouseout', () => updateStars(-1));
+        star.addEventListener('click', () => {
+            selectedRating = idx + 1;
+            ratingInput.value = selectedRating;
+            updateStars(-1);
+        });
     });
-    </script>
-</body><script src="{% static 'JS/WriteReview.js'%}"></script>
+
+    // 별점 미선택 시 제출 방지
+    const reviewForm = document.getElementById('review-form');
+    reviewForm.addEventListener('submit', (e) => {
+        if (!ratingInput.value) {
+            e.preventDefault();
+            alert("별점을 선택해주세요.");
+        }
+    });
+
+    // 파일 누적 및 미리보기
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    let filesArray = [];
+
+    function updatePreview() {
+        preview.innerHTML = '';
+        filesArray.forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.marginRight = '5px';
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = 'X';
+                btn.style.marginLeft = '5px';
+                btn.addEventListener('click', () => {
+                    filesArray.splice(idx, 1);
+                    updatePreview();
+                });
+
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'inline-block';
+                wrapper.appendChild(img);
+                wrapper.appendChild(btn);
+                preview.appendChild(wrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    fileInput.addEventListener('change', () => {
+        const newFiles = Array.from(fileInput.files);
+        filesArray = filesArray.concat(newFiles);
+        updatePreview();
+    });
+
+    // Ajax 전송
+    reviewForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // 일반 제출 막기
+        const formData = new FormData();
+
+        // csrf token
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        formData.append('rating', ratingInput.value);
+        formData.append('comment', reviewForm.querySelector('textarea[name=comment]').value);
+
+        filesArray.forEach(file => formData.append('images', file));
+
+        fetch(reviewForm.action, { method: 'POST', body: formData })
+        .then(res => res.text())
+        .then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>
+</body>
 </html>
