@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/WriteReview.css'%}" />
 </head>
 <body>
     <main>
         <header>
+<<<<<<< HEAD
             <a href="{% url 'stores:store-detail' store.id %}" style="text-decoration: none;">
             <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
+=======
+            <a href="./MyReviewWrite.html" style="text-decoration: none;">
+            <img src="{% static 'img/x.svg'%}" class="back-img"></img>
+>>>>>>> dbb1db092b32fb7f1895c70b749f6c12f3573279
             </a>
             <div class="title text" > 평가 및 리뷰 작성 </div>
             <p> </p>
@@ -42,6 +47,53 @@
                     <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
                     {% endif %}
 
+<<<<<<< HEAD
+=======
+                    </div>
+                    <div class="evaluation-service">
+                        <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
+                        <div class="evaluation-service-star">
+                            <img src="{% static 'img/my-star.png'%}" class="s-star1">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star2">
+                            <img src="{% static 'img/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star3">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star4">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
+                            <img src="{% static 'img/my-star.png'%}"class="s-star5">
+                            <img src="{% static 'img/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
+                        </div>
+                    </div>
+                    <!-- ⭐ 숨겨진 input들 추가 -->
+                    <input type="hidden" id="food-rating">
+                    <input type="hidden" id="service-rating">
+                    <input type="hidden" name="rating" id="rating-input" required>
+                </div>
+                {% if store.image %}
+            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지"  class="store-img">
+            {% else %}
+                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지"  class="store-img">
+            {% endif %}
+            </div>
+            <div class="separation-box"></div>
+            <div class="write-review">
+                <div class="text">자세한 리뷰를 작성해주세요</div>
+                <textarea class="write-review-box" name="comment"
+                    placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해
+    자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."
+                required
+                ></textarea>
+                <div class="input-area">
+                    <div class="upload-content">
+                        <img src="{% static 'img/camera.png'%}" alt="업로드" class="upload-icon">
+                        <span class="upload-text">사진 추가</span>
+                    </div>
+                    <input type="file" class="file-input" id="fileInput" name="images" accept="image/*" multiple>
+                </div>
+                <div class="stemp-area">
+                    <button type="submit" class="stemp-area-text">완료</button>
+>>>>>>> dbb1db092b32fb7f1895c70b749f6c12f3573279
                 </div>
             </div>
             <div id="containerBottom">

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <link rel="stylesheet" href="{% static "CSS/MyPoint.css" %}" />
+    <link rel="stylesheet" href="{% static "css/MyPoint.css" %}" />
 </head>
 <body>
     <main>
@@ -19,7 +19,7 @@
 
         <header>
             <a href="{% url 'home:main' %}">
-                <img src="{% static 'IMG/my-back.png'%}" class="back-img"></img>
+                <img src="{% static 'img/my-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 포인트 </div>
         </header>
@@ -48,12 +48,12 @@
                     </div>
                     <div class="mission-btn">
                         <a href="{% url 'visit_rewards:my_character' %}" class="mission-QR" style="text-decoration:none">
-                            <img src="{% static 'IMG/pen.png'%}" class="qr-img">
+                            <img src="{% static 'img/pen.png'%}" class="qr-img">
                             <div class="text" style="font-size: 14px;margin-left: 11px;">내 캐릭터</div>
                         </a>
                         <div class="other-btn-box">
                             <a class="other-btn" href="{% url 'visit_rewards:shop_gifticons' %}">
-                                <img src="{% static 'IMG/home-y.svg'%}" class="benefit-img">
+                                <img src="{% static 'img/home-y.svg'%}" class="benefit-img">
                                 <div class="text" style="font-size: 14px;margin-left: 11px;">포인트 샵</div>
                             </a>
                         </div>

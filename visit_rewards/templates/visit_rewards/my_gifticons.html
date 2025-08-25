@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/MyCoupon.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/MyCoupon.css'%}" />
     <style>
       .gifticon-img {
           cursor: pointer;
@@ -25,7 +25,7 @@
     <main>
         <header>
             <a href="{% url 'accounts:mypage' %}" style="text-decoration: none;">
-                <img src="{%static "IMG/my-back.png"%}" class="back-img"></img>
+                <img src="{%static "img/my-back.png"%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 쿠폰 </div>
         </header>
@@ -51,7 +51,7 @@
 
                         <div class="other-btn-box">
                             <button class="use-coupon-btn" data-id="{{ coupon.id }}" style="text-decoration:none">
-                                <img src="{% static 'IMG/my-coupon.png'%}" class="coupon-img">
+                                <img src="{% static 'img/my-coupon.png'%}" class="coupon-img">
                                 <div class="text" style="font-size: 14px;margin-left: 5px;">쿠폰 사용하기</div>
                             </button>
                         </div>

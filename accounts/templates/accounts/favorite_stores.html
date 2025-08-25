@@ -5,18 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/InterestingStore.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/InterestingStore.css'%}" />
 </head>
 <body>
     <main>
         <header>
             <!-- 뒤로가기 버튼 -->
             <a href="{% url 'home:main' %}" class="back-btn">
-                <img src="{% static 'IMG/edit-back.png'%}" alt="뒤로가기">
+                <img src="{% static 'img/edit-back.png'%}" alt="뒤로가기">
             </a>
         
             <!-- 제목 -->
             <div class="tittle-box">
+<<<<<<< HEAD
+=======
+                <img src="{% static 'img/intereststorepicked.svg' %}" alt="아이콘">
+>>>>>>> dbb1db092b32fb7f1895c70b749f6c12f3573279
                 <div class="tittle text">관심 매장</div>
             </div>
         </header>
@@ -41,7 +45,7 @@
                             <div class="third-line">
                                 <div class="position text">⭐ {{ fav.store.rating|floatformat:1 }} ({{ fav.store.reviews.count }})</div>
                                 <div class="operation">
-                                    <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+                                    <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6">
                                     {% if fav.store.is_open %}
                                         <div class="time text" style="color:#0094D6">영업중</div>
                                     {% else %}
