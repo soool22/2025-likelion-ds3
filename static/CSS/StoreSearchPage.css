@@ -201,6 +201,17 @@ header{
     align-items: center;
 }
 
+#sheet {
+  touch-action: none;          /* 시트 제스처 충돌 방지 */
+  will-change: transform;      /* 스크롤/애니메이션 최적화 */
+}
+
+/* 스크롤 영역은 그대로 스크롤 가능 */
+#sheet .sheet-body {
+  touch-action: pan-y;         /* 내부 세로 스크롤 허용 */
+}
+
+
 .sheetHeaderBox{
     width: auto;
     height: 22px;
