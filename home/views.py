@@ -73,7 +73,7 @@ def main(request):
     if request.user.is_authenticated:
         preference, _ = UserPreference.objects.get_or_create(user=request.user)
         if not preference.last_ai_recommendation or not preference.last_ai_call_time or \
-            timezone.now() - preference.last_ai_call_time >= timedelta(minutes=1):
+            timezone.now() - preference.last_ai_call_time >= timedelta(minutes=5):
             recommended_stores = store_recommend(request.user)
         else:
             recommended_stores = preference.last_ai_recommendation

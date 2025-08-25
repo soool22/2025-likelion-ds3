@@ -94,7 +94,7 @@ def store_recommend(user):
     # 캐시가 없거나 30분 이상 지난 경우 새 호출
     if not preference.last_ai_recommendation or \
        not preference.last_ai_call_time or \
-       timezone.now() - preference.last_ai_call_time >= timedelta(minutes=30):
+       timezone.now() - preference.last_ai_call_time >= timedelta(minutes=5):
 
         categories = preference.preferred_categories.split(",") if preference.preferred_categories else []
         tastes = preference.preferred_tastes.split(",") if preference.preferred_tastes else []
