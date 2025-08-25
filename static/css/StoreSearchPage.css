@@ -363,3 +363,6 @@ header{
     font-weight: 600;
     margin: 0;
 }
+
+#sheet { touch-action: none; }
+#sheet .sheet-body { touch-action: pan-y; } /* 내용 스크롤은 그대로 */
