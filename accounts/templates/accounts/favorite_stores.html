@@ -1,87 +1,63 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/InterestingStore.css'%}" />
-</head>
-<body>
-    <main>
-        <header>
-            <!-- 뒤로가기 버튼 -->
-            <a href="{% url 'home:main' %}" class="back-btn">
-                <img src="{% static 'IMG/edit-back.png'%}" alt="뒤로가기">
-            </a>
-        
-            <!-- 제목 -->
-            <div class="tittle-box">
-                <img src="{% static 'IMG/intereststorepicked.svg' %}" alt="아이콘">
-                <div class="tittle text">관심 매장</div>
-            </div>
-        </header>
-        
-
-        <!-- 관심 매장 리스트 -->
-        <div class="store-info-box">
-            {% if favorites %}
-                {% for fav in favorites %}
-                    <a href="{% url 'stores:store-detail' fav.store.id %}" class="box" style="text-decoration: none;">
-                        <div class="left-box">
-                            <div class="first-line text">
-                                {{ fav.store.address }} 
-                                {% for category in fav.store.category.all %}
-                                    {{ category.name }}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </div>
-                            <div class="second-line">
-                                <div class="num text">{{ forloop.counter }}</div>
-                                <div class="store-name text">{{ fav.store.name }}</div>
-                            </div>
-                            <div class="third-line">
-                                <div class="position text">⭐ {{ fav.store.rating|floatformat:1 }} ({{ fav.store.reviews.count }})</div>
-                                <div class="operation">
-                                    <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DDAL-LANG</title>
+        <link rel="stylesheet" href="{% static 'CSS/InterestingStore.css'%}" />
+    </head>
+    <body>
+        <main>
+            <header>
+            <div class="tittle text" >관심 매장</div>
+            </header>
+            <div class="store-list">
+                {% if favorites %}
+                    {% for fav in favorites %}
+                    <a href="{% url 'stores:store-detail' fav.store.id %}" class="store-link">
+                        <div class="list {{ fav.id }}">
+                            <img src="{% static 'img/default_store.png'%}" class="store-img">
+                            <div class="store-text">
+                                <div class="store-name">{{ fav.store.name }}</div>
+                                <div class="store-score">
+                                    <img src="{% static 'IMG/star-yellow.png'%}" class="yellow-star">
+                                    <div class="store-score-num">{{ fav.store.rating|floatformat:1 }}</div>
+                                    <div class="store-score-review">({{ fav.store.reviews.count }})</div>
+                                </div>
+                                <div class="store-info">
                                     {% if fav.store.is_open %}
-                                        <div class="time text" style="color:#0094D6">영업중</div>
+                                        영업 중
                                     {% else %}
-                                        <div class="time text" style="color:#0094D6">영업 종료</div>
+                                        영업 종료
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
-                        {% if fav.store.image %}
-                            <img src="{{ fav.store.image.url }}" alt="{{ fav.store.name }} 이미지" class="store-img">
-                        {% else %}
-                            <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" class="store-img">
-                        {% endif %}
                     </a>
-                {% endfor %}
-            {% else %}
+                    {% endfor %}
+                {% else %}
                 <p class="store-name">찜한 가게가 없습니다.</p>
-            {% endif %}
-        </div>
-
-        <!-- 하단 탭바 -->
-        <div id="tapBar">
-            <a class="tapBarBox" href="{% url 'home:main'%}">
-                <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                <p class="tapBarLabel">홈</p>
-            </a>
-            <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
-                <p class="tapBarLabel">가게 검색</p>
-            </a>
-            <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                <img class="tapBarIcon" src="{% static 'img/intereststorepicked.svg'%}" alt="관심 매장 아이콘" />
-                <p class="tapBarLabel picked">관심 매장</p>
-            </a>
-            <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
-                <p class="tapBarLabel">내 정보</p>
-            </a>
-        </div>
-    </main>
-</body>
+                {% endif %}
+            </div>
+            <div id="tapBar">
+                <a class="tapBarBox" href="{% url 'home:main'%}">
+                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                    <p class="tapBarLabel">홈</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                    <p class="tapBarLabel">가게 검색</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                    <img class="tapBarIcon" src="{% static 'img/intereststorepicked.svg'%}" alt="관심 매장 아이콘" />
+                    <p class="tapBarLabel picked">관심 매장</p>
+                </a>
+                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
+                    <p class="tapBarLabel">내 정보</p>
+                </a>
+            </div>
+        </main>
+    </body>
 </html>
