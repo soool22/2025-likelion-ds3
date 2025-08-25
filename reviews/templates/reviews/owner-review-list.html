@@ -132,14 +132,6 @@
                                 {% else %}
                                 <p> </p>
                                 {% endif %}
-                                {% if review.user != request.user %}
-                                <form method="post" action="{% url 'reviews:review-like-toggle' review.id %}">
-                                    {% csrf_token %}
-                                    <button class="helpBtn" type="submit">
-                                        도움이 돼요
-                                    </button>
-                                </form>
-                                {% endif %}
                                 {% if review.user == request.user %}
                                     <a class="helpBtn" href="{% url 'reviews:review-delete' review.id %}">삭제</a>
                                 {% endif %}

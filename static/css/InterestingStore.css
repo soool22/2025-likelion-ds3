@@ -31,9 +31,11 @@ header {
     margin-bottom: 20px;
     position: relative; /* 뒤로가기 버튼 위치용 */
 }
+
 a{
     text-decoration: none;
 }
+
 /* 뒤로가기 버튼 */
 .back-btn {
     position: absolute;

@@ -8,7 +8,7 @@ button{
 main{
     display: flex;
     justify-self: center;
-    height: 100dvh; 
+    /* height: 100dvh;  */
     background-color: white;
     flex-direction:column;
     position: relative;
@@ -218,6 +218,7 @@ input:focus {
     font-weight: 500;
 }
 
+<<<<<<< HEAD:static/css/OwnerStoreRegistration.css
 textarea{
     color: #000;
 font-family: Inter;
@@ -225,4 +226,20 @@ font-size: 15px;
 font-style: normal;
 font-weight: 500;
 line-height: normal;
+=======
+#btn-search{
+    border: 0;
+    background-color: transparent;
+    outline: none;
+}
+
+.imageLabel{
+    display: flex;
+    gap: 10px;
+}
+
+.imageLabel p{
+    font-weight: 600;
+    color: #7b7b7b;
+>>>>>>> 1f599d87741c9568fcbc1e5ac7690bc894cd9ad3:static/CSS/OwnerStoreRegistration.css
 }

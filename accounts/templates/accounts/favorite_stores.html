@@ -43,18 +43,13 @@
                                 <div class="operation">
                                     <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6">
                                     {% if fav.store.is_open %}
-                                        <div class="time text" style="color:#0094D6">영업중</div>
+                                        영업 중
                                     {% else %}
-                                        <div class="time text" style="color:#0094D6">영업 종료</div>
+                                        영업 종료
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
-                        {% if fav.store.image %}
-                            <img src="{{ fav.store.image.url }}" alt="{{ fav.store.name }} 이미지" class="store-img">
-                        {% else %}
-                            <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" class="store-img">
-                        {% endif %}
                     </a>
                 {% endfor %}
             {% else %}
