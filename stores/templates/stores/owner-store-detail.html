@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="{% static 'css/StoreDetailPage.css'%}" />
     </head>
     <body>
-        <main>
+        <main style="margin-bottom:0px">
             <div id="container">
                 <header>
                     <div id="headerBox">
@@ -146,8 +146,9 @@
                 </div>
 
                 </div>
+                {% endcomment %}
                 <div class="containerContent">
-                    <div class="containerTitle">진행중인 챌린지</div>
+                    <div class="containerTitle" style="padding:9px 40px; margin-top:37px;">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
                         {% for mission in missions %}
                         <p class="containerSmallContent">

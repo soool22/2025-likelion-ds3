@@ -10,14 +10,16 @@
 <body>
     <main>
         <header>
-            <a href="./MyReviewWrite.html" style="text-decoration: none;">
+            <a href="{% url 'stores:store-detail' store.id %}" style="text-decoration: none;">
             <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
             </a>
             <div class="title text" > 평가 및 리뷰 작성 </div>
             <p> </p>
         </header>
         <div id="container">
-            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form"></form>
+            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form">
+
+
             {% csrf_token %}
             <div id="containerTop">
                 <p class="storeName">산책</p>
@@ -32,7 +34,6 @@
                             <img data-value="4" src="{% static 'img/stargray.svg' %}" class="star"/>
                             <img data-value="5" src="{% static 'img/stargray.svg' %}" class="star"/>
                         </div>
-<<<<<<< HEAD
                         <input type="hidden" name="rating" id="rating-input" required>
                                             </div>
                     {% if store.image %}
@@ -41,58 +42,11 @@
                     <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
                     {% endif %}
 
-=======
-                    </div>
-                    <div class="evaluation-service">
-                        <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
-                        <div class="evaluation-service-star">
-                            <img src="{% static 'IMG/my-star.png'%}" class="s-star1">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star1" style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star2">
-                            <img src="{% static 'IMG/star-yellow.png'%}" class="s-y-star2"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star3">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star3"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star4">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star4"style="width: 22px; display: none;">
-                            <img src="{% static 'IMG/my-star.png'%}"class="s-star5">
-                            <img src="{% static 'IMG/star-yellow.png'%}"  class="s-y-star5"style="width: 22px; display: none;">
-                        </div>
-                    </div>
-                    <!-- ⭐ 숨겨진 input들 추가 -->
-                    <input type="hidden" id="food-rating">
-                    <input type="hidden" id="service-rating">
-                    <input type="hidden" name="rating" id="rating-input" required>
-                </div>
-                {% if store.image %}
-            <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지"  class="store-img">
-            {% else %}
-                <img src="{% static 'img/default_store.png' %}" alt="Default 이미지"  class="store-img">
-            {% endif %}
-            </div>
-            <div class="separation-box"></div>
-            <div class="write-review">
-                <div class="text">자세한 리뷰를 작성해주세요</div>
-                <textarea class="write-review-box" name="comment"
-                    placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해
-    자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."
-                required
-                ></textarea>
-                <div class="input-area">
-                    <div class="upload-content">
-                        <img src="{% static 'IMG/camera.png'%}" alt="업로드" class="upload-icon">
-                        <span class="upload-text">사진 추가</span>
-                    </div>
-                    <input type="file" class="file-input" id="fileInput" name="images" accept="image/*" multiple>
-                </div>
-                <div class="stemp-area">
-                    <button type="submit" class="stemp-area-text">완료</button>
->>>>>>> 5834bfc3fc6d35b5d0866c0e4d2eefd5a5f252ec
                 </div>
             </div>
             <div id="containerBottom">
                 <p class="storeName">자세한 음식 리뷰를 작성해주세요</p>
-                <textarea class="review" name="comment" placeholder="">주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히
-써주시면 다른 사람들에게 유용한 리뷰가 돼요.</textarea>
+                <textarea class="review" name="comment" placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."></textarea>
                 <label class="image" type="image">
                     <input type="file" id="fileInput" name="images" accept="image/*" multiple hidden>
                     <div class="box">
