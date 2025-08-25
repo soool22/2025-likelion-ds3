@@ -12,13 +12,8 @@
 <body>
     <main>
         <header>
-<<<<<<< HEAD
-            <a href="{% url 'stores:self-service' store.id %}">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
-=======
             <a href="{% url 'stores:owner-store-list' %}">
                 <img src="{% static 'img/edit-back.png'%}" class="back-img"></img>
->>>>>>> dbb1db092b32fb7f1895c70b749f6c12f3573279
             </a>
             <div class="tittle-text"> 상품/메뉴 목록 </div>
         </header>
@@ -26,13 +21,13 @@
             <div class="food-list">
                 <div class="menu-box">
                     <div class="first-line">
-                        <div style="display:flex;"> 
+                        <div style="display:flex; align-items: center"> 
                                 {% if product.is_main %}
                                     <div class="main-menu">대표</div>
                                 {% endif %}
-                            <div class="menu-name">{{ product.name }}</div>
+                            <div class="menu-name"style="margin-left:10px">{{ product.name }}</div>
                         </div>
-                        <div class="menu-name">{{ product.price|floatformat:0|intcomma }}</div>
+                        <div class="menu-name" >{{ product.price|floatformat:0|intcomma }}</div>
                     </div>
                     <div class="menu-description">{{ product.description }}</div>
                     <div class="third-line">
@@ -48,7 +43,7 @@
                 </div>
             </div>
         {% empty %}
-            등록된 상품이 없습니다.
+            <div  style="text-align:center; margin-top:3px;">등록된 상품이 없습니다.</div>
         {% endfor %}
         <!-- 새 상품 등록 버튼 -->
         <a href="{% url 'products:product-create' store.id %}"  class="new-box">

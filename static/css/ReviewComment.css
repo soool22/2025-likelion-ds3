@@ -1,11 +1,13 @@
 body{
     background-color:#fafafa;
     margin: 0px;
-    -ms-overflow-style: none;
 }
-
+body{
+ -ms-overflow-style: none;
+ }
+ 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 main{
