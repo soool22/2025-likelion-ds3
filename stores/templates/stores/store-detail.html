@@ -49,7 +49,7 @@
                             {% endfor %}
                         </p>
                         <p id="storeName">{{ store.name }}</p>
-                        <a href="{% url 'reviews:review-create' store.id %}">
+                        <a href="{% url 'reviews:review-list' store.id %}">
                             <div id="scoreBox">
                                 <a id="scoreSmallBox" href="{% url 'reviews:review-list' store.id %}">
                                     <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>

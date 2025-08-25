@@ -1,268 +1,97 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="{% static 'css/ReviewComment.css'%}" />
-    </head>
-    <body>
-        <main>
-            <div id="container">
-                <header>
-                    <div id="headerBox">
-                        <a href="{% url 'stores:store-detail' store.id %}">
-                            <img id="sideClick" src="{% static 'img/leftside.svg'%}"/>
-                        </a>
-                        <img id="star" src="{% static 'img/star.svg'%}"/>
-                        <button id="keep" type="button">찜하기</button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'CSS/MyReview.css'%}" />    
+</head>
+<body>
+    <main>
+        <header>
+            <a href="{% url 'home:main' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+            </a>
+            <div class="tittle text"> 내 리뷰 관리 </div>
+        </header>
+        <div class="separation-box"></div>
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-box">
+                <a href="{% url 'stores:store-detail' review.store.id %}">
+                    <div class="store-name text">{{ review.store.name }}</div>
+                </a>
+                <div class="second-line">
+                    <div class="review-star">
+                        {{ review.stars }}
                     </div>
-                </header>
-                <div id="containerBox">
-                    {% if store.image %}
-                    <a href="{{ store.image.url }}" target="_blank">
-                        <img id="storeImg" src="{{ store.image.url }}" alt="{{ store.name }}"/>
-                    </a>
-                    {% else %}
-                        <img src="{% static 'img/default_store.png' %}" alt="Default 이미지">
-                    {% endif %}
-                    <div id="storeInfoBox">
-                        <p id="category">
-                            {% for category in store.category.all %}
-                                {{ category.name }}{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p id="storeName">{{ store.name }}</p>
-                    </div>
-                    <div id="reviewScoreBox">
-                        <div id="reviewScore">
-                            <img id="bigStar" src="{% static 'img/starpicked.svg'%}">
-                            <div id="bigScoreBox">
-                                <p id="score">{{ avg_rating|floatformat:1 }}</p>
-                                <p id="scoreCount">({{ store.reviews.count }})</p>
-                            </div>
-                            <div id="scoreBarBox">
-                                <div class="barBox">
-                                    <p class="numStyle">5</p>
-                                    <div class="totalAchievement">
-                                        <div class="achievement"></div>
-                                    </div>
-                                    <p class="numStyle">({{ rating_counts.5 }})</p>
-                                </div>
-                                <div class="barBox">
-                                    <p class="numStyle">4</p>
-                                    <div class="totalAchievement">
-                                        <div class="achievement"></div>
-                                    </div>
-                                    <p class="numStyle">({{ rating_counts.4 }})</p>
-                                </div>
-                                <div class="barBox">
-                                    <p class="numStyle">3</p>
-                                    <div class="totalAchievement">
-                                        <div class="achievement"></div>
-                                    </div>
-                                    <p class="numStyle">({{ rating_counts.3 }})</p>
-                                </div>
-                                <div class="barBox">
-                                    <p class="numStyle">2</p>
-                                    <div class="totalAchievement">
-                                        <div class="achievement"></div>
-                                    </div>
-                                    <p class="numStyle">({{ rating_counts.2 }})</p>
-                                </div>
-                                <div class="barBox">
-                                    <p class="numStyle">1</p>
-                                    <div class="totalAchievement">
-                                        <div class="achievement"></div>
-                                    </div>
-                                    <p class="numStyle">({{ rating_counts.1 }})</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="date text">{{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})</div>
                 </div>
-                <div class="containerContent">
-                    <div id="sheetHeader">
-                        <a href="?sort=latest">
-                            <div class="sheetHeaderBox">
-                                <p class="sheetHeaderContent">최신순</p>
-                            </div>
-                        </a>
-                        <a href="?sort=rating_desc">
-                            <div class="sheetHeaderBox">
-                                <p class="sheetHeaderContent">별점 높은 순</p>
-                            </div>
-                        </a>
-                        <a href="?sort=rating_asc">
-                            <div class="sheetHeaderBox">
-                                <p class="sheetHeaderContent">별점 낮은 순</p>
-                            </div>
-                        </a>
-                        <a href="?sort=helpful">
-                            <div class="sheetHeaderBox">
-                                <p class="sheetHeaderContent">도움 많은 순</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="reviewBigBox">
-                    {% if reviews %}
-                        {% for review in reviews %}
-                        <div class="reviewBox" id="review-{{ review.id }}">
-                            <p class="userId">{{ review.user.username }}</p>
-                            <div class="starScoreBox">
-                                <div class="starBox">
-                                    {{ review.stars }}
-                                </div>
-                                <p class="date">{{ review.created_at|date:"Y-m-d" }} ({{ review.natural_days }})</p>
-                            </div>
-                            <p class="reviewContent">{{ review.comment|linebreaks }}</p>
-                            <div class="review-images">
-                                {% for img in review.images.all %}
-                                    {% if img.image %}
-                                        <a href="{{ img.image.url }}" target="_blank">
-                                            <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <div class="reviewLastBox">
-                                {% if review.helpful_count > 0 %}
-                                <p class="helpMent">{{ review.helpful_count }}명이 이 리뷰를 추천해요</p>
-                                {% else %}
-                                <p> </p>
-                                {% endif %}
-                                {% if review.user != request.user %}
-                                <form method="post" action="{% url 'reviews:review-like-toggle' review.id %}">
-                                    {% csrf_token %}
-                                    <button class="helpBtn" type="submit">
-                                        도움이 돼요
-                                    </button>
-                                </form>
-                                {% endif %}
-                                {% if review.user == request.user %}
-                                    <a class="helpBtn" href="{% url 'reviews:review-delete' review.id %}">삭제</a>
-                                {% endif %}
-                            </div>
-                        </div>
+                <div class="short-review text">{{ review.comment|linebreaks }}</div>
+                <!--이미지-->
+                <div class="review-images">
+                        {% for img in review.images.all %}
+                            {% if img.image %}
+                                <a href="{{ img.image.url }}" target="_blank">
+                                    <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                                </a>
+                            {% endif %}
                         {% endfor %}
                     </div>
-                    {% else %}
-                        아직 작성된 리뷰가 없습니다.
+
+                <div class="fourth-line">
+                    {% if review.likes.count > 0 %}
+                        <div class="recommend-num">{{ review.likes.count }}명이 추천해요</div>
                     {% endif %}
+                    <div style="display: flex; align-items: center;">
+                        <div class="delete-box">
+                        <img src="{% static 'IMG/delete.png'%}">
+                        <div class="delete text">
+                            <a class="delete text" href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="tapBar">
-                <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel">홈</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel picked">가게 검색</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
-                    <p class="tapBarLabel">관심 매장</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
-                    <p class="tapBarLabel">내 정보</p>
-                </a>
-            </div>
-        </main>
-        <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const favBtn  = document.getElementById('favorite-btn');
-        const starImg = document.getElementById('star');
-        if (!favBtn || !starImg) return;
+            {% endfor %}
+        {% else %}
+            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+        {% endif %}
+    </main>
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filledSrc = "{% static 'IMG/starpicked.svg' %}"; // 채운 별
+  const MAX = 5;
 
-        const storeId     = favBtn.dataset.store;
-        const KEY         = 'fav_store_' + storeId;     // e.g. fav_store_3
-        const SRC_DEFAULT = starImg.dataset.default;    // data-default에서 읽음
-        const SRC_PICKED  = starImg.dataset.picked;     // data-picked에서 읽음
+  document.querySelectorAll('.review-star').forEach(el => {
+    const raw = (el.textContent || '').trim();
 
-        // ---------- A) 초기 상태 복원 (localStorage 우선) ----------
-        const saved = localStorage.getItem(KEY); // '1' or '0' or null
-        if (saved === '1') {
-            starImg.src = SRC_PICKED;
-            favBtn.textContent = '♥ 찜 해제';
-        } else if (saved === '0') {
-            starImg.src = SRC_DEFAULT;
-            favBtn.textContent = '♡ 찜하기';
-        } // null이면 서버가 렌더한 기본 상태를 그대로 둠
+    // 1) "★★★★☆" 같은 문자열이면 ★ 개수 세기
+    let filled = (raw.match(/★/g) || []).length;
 
-        // ---------- B) 별 클릭 시 → 버튼 클릭 위임 ----------
-        starImg.addEventListener('click', () => favBtn.click());
+    // 2) 만약 숫자라면 숫자로 처리 (예: "4")
+    if (!filled && /^\d+$/.test(raw)) {
+      filled = parseInt(raw, 10) || 0;
+    }
 
-        // ---------- C) 버튼 클릭 시 서버 토글 + localStorage 동기화 ----------
-        let busy = false;
-        favBtn.addEventListener('click', function () {
-            if (busy) return;
-            busy = true;
+    filled = Math.max(0, Math.min(MAX, filled));
+    const empty = MAX - filled;
 
-            fetch("{% url 'accounts:toggle_favorite' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: `store_id=${encodeURIComponent(storeId)}`
-            })
-            .then(res => res.json())
-            .then(data => {
-            if (data.status === 'added') {
-                starImg.src = SRC_PICKED;
-                favBtn.textContent = '♥ 찜 해제';
-                localStorage.setItem(KEY, '1');
-            } else if (data.status === 'removed') {
-                starImg.src = SRC_DEFAULT;
-                favBtn.textContent = '♡ 찜하기';
-                localStorage.setItem(KEY, '0');
-            } else {
-                alert('찜 처리에 실패했습니다.');
-            }
-            })
-            .catch(() => {
-            alert('네트워크 오류가 발생했습니다.');
-            })
-            .finally(() => { busy = false; });
-        });
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-        const filledSrc = "{% static 'img/starpicked.svg' %}"; // 채운 별
-        const MAX = 5;
+    // 이미지로 교체
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < filled; i++) {
+      const img = document.createElement('img');
+      img.src = filledSrc;
+      img.alt = '★';
+      frag.appendChild(img);
+    }
+    
 
-        document.querySelectorAll('.starBox').forEach(el => {
-            const raw = (el.textContent || '').trim();
-
-            // 1) "★★★★☆" 같은 문자열이면 ★ 개수 세기
-            let filled = (raw.match(/★/g) || []).length;
-
-            // 2) 만약 숫자라면 숫자로 처리 (예: "4")
-            if (!filled && /^\d+$/.test(raw)) {
-            filled = parseInt(raw, 10) || 0;
-            }
-
-            filled = Math.max(0, Math.min(MAX, filled));
-            const empty = MAX - filled;
-
-            // 이미지로 교체
-            const frag = document.createDocumentFragment();
-            for (let i = 0; i < filled; i++) {
-            const img = document.createElement('img');
-            img.src = filledSrc;
-            img.alt = '★';
-            frag.appendChild(img);
-            }
-            
-
-            el.textContent = '';   // 기존 ★ 텍스트 지우기
-            el.appendChild(frag);  // 이미지 삽입
-        });
-        });
-        </script>
-    </body>
-    <script src="{% static 'js/ReviewComment.js'%}"></script>
+    el.textContent = '';   // 기존 ★ 텍스트 지우기
+    el.appendChild(frag);  // 이미지 삽입
+  });
+});
+</script>
 </html>
