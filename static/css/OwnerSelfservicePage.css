@@ -243,3 +243,19 @@ header{
     font-size: 15px;
     font-weight: 500;
 }
+
+#change{
+    width: 30px;
+    height: 16px;
+    border-radius: 5px;
+    border: 1px solid #FFB635;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFB635;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    background-color: #fff;
+    text-decoration: none;
+}

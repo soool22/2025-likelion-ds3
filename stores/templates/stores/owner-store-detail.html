@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="{% static 'css/StoreDetailPage.css'%}" />
     </head>
     <body>
-        <main>
+        <main style="margin-bottom:0px">
             <div id="container">
                 <header>
                     <div id="headerBox">
@@ -89,6 +89,13 @@
                             </div>
                             </button>
                         </a>
+                        <a href="{% url 'stores:self-service' store.id %}" class="btnLink">
+                            <button id="certificationBtn" type="button">
+                            <div class="btnInnerBox">
+                                <p class="btnText1">셀프 서비스</p>
+                            </div>
+                            </button>
+                        </a>
 
                         
                         {% comment %} <a href="{% url 'reviews:review-create' store.id %}" class="btnLink">
@@ -134,60 +141,41 @@
                             alert('{{ message }}');
                         {% endfor %}
                         </script>
-                        {% endif %} {% endcomment %}
-                    </div>
-                </div>
-                <div class="containerContent" style="margin-top:31px;">
-                    <div class="containerMiddleBox">
-                        <p class="middleTitle">챌린지 누적 금액</p>
-                        <p class="middleContent">
-                        {% if amount_progress is not None %}
-                            {{ amount_progress|intcomma }}원
-                        {% else %}
-                            -
-                        {% endif %}
-                        </p>
-                    </div>
-
-                    <div class="containerMiddleBox">
-                        <p class="middleTitle">포인트</p>
-                        <p class="middleContent">
-                        {% if user_points is not None %}
-                            {{ user_points|intcomma }}점
-                        {% else %}
-                            -
-                        {% endif %}
-                        </p>
-                    </div>
-
-                    <div class="containerMiddleBox">
-                        {% if mission %}
-                        <p class="middleLastTitle">
-                            유효기간 {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}
-                        </p>
-                        {% endif %}
-                        {% if mission and mission.mission_type.key == 'amount' and user_can_access_amount %}
-                        <a href="{% url 'missions:update-amount' mission.id %}">
-                            <p class="middleLastContent">누적 금액 입력</p>
-                        </a>
                         {% endif %}
                     </div>
                 </div>
+
+                </div>  
+                {% endcomment %}
                 <div class="containerContent">
-                    <div class="containerTitle">진행중인 챌린지</div>
+                    <div class="containerTitle" style="padding:9px 40px; margin-top:37px;">진행중인 챌린지</div>
                     <div class="containerSmallContentBox">
                         {% for mission in missions %}
-                            <div>
-                                <h4>{{ mission.title }}</h4>
-                                {{ mission.description }}<br/>
-                                {{ mission.mission_type.name }} - {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }}
-                                <br/>
+                        <p class="containerSmallContent">
+                            <span class="mission-title">{{ mission.title }}</span><br/>
+                            {{ mission.description }}<br/>
+                            <span class="challenge-type">
+                            ({{ mission.mission_type.name }} {{ mission.target_value|floatformat:0|intcomma }}{{ mission.mission_type.unit }})
+                            </span>
+                            <br/>
+                            <span class="reward-text">
                                 {% if mission.reward_type == "POINT" %}
-                                    <div>
-                                        <label>포인트:</label> {{ mission.reward_points }}점
-                                    </div>
+                                    포인트: {{ mission.reward_points }}점 
+                                {% elif mission.reward_type == "CUSTOM" %}
+                                    직접 입력 보상: {{ mission.reward_description }}
                                 {% endif %}
-                            </div>
+                            </span>
+                            <br/>
+
+                            <span class="date-text">
+                                {{ mission.start_date|date:"Y-m-d H:i" }} ~ {{ mission.end_date|date:"Y-m-d H:i" }}
+                            </span>
+                            <br/>
+
+                            {% if mission.mission_type.key == 'amount' and user_can_access_amount %}
+                            <a href="{% url 'missions:update-amount' mission.id %}">누적 금액 입력</a>
+                            {% endif %}
+                        </p>
                         {% empty %}
                             <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
                         {% endfor %}

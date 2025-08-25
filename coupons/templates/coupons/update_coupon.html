@@ -1,54 +1,253 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>쿠폰 수정</title>
-</head>
-<body>
-    <a href="{% url 'coupons:coupon_list' coupon.store.id %}">쿠폰 목록으로 돌아가기</a>
-    <h2>{{ coupon.name }} - 쿠폰 수정</h2>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>쿠폰 수정</title>
+        <link rel="stylesheet" href="{% static 'css/OwnerStoreRegistration.css'%}" />
+    </head>
+    <body>
+        <main>
+            <div id="container">
+                <header>
+                    <a href="{% url 'coupons:coupon_list' coupon.store.id %}">
+                        <img src="{% static 'img/leftside.svg'%}" class="sideClick"/>
+                    </a>
+                    <p id="title">쿠폰 수정</p>
+                    <p> </p>
+                </header>
+                <div id="containerBox">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="box">
+                            <p class="boxTitle">가게 선택</p>
+                            <select name="store" class="timeStyle" required>
+                            {% for store in stores %}
+                                <option value="{{ store.id }}" {% if coupon.store.id == store.id %}selected{% endif %}>
+                                    {{ store.name }}
+                                </option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <input type="text" placeholder="쿠폰 이름" name="name" value="{{ coupon.name }}" required class="inputBox"/>
+                        <div class="box">
+                            <p class="boxTitle">쿠폰 타입</p>
+                            <select name="type" class="timeStyle" required>
+                                <option value="amount" {% if coupon.coupon_type == "amount" %}selected{% endif %}>금액 할인</option>
+                                <option value="percent" {% if coupon.coupon_type == "percent" %}selected{% endif %}>비율 할인</option>
+                                <option value="gift" {% if coupon.coupon_type == "gift" %}selected{% endif %}>증정 이벤트</option>
+                                <option value="custom" {% if coupon.coupon_type == "custom" %}selected{% endif %}>직접 입력</option>
+                            </select>
+                        </div>
+                        <input type="number" placeholder="금액 할인"name="discount_amount" value="{{ coupon.discount_amount }}"class="inputBox"/>
+                        <input type="number" placeholder="비율 할인"name="discount_percent" value="{{ coupon.discount_percent }}"class="inputBox"/>
+                        <input type="text" placeholder="증정 아이템"name="gift_item" value="{{ coupon.gift_item }}"class="inputBox"/>
+                        <input type="text" placeholder="직접 입력 설명"name="custom_text" value="{{ coupon.custom_text }}"class="inputBox"/>
+                        <div class="box">
+                            <p class="boxTitle">만료일 (선택)</p>
+                            <div class="boxContent">
+                                <input type="datetime-local" name="expire_at" value="{{ coupon.expire_at|date:'Y-m-d\\TH:i' }}" class="timeStyle" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" id="btn">수정</button>
+                    </form>
 
-    <form method="post">
-        {% csrf_token %}
+                </div>
+            </div>
+        </main>
+    </body>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const btn  = document.getElementById('btn');
 
-        <label>가게 선택</label>
-        <select name="store" required>
-            {% for store in stores %}
-                <option value="{{ store.id }}" {% if coupon.store.id == store.id %}selected{% endif %}>{{ store.name }}</option>
-            {% endfor %}
-        </select>
-        <br/><br/>
+    // --- 엘리먼트 참조( name 기준으로 안전하게 잡기 ) ---
+    const storeSelect = form.querySelector('select[name="store"]');
+    const typeSelect  = form.querySelector('select[name="type"]');
 
-        <label>쿠폰 이름</label>
-        <input type="text" name="name" value="{{ coupon.name }}" required><br/><br/>
+    const nameInput   = form.querySelector('input[name="name"]');
+    const amountInput = form.querySelector('input[name="discount_amount"]');
+    const rateInput   = form.querySelector('input[name="discount_percent"]');
+    const giftInput   = form.querySelector('input[name="gift_item"]');
+    const customInput = form.querySelector('input[name="custom_text"]');
+    const expireInput = form.querySelector('input[name="expire_at"]'); // datetime-local
 
-        <label>쿠폰 타입</label>
-        <select name="type" required>
-            <option value="amount" {% if coupon.coupon_type == "amount" %}selected{% endif %}>금액 할인</option>
-            <option value="percent" {% if coupon.coupon_type == "percent" %}selected{% endif %}>비율 할인</option>
-            <option value="gift" {% if coupon.coupon_type == "gift" %}selected{% endif %}>증정 이벤트</option>
-            <option value="custom" {% if coupon.coupon_type == "custom" %}selected{% endif %}>직접 입력</option>
-        </select>
-        <br/><br/>
+    const boxes = Array.from(document.querySelectorAll('.box'));
 
-        <div>
-            <label>금액 할인</label>
-            <input type="number" name="discount_amount" value="{{ coupon.discount_amount }}"><br/>
-            <label>비율 할인</label>
-            <input type="number" name="discount_percent" value="{{ coupon.discount_percent }}"><br/>
-            <label>증정 아이템</label>
-            <input type="text" name="gift_item" value="{{ coupon.gift_item }}"><br/>
-            <label>직접 입력 설명</label>
-            <input type="text" name="custom_text" value="{{ coupon.custom_text }}"><br/>
-        </div>
-        <br/>
+    // ---- 유틸 ----
+    const hasValue = (el) => !!el && el.value.trim() !== '';
+    const closestBox = (el) => el ? el.closest('.box') : null;
 
-        <label>만료일 (선택)</label>
-        <input type="datetime-local" name="expire_at" value="{{ coupon.expire_at|date:'Y-m-d\\TH:i' }}"><br/><br/>
+    const toggleActive = (el) => {
+        if (!el) return;
+        // 인풋 자체 active
+        el.classList.toggle('active', hasValue(el));
+        // 상위 .box 도 active
+        const b = closestBox(el);
+        if (b) b.classList.toggle('active', hasValue(el));
+    };
 
-        <button type="submit">수정</button>
-    </form>
-</body>
+    const toggleBoxActiveForSelect = (sel) => {
+        if (!sel) return;
+        const b = closestBox(sel);
+        if (b) b.classList.toggle('active', sel.value !== '');
+    };
+
+    // 금액: 숫자만
+    const sanitizeMoney = () => {
+        if (!amountInput) return;
+        const before = amountInput.value;
+        let digits = before.replace(/[^\d]/g, '');
+        if (digits.length > 1) digits = String(parseInt(digits, 10) || '');
+        if (before !== digits) amountInput.value = digits;
+    };
+    const formatMoneyOnBlur = () => {
+        if (!amountInput || !hasValue(amountInput)) return;
+        const n = parseInt(amountInput.value.replace(/[^\d]/g, ''), 10);
+        if (Number.isFinite(n)) amountInput.value = n.toLocaleString();
+    };
+    const unformatMoneyBeforeSubmit = () => {
+        if (!amountInput) return;
+        amountInput.value = amountInput.value.replace(/[^\d]/g, '');
+    };
+
+    // 비율: 0~100
+    const sanitizeRate = () => {
+        if (!rateInput) return;
+        let d = rateInput.value.replace(/[^\d]/g, '');
+        if (d !== '') {
+        let n = parseInt(d, 10);
+        if (!Number.isFinite(n)) n = 0;
+        n = Math.min(100, Math.max(0, n));
+        rateInput.value = String(n);
+        } else {
+        rateInput.value = '';
+        }
+    };
+
+    // ---- 타입별 입력 가능/필수 필드 제어 ----
+    function setTypeFields() {
+        const t = (typeSelect && typeSelect.value) || '';
+
+        // 모두 활성화 후 필요없는 건 비활성+초기화
+        [amountInput, rateInput, giftInput, customInput].forEach(el => {
+        if (!el) return;
+        el.disabled = false;
+        });
+
+        const disableAndClear = (el) => {
+        if (!el) return;
+        el.value = '';
+        el.disabled = true;
+        el.classList.remove('active');
+        const b = closestBox(el);
+        if (b) b.classList.remove('active');
+        };
+
+        if (t === 'amount') {
+        disableAndClear(rateInput);
+        disableAndClear(giftInput);
+        disableAndClear(customInput);
+        } else if (t === 'percent') {
+        disableAndClear(amountInput);
+        disableAndClear(giftInput);
+        disableAndClear(customInput);
+        } else if (t === 'gift') {
+        disableAndClear(amountInput);
+        disableAndClear(rateInput);
+        disableAndClear(customInput);
+        } else if (t === 'custom') {
+        disableAndClear(amountInput);
+        disableAndClear(rateInput);
+        disableAndClear(giftInput);
+        } else {
+        // 타입 미선택이면 상세 입력 막기
+        [amountInput, rateInput, giftInput, customInput].forEach(disableAndClear);
+        }
+
+        toggleBoxActiveForSelect(typeSelect);
+        updateButton();
+    }
+
+    // ---- 버튼 활성화 조건 ----
+    function updateButton() {
+        const storeOk = hasValue(storeSelect);
+        const nameOk  = hasValue(nameInput);
+        const t       = typeSelect ? typeSelect.value : '';
+        let typeOk    = false;
+
+        if (t === 'amount')      typeOk = hasValue(amountInput);
+        else if (t === 'percent') typeOk = hasValue(rateInput);
+        else if (t === 'gift')    typeOk = hasValue(giftInput);
+        else if (t === 'custom')  typeOk = hasValue(customInput);
+        else typeOk = false;
+
+        // 만료일(expire_at)은 선택 사항
+        const ok = storeOk && nameOk && typeOk;
+
+        btn.classList.toggle('active', ok);
+        btn.dataset.enabled = ok ? '1' : '0';
+    }
+
+    // ---- 이벤트 바인딩 ----
+    if (storeSelect) {
+        storeSelect.addEventListener('change', () => {
+        toggleBoxActiveForSelect(storeSelect);
+        updateButton();
+        });
+        toggleBoxActiveForSelect(storeSelect);
+    }
+
+    if (typeSelect) {
+        typeSelect.addEventListener('change', setTypeFields);
+        setTypeFields();
+    }
+
+    // 텍스트 입력들
+    [nameInput, giftInput, customInput].forEach(el => {
+        if (!el) return;
+        el.addEventListener('input', () => { toggleActive(el); updateButton(); });
+        toggleActive(el);
+    });
+
+    // 금액
+    if (amountInput) {
+        amountInput.addEventListener('input', () => { sanitizeMoney(); toggleActive(amountInput); updateButton(); });
+        amountInput.addEventListener('focus', () => { amountInput.value = amountInput.value.replace(/[^\d]/g, ''); });
+        amountInput.addEventListener('blur',  () => { formatMoneyOnBlur(); toggleActive(amountInput); updateButton(); });
+        toggleActive(amountInput);
+    }
+
+    // 비율
+    if (rateInput) {
+        rateInput.addEventListener('input', () => { sanitizeRate(); toggleActive(rateInput); updateButton(); });
+        toggleActive(rateInput);
+    }
+
+    // 만료일(선택) — datetime-local
+    if (expireInput) {
+        expireInput.addEventListener('change', () => {
+        toggleActive(expireInput);
+        updateButton();
+        });
+        toggleActive(expireInput);
+    }
+
+    // 제출
+    btn.addEventListener('click', (e) => {
+        if (btn.dataset.enabled !== '1') {
+        e.preventDefault();
+        alert('필수 항목을 입력/선택해 주세요.');
+        return;
+        }
+        unformatMoneyBeforeSubmit(); // 금액 콤마 제거
+        form.submit();
+    });
+
+    // 초기 상태
+    updateButton();
+    });
+    </script>
+
 </html>

@@ -95,7 +95,7 @@ header{
     align-items: center;
 }
 .delete-box{
-    margin-left: 241px;
+    margin-left: 300px;
     cursor: pointer;
 }
 .delete{
@@ -152,4 +152,18 @@ font-size: 10px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
+}
+
+.review-images {
+    display: flex;              
+    gap: 8px;                   
+    overflow-x: auto;           
+    white-space: nowrap;        
+    max-width: 100%;            
+    padding-bottom: 5px;        
+}
+
+.review-images img {
+    flex-shrink: 0;             
+    border-radius: 8px;         
 }

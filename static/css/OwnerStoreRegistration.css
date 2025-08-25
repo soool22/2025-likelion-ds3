@@ -2,13 +2,15 @@ body{
     background-color:#fafafa;
     margin: 0px;
 }
+
 main{
     display: flex;
     justify-self: center;
-    min-width: 430px;
-    min-height: 100dvh; 
+    /* height: 100dvh;  */
     background-color: white;
     flex-direction:column;
+    position: relative;
+    margin: 0 auto;
 }
 
 @font-face {
@@ -204,4 +206,20 @@ input:focus {
 .checkboxLabel{
     font-size: 15px;
     font-weight: 500;
+}
+
+#btn-search{
+    border: 0;
+    background-color: transparent;
+    outline: none;
+}
+
+.imageLabel{
+    display: flex;
+    gap: 10px;
+}
+
+.imageLabel p{
+    font-weight: 600;
+    color: #7b7b7b;
 }

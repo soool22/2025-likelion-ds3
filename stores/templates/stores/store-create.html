@@ -47,6 +47,12 @@
                         <input type="text" name="number" placeholder="가게 전화"
                class="inputBox" id="id_number"
                value="{{ form.instance.number|default_if_none:'' }}"/>
+                <!--가게 대표 이미지-->
+                        <div>
+                            대표 이미지
+                            {{ form.image }}
+                        </div>
+                <!--###############################-->
                         <div class="box">
                             <p class="boxTitle">오픈 시간</p>
                             <div class="boxContent">
@@ -61,6 +67,21 @@
                    value="{{ form.instance.close_time|default_if_none:'' }}" />
                             </div>
                         </div>
+                         <label for="imageInput" class="imageLabel">
+                            <img src="{% static 'img/imgupload.svg' %}" alt="" />
+                            <p>가게 이미지 업로드</p>
+                        </label>
+                        <img id="preview" style="max-width:310px; display:none;" alt="미리보기" />
+
+                        <!-- 업로드용 input -->
+                        <input
+                            id="imageInput"
+                            type="file"
+                            name="image"
+                            class="imageInput"
+                            accept="image/*"
+                            style="display:none"
+                        />
                         <input type="password" name="secret_code" placeholder="점주 코드"
                class="inputBox" id="id_secret_code"
                value="{{ form.instance.secret_code|default_if_none:'' }}"/>
@@ -167,6 +188,19 @@
                     }
                 });
             }
+        });
+
+        {% comment %} 이미지 업로드 {% endcomment %}
+        const input = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+
+        input.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            preview.style.display = 'block';
         });
         </script>
     </body>

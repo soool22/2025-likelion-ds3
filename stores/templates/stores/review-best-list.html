@@ -25,9 +25,9 @@
             <a href="{% url 'stores:store-detail' store.id %}" class="box"  style="text-decoration: none;">
                 <div class="left-box">
                     <div class="first-line text">
-                        {{ store.address }}
+                        {{ store.address }} <br/>
                         {% for category in store.category.all %}
-                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                            <span class="category">{{ category.name }}</span>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </div>
                     <div class="second-line">

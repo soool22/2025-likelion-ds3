@@ -25,6 +25,9 @@
                         {% endif %}
                         <img id="downSideClick" src="{% static 'img/downside.svg'%}"/>
                     </div>
+                    <a href="{% url 'accounts:start-page' %}" id="change">
+                        변경
+                    </a>
                     <div id="headerLastBox">
                         <a href="{% url 'visit_rewards:my_character' %}">
                             <img id="characterIcon" src="{% static 'img/charactericon.svg'%}"/>
@@ -69,7 +72,11 @@
                             {% for store in recommended_stores %}
                             <a href="{% url 'stores:store-detail' store.id %}">
                                 <div class="storeCard">
-                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    {% if store.image %}
+                                        <img class="storeImg" src="{{ store.image.url }}"/>
+                                    {% else %}
+                                        <img class="storeImg" src="{% static 'img/default_store.png' %}"/>
+                                    {% endif %}
                                     <div class="storeInfoBox">
                                         <div class="storeInfoMediumBox">
                                             <div class="storeInfoSmallBox">
@@ -109,7 +116,11 @@
                             {% for store in top_visits %}
                             <a href="{% url 'stores:store-detail' store.id %}">
                                 <div class="storeCard">
-                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    {% if store.image %}
+                                        <img class="storeImg" src="{{ store.image.url }}"/>
+                                    {% else %}
+                                        <img class="storeImg" src="{% static 'img/default_store.png' %}"/>
+                                    {% endif %}
                                     <div class="storeInfoBox">
                                         <div class="storeInfoMediumBox">
                                             <div class="storeInfoSmallBox">
@@ -145,7 +156,11 @@
                             {% for store in review_best %}
                             <a href="{% url 'stores:store-detail' store.id %}">
                                 <div class="storeCard">
-                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    {% if store.image %}
+                                        <img class="storeImg" src="{{ store.image.url }}"/>
+                                    {% else %}
+                                        <img class="storeImg" src="{% static 'img/default_store.png' %}"/>
+                                    {% endif %}
                                     <div class="storeInfoBox">
                                         <div class="storeInfoMediumBox">
                                             <div class="storeInfoSmallBox">

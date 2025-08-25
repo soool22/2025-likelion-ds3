@@ -4,17 +4,23 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>상품/메뉴 삭제</title>
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'css/StoreDelete.css'%}" />
+
 </head>
 <body>
-
-    <h2>{{ product.name }} - 상품 삭제</h2>
-    정말 이 상품을 삭제하시겠습니까?
+    <main style="margin-bottom:0px">
+        <p id="really">
+            정말 {{ product.name }}을 삭제하시겠습니까?
+        </p>
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit">삭제</button>
-        <a href="{% url 'products:product-list' product.store.id %}">취소</a>
+        <div id="btnBox">
+            <button id="delete" class="btn" type="submit">삭제</button>
+            <a href="{% url 'products:product-list' product.store.id %}">
+                <div id="no" class="btn">취소</div>
+            </a>
 </form>
     </form>
 

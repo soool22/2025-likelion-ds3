@@ -170,3 +170,7 @@ background: rgba(123, 123, 123, 0.45);  display: flex;
 .hidden{
     display: none;
 }
+
+.gifticonImg{
+    width: 111px !important;
+}

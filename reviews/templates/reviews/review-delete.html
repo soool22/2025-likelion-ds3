@@ -5,16 +5,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리뷰 삭제</title>
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'css/StoreDelete.css'%}" />
+
+
 </head>
 <body>
-    <h2>리뷰 삭제</h2>
-    <h3>{{ review.store.name }} > </h3> 
+    <main style="margin-bottom:0px">
+        <p id="really">
+            {{ review.store.name }}의 리뷰를 삭제하시겠습니까?
+        </p>
 
-    {{ review.stars }}
-    {{ review.created_at|date:"Y-m-d" }}
-    {{ review.comment|linebreaks }}
-
+    <p id="really" style="font-size:15px; color:#7b7b7b;">{{ review.stars }}</p>
+    <p id="really" style="font-size:15px; color:#7b7b7b;">{{ review.created_at|date:"Y-m-d" }}</p>
+    <div id="really" style="font-size:15px; color:#b7b7b7;">{{ review.comment|linebreaks }}</div>
 
     {% if review.images.all %}
         {% for img in review.images.all %}
@@ -23,11 +27,15 @@
         <br/>
     {% endif %}
 
-    정말 삭제하시겠습니까?
+
     <form method="POST" action="{% url 'reviews:review-delete' review.id %}">
         {% csrf_token %}
-        <button type="submit">삭제</button>
-        <a href="{% url 'reviews:review-list' review.store.id %}">취소</a>
+        <div id="btnBox">
+            <button id="delete" class="btn" type="submit">삭제</button>
+            <a href="{% url 'reviews:review-list' review.store.id %}">
+                <div id="no" class="btn">뒤로 가기</div>
+            </a>
+        </div>
     </form>
 </body>
 </html>

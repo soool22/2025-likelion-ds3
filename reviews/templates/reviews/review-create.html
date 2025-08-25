@@ -17,10 +17,12 @@
             <p> </p>
         </header>
         <div id="container">
-            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form"></form>
+            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form">
+
+
             {% csrf_token %}
             <div id="containerTop">
-                <p class="storeName">산책</p>
+                <p class="storeName">{{ store.name }}</p>
                 <div class="storeScore">
                     <div class="scoreBox">
                         <p class="scoreComment">음식은 어떠셨나요?</p>
@@ -40,6 +42,7 @@
                     <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
                     {% endif %}
 
+<<<<<<< HEAD
                     </div>
                     <div class="evaluation-service">
                         <div class="evaluation-service-text">서비스는 어떠셨나요?</div>
@@ -84,12 +87,13 @@
                 </div>
                 <div class="stemp-area">
                     <button type="submit" class="stemp-area-text">완료</button>
+=======
+>>>>>>> origin/develop
                 </div>
             </div>
             <div id="containerBottom">
                 <p class="storeName">자세한 음식 리뷰를 작성해주세요</p>
-                <textarea class="review" name="comment" placeholder="">주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히
-써주시면 다른 사람들에게 유용한 리뷰가 돼요.</textarea>
+                <textarea class="review" name="comment" placeholder="주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히 써주시면 다른 사람들에게 유용한 리뷰가 돼요."></textarea>
                 <label class="image" type="image">
                     <input type="file" id="fileInput" name="images" accept="image/*" multiple hidden>
                     <div class="box">
