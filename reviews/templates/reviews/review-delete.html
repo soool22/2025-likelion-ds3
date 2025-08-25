@@ -27,7 +27,7 @@
     <form method="POST" action="{% url 'reviews:review-delete' review.id %}">
         {% csrf_token %}
         <button type="submit">삭제</button>
-        <a href="{% url 'reviews:review-list' review.store.id %}">취소</a>
+        <a href="{% url 'reviews:owner-review-list' review.store.id %}">취소</a>
     </form>
 </body>
 </html>
