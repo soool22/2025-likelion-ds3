@@ -12,6 +12,13 @@ main{
     flex-direction:column;
     position: relative;
 }
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
 
 header{
     display: flex;

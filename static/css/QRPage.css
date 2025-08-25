@@ -5,6 +5,13 @@ html, body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
 main {
   display: flex;
   flex-direction: column;

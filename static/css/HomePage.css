@@ -5,7 +5,16 @@
     font-weight: 400;
     font-style: normal;
 }
-
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
+button{
+    all:unset
+}
 body{
     background-color:#fafafa;
     margin: 0px;
@@ -88,7 +97,11 @@ header{
     justify-content: space-between;
     align-items: center;
 }
-
+#headerLastBox{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
 #headerSmallBox{
     display: flex;
     gap: 8px;
@@ -103,6 +116,7 @@ header{
     color: #000000;
     font-size: 16px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 #downSideClick{
@@ -397,4 +411,5 @@ header{
     background-color: #fff;
     text-decoration: none;
     margin-left:130px;
+    padding: 0px 5px;
 }

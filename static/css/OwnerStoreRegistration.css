@@ -2,7 +2,9 @@ body{
     background-color:#fafafa;
     margin: 0px;
 }
-
+button{
+    all:unset
+}
 main{
     display: flex;
     justify-self: center;
@@ -11,6 +13,13 @@ main{
     flex-direction:column;
     position: relative;
     margin: 0 auto;
+}
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
 }
 
 @font-face {
@@ -72,6 +81,7 @@ form{
     box-sizing: border-box;
     font-size: 15px;
     font-weight: 500;
+    padding-top: 12px;
 }
 
 input:focus {
@@ -208,6 +218,13 @@ input:focus {
     font-weight: 500;
 }
 
+textarea{
+    color: #000;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;}
 #btn-search{
     border: 0;
     background-color: transparent;

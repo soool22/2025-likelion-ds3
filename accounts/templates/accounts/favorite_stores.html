@@ -17,7 +17,6 @@
         
             <!-- 제목 -->
             <div class="tittle-box">
-                <img src="{% static 'img/intereststorepicked.svg' %}" alt="아이콘">
                 <div class="tittle text">관심 매장</div>
             </div>
         </header>
@@ -57,29 +56,31 @@
                         </div>
                         <img src="/static/img/default_store.png" alt="Default 이미지" class="store-img">
                     </a>
-                    {% endfor %}
-                {% else %}
-                <p class="store-name">찜한 가게가 없습니다.</p>
-                {% endif %}
-            </div>
-            <div id="tapBar">
-                <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel">홈</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel">가게 검색</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                    <img class="tapBarIcon" src="{% static 'img/intereststorepicked.svg'%}" alt="관심 매장 아이콘" />
-                    <p class="tapBarLabel picked">관심 매장</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
-                    <p class="tapBarLabel">내 정보</p>
-                </a>
-            </div>
-        </main>
-    </body>
+                {% endfor %}
+            {% else %}
+                <p class="store-name" style="text-align:center; margin-top:3px;">찜한 가게가 없습니다.</p>
+            {% endif %}
+        </div>
+
+        <!-- 하단 탭바 -->
+        <div id="tapBar">
+            <a class="tapBarBox" href="{% url 'home:main'%}">
+                <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
+                <p class="tapBarLabel">홈</p>
+            </a>
+            <a class="tapBarBox" href="{% url 'stores:store-search' %}">
+                <img class="tapBarIcon" src="{% static 'img/search.svg'%}" alt="가게 검색 아이콘" />
+                <p class="tapBarLabel">가게 검색</p>
+            </a>
+            <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
+                <img class="tapBarIcon" src="{% static 'img/intereststorepicked.svg'%}" alt="관심 매장 아이콘" />
+                <p class="tapBarLabel picked">관심 매장</p>
+            </a>
+            <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
+                <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
+                <p class="tapBarLabel">내 정보</p>
+            </a>
+        </div>
+    </main>
+</body>
 </html>

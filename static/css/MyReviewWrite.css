@@ -12,7 +12,13 @@ main{
     flex-direction:column;
 
 }
-
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
 header{
     display: flex;
     margin-top: 32px;

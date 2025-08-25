@@ -12,6 +12,13 @@ main{
     flex-direction:column;
 
 }
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
 
 @font-face {
     font-family: 'Pretendard-Regular';

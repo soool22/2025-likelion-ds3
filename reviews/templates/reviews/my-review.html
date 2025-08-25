@@ -47,14 +47,16 @@
                     <div style="display: flex; align-items: center;">
                         <div class="delete-box">
                         <img src="{% static 'img/delete.png'%}">
-                        <div class="delete text">삭제</div>
+                        <div class="delete text">
+                            <a class="delete text" href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                        </div>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+            <div class="store-name text" style="text-align:center; margin-top:3px;">아직 작성한 리뷰가 없습니다.</div>
         {% endif %}
     </main>
 </body>

@@ -9,7 +9,6 @@
 
 (() => {
   const sheet  = document.getElementById('sheet');
-  const handle = document.getElementById('sheetHandle'); // 있어도 무방
   const body   = sheet.querySelector('.sheet-body');
 
   const vh = () => window.innerHeight;
@@ -17,9 +16,15 @@
   const TOP_GAP_RATIO = 0.18;
 
   let currentY = 0;
-  let dragging = false;
+
+  // 👇 추가: 드래그 임계치
+  const DRAG_THRESHOLD = 8;     // px
+  let dragging = false;         // 실제 드래그 중인지
+  let maybeDrag = false;        // 드래그 후보 상태
   let startY = 0;
   let startYPos = 0;
+  let lastPointerId = null;
+  let moved = false;            // 포인터가 움직였는지(클릭 구분용)
 
   function bounds() {
     const h = sheet.getBoundingClientRect().height;
@@ -44,49 +49,74 @@
     setY(currentY < mid ? minY : maxY, true);
   }
 
-  function shouldStartDragFrom(target) {
-    // 시트 안에서 시작했는지
+  function canStartFrom(target) {
     if (!sheet.contains(target)) return false;
-
-    // sheet-body 위에서 시작했고, 내용이 스크롤 가능하며 현재 스크롤이 위가 아니면 드래그 시작하지 않음
     const inBody = target.closest('.sheet-body');
+    // body 안에서 시작했고 스크롤이 위가 아니면(= 스크롤 우선) 드래그 시작 안 함
     if (inBody) {
       const canScroll = body.scrollHeight > body.clientHeight;
       if (canScroll && body.scrollTop > 0) return false;
     }
-    // 버튼/입력 등 드래그 비활성화하고 싶으면 data-no-drag로 예외 처리 가능
-    if (target.closest('[data-no-drag]')) return false;
-
+    // 드래그 금지 영역
+    if (target.closest('a, button, input, textarea, [data-no-drag]')) return false;
     return true;
   }
 
   function onPointerDown(e) {
-    if (!shouldStartDragFrom(e.target)) return;
-
-    dragging = true;
+    if (!canStartFrom(e.target)) {
+      dragging = false;
+      maybeDrag = false;
+      return;
+    }
+    maybeDrag = true;   // 아직 ‘클릭’일 수도, ‘드래그’일 수도
+    dragging = false;
+    moved = false;
     startY = e.clientY;
     startYPos = currentY;
-
-    // 드래그 동안 내부 스크롤/클릭 막기
-    body.style.pointerEvents = 'none';
-    sheet.setPointerCapture?.(e.pointerId);
-
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp, { once: true });
+    lastPointerId = e.pointerId;
+    // ❌ 여기서 pointerEvents를 끄지 않습니다(클릭 살리기)
+    sheet.addEventListener('pointermove', onPointerMove);
+    sheet.addEventListener('pointerup', onPointerUp, { once: true });
   }
 
   function onPointerMove(e) {
-    if (!dragging) return;
+    moved = true;
+    if (!maybeDrag && !dragging) return;
+
     const dy = e.clientY - startY;
+
+    // 임계치 넘기 전이면 클릭으로 놔둠
+    if (!dragging) {
+      if (Math.abs(dy) < DRAG_THRESHOLD) return;
+
+      // 👉 여기서부터 ‘진짜 드래그’ 시작
+      dragging = true;
+      // 드래그 중에만 내부 클릭/스크롤 차단
+      body.style.pointerEvents = 'none';
+      sheet.setPointerCapture?.(lastPointerId ?? e.pointerId);
+    }
+
     setY(startYPos + dy);
   }
 
   function onPointerUp(e) {
-    dragging = false;
-    body.style.pointerEvents = '';
-    sheet.releasePointerCapture?.(e.pointerId);
-    window.removeEventListener('pointermove', onPointerMove);
-    snap();
+    // 드래그 중이면 스냅 + 차단 해제
+    if (dragging) {
+      dragging = false;
+      body.style.pointerEvents = '';
+      sheet.releasePointerCapture?.(lastPointerId ?? e.pointerId);
+      snap();
+
+      // 드래그가 있었으면 아래 클릭을 막아 클릭-탭 오작동 방지
+      sheet.addEventListener(
+        'click',
+        (ev) => ev.stopPropagation(),
+        { capture: true, once: true }
+      );
+    }
+
+    maybeDrag = false;
+    sheet.removeEventListener('pointermove', onPointerMove);
   }
 
   function init() {
@@ -94,7 +124,7 @@
     setY(maxY, false);
   }
 
-  // ✅ 핸들이 아니라 시트 전체에서 드래그 시작
+  // ✅ 이제 시트 전체에서 제스처 시작
   sheet.addEventListener('pointerdown', onPointerDown);
 
   window.addEventListener('resize', () => {
@@ -106,6 +136,7 @@
   body.style.webkitOverflowScrolling = 'touch';
   init();
 })();
+
 
 
 const starIcon = document.getElementById("starIcon");

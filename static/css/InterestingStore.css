@@ -4,7 +4,13 @@ body {
     margin: 0;
     font-family: Pretendard, sans-serif;
 }
-
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
 main {
     display: flex;
     flex-direction: column;
