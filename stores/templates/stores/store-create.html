@@ -47,6 +47,12 @@
                         <input type="text" name="number" placeholder="가게 전화"
                class="inputBox" id="id_number"
                value="{{ form.instance.number|default_if_none:'' }}"/>
+                <!--가게 대표 이미지-->
+                        <div>
+                            대표 이미지
+                            {{ form.image }}
+                        </div>
+                <!--###############################-->
                         <div class="box">
                             <p class="boxTitle">오픈 시간</p>
                             <div class="boxContent">
