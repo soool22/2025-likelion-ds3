@@ -110,11 +110,13 @@ a{
 .num {
     font-size: 20px;
     font-weight: 600;
+    color: black;
 }
 
 .store-name {
     font-size: 21px;
     font-weight: 600;
+    color: black;
 }
 
 /* 거리 + 영업 상태 */

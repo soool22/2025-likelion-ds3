@@ -102,8 +102,9 @@ font-weight: 600;
 #containerBottom{
     display: flex;
     flex-direction: column;
-    margin-top: 33px;
     gap: 8px;
+    box-sizing: border-box;
+    padding: 20px 53px;
 }
 .box{
     display: flex;
@@ -118,10 +119,12 @@ border: 1px solid #000;
 color: #B7B7B7;
 font-size: 13px;
 font-weight: 600;
-padding: 8px 25px;
+padding: 5px 22px;
 box-sizing: border-box;
 font-weight: 600;
 margin-top: 12px;
+font-family: Pretendard;
+resize: none;
 }
 
 .image{

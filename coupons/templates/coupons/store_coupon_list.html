@@ -12,7 +12,7 @@
 <body>
     <main>
         <header>
-            <a href="{% url 'stores:owner-store-list' %}">
+            <a href="{% url 'stores:self-service' store.id %}">
                 <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-text" > 쿠폰 목록 </div>
@@ -24,7 +24,8 @@
                 style="
                 width:46px; height:22px;
                 padding: 4px 7px 4px 7px;
-                border-radius: 40px; white-space: nowrap;"
+                border-radius: 40px; 
+                white-space: nowrap;"
                 {% if status == "active" %}
                     id="active-btn"
                 {% endif %}>진행중</button>
@@ -36,7 +37,8 @@
                 width:33px; height:22px;
                 padding: 4px 5px 4px 7px;
                 border-radius: 9px;
-                margin-right:45px white-space: nowrap;;"
+                margin-right:45px;
+                white-space: nowrap;"
                 {% if status == "past" %}
                     id="active-btn"
                 {% endif %}>과거</button>

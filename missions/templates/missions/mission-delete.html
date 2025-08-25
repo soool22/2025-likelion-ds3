@@ -4,22 +4,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>챌린지 삭제 확인(점주)</title>
+    <title>DDAL-LANG</title>
+    <link rel="stylesheet" href="{% static 'css/StoreDelete.css'%}" />
 </head>
 <body>
-    <h2>챌린지 삭제</h2>
-    정말 이 챌린지를 삭제하시겠습니까?<hr/>
-    <h3>{{ mission.title }}</h3>
-    {{ mission.description }}
+    <main style="margin-bottom:0px">
+        <p id="really">
+            {{ mission.title }} 챌린지를 삭제하시겠습니까?
+        </p>
     <br/>
-    {{ mission.mission_type.name }} - {{ mission.target_value }}{{ mission.mission_type.unit }}
-    <br/>
-    보상: {{ mission.reward_description }}
+    <p id="really" style="font-size:15px; color:#7b7b7b;">{{ mission.mission_type.name }} - {{ mission.target_value }}{{ mission.mission_type.unit }}</p>
+    <p id="really"  style="font-size:15px; color:#7b7b7b;">보상: {{ mission.reward_description }}</p>
 
     <form method="POST">
         {% csrf_token %}
-        <button type="submit">삭제</button>
-        <a href="{% url 'missions:mission-list' mission.store.id %}">취소</a>
+        <div id="btnBox">
+            <button id="delete" type="submit" class="btn">삭제</button>
+            <a href="{% url 'missions:mission-list' mission.store.id %}">
+                <div id="no" class="btn">취소</div>
+            </a>
+        </div>
     </form>
 </body>
 </html>

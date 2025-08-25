@@ -37,7 +37,6 @@ def store_create(request):
             # ManyToMany 카테고리 저장
             form.save_m2m()
             
-            messages.success(request, '가게 등록 완료!')
             return redirect('stores:owner-store-list')
         else:
             messages.error(request, '입력 정보를 확인해주세요.')
@@ -113,7 +112,6 @@ def store_delete(request, store_id):
     store = get_object_or_404(Store, id=store_id, owner=request.user)
     if request.method == 'POST':
         store.delete()
-        messages.success(request, '가게가 삭제되었습니다.')
         return redirect('stores:owner-store-list')
 
     # 삭제 확인 페이지
@@ -128,7 +126,6 @@ def store_update(request, store_id):
         form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
             form.save()
-            messages.success(request, '가게 정보가 수정되었습니다.')
             return redirect('stores:owner-store-list')
         else:
             messages.error(request, '입력 정보를 확인해주세요.')

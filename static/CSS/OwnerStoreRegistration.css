@@ -2,13 +2,15 @@ body{
     background-color:#fafafa;
     margin: 0px;
 }
+
 main{
     display: flex;
     justify-self: center;
-    min-width: 430px;
-    min-height: 100dvh; 
+    height: 100dvh; 
     background-color: white;
     flex-direction:column;
+    position: relative;
+    margin: 0 auto;
 }
 
 @font-face {
