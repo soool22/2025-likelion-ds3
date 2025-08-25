@@ -7,7 +7,6 @@ main{
     justify-self: center;
     min-width: 430px;
     min-height: 100dvh;
-    margin-bottom: 65px;
     background-color: white;
     flex-direction:column;
     display: flex;
@@ -40,7 +39,9 @@ p{
     gap: 40px;
     margin-top: 25px;
 }
-
+button{
+        all: unset;
+}
 .btn{
     outline: none;
     border: none;
