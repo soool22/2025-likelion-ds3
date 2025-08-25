@@ -316,6 +316,8 @@ def review_best_list(request):
 # 가게 검색
 @login_required
 def store_search(request):
+    
+    
     query = request.GET.get('q')
     sort = request.GET.get('sort')
     category_slug = request.GET.get('category')
@@ -323,8 +325,7 @@ def store_search(request):
     stores = Store.objects.all().order_by('-id')
 
     # 사용자 위치
-    #user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
-    user_lat, user_lng, gu_name = [37.5665, 126.9780,'도봉구']
+    user_lat, user_lng, gu_name= get_user_location(request.user) if request.user.is_authenticated else (37.5665, 126.9780)
     
     # 지역구 기준 필터링
     stores = Store.objects.all().order_by('-id')
