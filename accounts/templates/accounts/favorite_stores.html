@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +29,7 @@
                 {% for fav in favorites %}
                     <a href="{% url 'stores:store-detail' fav.store.id %}" class="box" style="text-decoration: none;">
                         <div class="left-box">
-                            <div class="first-line text">
+                            <div class="first-line text" style=" font-weight: 600;">
                                 {{ fav.store.address }} 
                                 {% for category in fav.store.category.all %}
                                     {{ category.name }}{% if not forloop.last %}, {% endif %}
@@ -41,44 +40,22 @@
                                 <div class="store-name text">{{ fav.store.name }}</div>
                             </div>
                             <div class="third-line">
-                                <div class="position text">⭐ {{ fav.store.rating|floatformat:1 }} ({{ fav.store.reviews.count }})</div>
+                                <div class="position text" style="font-weight: 600; font-size: 0.7em;">⭐ {{ fav.store.rating|floatformat:1 }} ({{ fav.store.reviews.count }})</div>
                                 <div class="operation">
-                                    <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6">
-=======
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="{% static 'CSS/InterestingStore.css'%}" />
-    </head>
-    <body>
-        <main>
-            <header>
-            <div class="tittle text" >관심 매장</div>
-            </header>
-            <div class="store-list">
-                {% if favorites %}
-                    {% for fav in favorites %}
-                    <a href="{% url 'stores:store-detail' fav.store.id %}" class="store-link">
-                        <div class="list {{ fav.id }}">
-                            <img src="{% static 'img/default_store.png'%}" class="store-img">
-                            <div class="store-text">
-                                <div class="store-name">{{ fav.store.name }}</div>
-                                <div class="store-score">
-                                    <img src="{% static 'IMG/star-yellow.png'%}" class="yellow-star">
-                                    <div class="store-score-num">{{ fav.store.rating|floatformat:1 }}</div>
-                                    <div class="store-score-review">({{ fav.store.reviews.count }})</div>
-                                </div>
-                                <div class="store-info">
->>>>>>> origin/develop
+                                    
+                                    <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6" >
                                     {% if fav.store.is_open %}
-                                        영업 중
+                                        <div class="time text" style="color:#0094D6; font-weight: 600; font-size: 0.7em;">영업 중</div>
                                     {% else %}
-                                        영업 종료
+                                        <div class="time text" style="color:#999999; font-weight: 600; font-size: 0.7em;">영업 종료</div>
                                     {% endif %}
+
+
+
                                 </div>
                             </div>
                         </div>
+                        <img src="/static/img/default_store.png" alt="Default 이미지" class="store-img">
                     </a>
                     {% endfor %}
                 {% else %}
