@@ -218,15 +218,13 @@ input:focus {
     font-weight: 500;
 }
 
-<<<<<<< HEAD:static/css/OwnerStoreRegistration.css
 textarea{
     color: #000;
 font-family: Inter;
 font-size: 15px;
 font-style: normal;
 font-weight: 500;
-line-height: normal;
-=======
+line-height: normal;}
 #btn-search{
     border: 0;
     background-color: transparent;
@@ -241,5 +239,4 @@ line-height: normal;
 .imageLabel p{
     font-weight: 600;
     color: #7b7b7b;
->>>>>>> 1f599d87741c9568fcbc1e5ac7690bc894cd9ad3:static/CSS/OwnerStoreRegistration.css
 }
