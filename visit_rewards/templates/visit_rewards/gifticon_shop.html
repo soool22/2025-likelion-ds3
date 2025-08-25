@@ -36,7 +36,8 @@
                            data-remaining="{{ g.remaining_points }}"
                            style="textdecoration:none;">  
                             {% if g.image %}
-                                <img src="{{ g.image.url }}" alt="{{ g.name }}" style="width:111px;">
+                            <img src="/media/{{ g.image.name }}" alt="{{ g.name }}" style="width:111px;">
+
                                 
                             {% else %}
                                 <img src="{% static 'IMG/default_gifticon.png' %}" alt="기본 이미지">
