@@ -153,23 +153,19 @@
                 </div>
             </div>
             <div id="tapBar">
-                <a class="tapBarBox" href="{% url 'home:main'%}">
-                    <img class="tapBarIcon" src="{% static 'img/home.svg'%}" alt="홈 선택 아이콘" />
-                    <p class="tapBarLabel">홈</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'stores:store-search' %}">
-                    <img class="tapBarIcon" src="{% static 'img/searchpicked.svg'%}" alt="가게 검색 아이콘" />
-                    <p class="tapBarLabel picked">가게 검색</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:favorite_stores' %}">
-                    <img class="tapBarIcon" src="{% static 'img/intereststore.svg'%}" alt="관심 매장 아이콘" />
-                    <p class="tapBarLabel">관심 매장</p>
-                </a>
-                <a class="tapBarBox" href="{% url 'accounts:mypage' %}">
-                    <img class="tapBarIcon" src="{% static 'img/myinfo.svg'%}" alt="내 정보 아이콘" />
-                    <p class="tapBarLabel">내 정보</p>
-                </a>
-            </div>
+            <a class="tapBarBox" href="{% url 'stores:owner-store-list' %}">
+                <img class="tapBarIcon" src="{% static 'img/ownerhome.png' %}" alt="홈 선택 아이콘" />
+                <p class="tapBarLabel">홈</p>
+            </a>
+            <a class="tapBarBox" href="">
+                <img class="tapBarIcon" src="{% static 'img/ownerselfservicepicked.svg' %}" alt="셀프 서비스 아이콘" />
+                <p class="tapBarLabel picked">셀프 서비스</p>
+            </a>
+            <a class="tapBarBox" href="">
+                <img class="tapBarIcon" src="{% static 'img/setting.svg' %}" alt="설정 아이콘" />
+                <p class="tapBarLabel">설정</p>
+            </a>
+        </div>
         </main>
         <script>
         document.addEventListener('DOMContentLoaded', function () {
