@@ -140,7 +140,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                        아직 작성된 리뷰가 없습니다.
+                        <div  style="text-align:center; margin-top:3px;">아직 작성된 리뷰가 없습니다.</div>
                     {% endif %}
                 </div>
             </div>
@@ -218,7 +218,7 @@
         });
         });
         document.addEventListener('DOMContentLoaded', () => {
-        const filledSrc = "{% static 'IMG/starpicked.svg' %}"; // 채운 별
+        const filledSrc = "{% static 'img/starpicked.svg' %}"; // 채운 별
         const MAX = 5;
 
         document.querySelectorAll('.starBox').forEach(el => {

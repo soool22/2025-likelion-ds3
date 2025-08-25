@@ -49,7 +49,7 @@
                             {% endfor %}
                         </p>
                         <p id="storeName">{{ store.name }}</p>
-                        <a href="{% url 'reviews:review-create' store.id %}">
+                        <a href="{% url 'reviews:review-list' store.id %}">
                             <div id="scoreBox">
                                 <a id="scoreSmallBox" href="{% url 'reviews:review-list' store.id %}">
                                     <img id="starScore" src="{% static 'img/starpicked.svg'%}"/>
@@ -127,7 +127,7 @@
                                 <p class="summaryTitle">{{ snippet }}</p>
                             </div>
                             {% else %}
-                            <p class="summaryContent">리뷰 요약 정보가 없습니다.</p>
+                            <p class="summaryContent" style="text-align:center; margin-top:3px;">리뷰 요약 정보가 없습니다.</p>
                             {% endif %}
                         </div>
                         {% if messages %}
@@ -196,7 +196,7 @@
                             {% endif %} {% endcomment %}
                         </div>
                         {% empty %}
-                        <p class="containerSmallContent">등록된 상품이 없습니다.</p>
+                        <p class="containerSmallContent" style="text-align:center; margin-top:3px;">등록된 상품이 없습니다.</p>
                         {% endfor %}
                     </div>
                 </div>

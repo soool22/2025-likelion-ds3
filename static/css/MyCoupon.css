@@ -1,0 +1,270 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+    position: relative;
+    margin: 0 auto;
+}
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+header{
+    display: flex;
+    margin-top: 32px;
+    gap: 106px;
+    align-items: center;
+    height: 29px;
+    margin-left: 54px;
+}
+
+.back-img{
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.text{
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.tittle{
+        font-size: 24px;
+}
+
+.box{
+    width: 319px;
+    height: 196px;
+    flex-shrink: 0;
+    border-radius: 22px;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    margin: 55px;
+    margin-top: 0px;
+    margin-bottom: 36px;
+}
+
+.B{
+    font-size: 20px;
+    padding-top: 21px;
+}
+
+.mission1{
+    font-size: 14px;
+    text-align: left;
+    margin-left: 22px;
+}
+
+.mission-box-flex{
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.percent{
+    font-size: 12px;
+    margin-left: 5px;
+}
+.gray-range{
+    position: relative;
+    width: 66%;
+    height: 16px;
+    background:#e5e5e5;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-left: 15px;
+    margin-top: 8px;
+}
+.yellow-range{
+    position: absolute;
+    inset: 0;
+    width: 50%;                /* 진행률만 바꾸면 됨 */
+    height: 100%;
+    background:#ffd84d;
+}
+
+.mission-QR{
+    width: 275px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    border: 2px dashed #FFD400 ;
+    display: flex;
+    align-items: center;
+    margin-left: 22px;
+    margin-top: 9px;
+}
+
+.qr-img{
+    width: 18px;
+    height: 18.01px;
+    flex-shrink: 0;
+    margin-left: 49px;
+}
+
+.other-btn-box{
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    margin-left: 22px;
+    cursor: pointer;
+
+}
+
+.use-coupon-btn{
+    width: 275px;
+height: 35px;
+flex-shrink: 0;
+border-radius: 11px;
+background: #F5F5F5;
+display: flex;
+align-items: center;
+border:none;
+}
+
+.date{
+    font-size: 11px;
+    color: #7B7B7B;
+    margin-left: 140px;
+    margin-top: 5px;
+}
+
+.coupon-img{
+    width: 20px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-left: 86px;
+    margin-top: 2px;
+}
+.modal-box {
+    background: #fff;
+    width: 80%;
+    max-width: 360px;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .modal-icon{
+        margin-top: 50px;
+        margin-bottom: 5px;
+    }
+    /* 텍스트 */
+    .modal-title {
+    font-weight: bold;
+    margin: 5px 0;
+    font-size: 22px;
+    }
+    .modal-error {
+        font-weight: bold;
+        margin: 0;
+    }
+    .modal-subtitle {
+    color: orange;
+    font-weight: bold;
+    margin: 5px 0;
+    }
+    .modal-desc {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0px 10px 0px;
+    font-weight: bold;
+    }
+
+    /* 버튼 */
+.modal-btn{
+    display: block;
+    width: 100%;
+    background: #FFD400;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #FFF;
+}
+
+.modal-input{
+    display: block;
+    width: 91.4%;
+    border: 2px dashed #ffd400;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #000;
+    margin-bottom: 40px;
+}
+
+.modal-overlay{
+    position: absolute;   /* main 안에서만 */
+  top: 0;
+  left: 0;
+  width: 100%;   /* main의 100% */
+  height: 100%;
+  background: rgba(128, 128, 128, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.hidden{
+    display: none;
+}
+.first{
+    color: #7B7B7B;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: left;
+    margin-left: 55px;
+    margin-top: 9px;
+}
+
+.separation-box{
+    width: 100%;
+    height: 2px;
+    background-color: #d9d9d9;
+    margin-top: 25px;
+}
+
+.second-text{
+    color: #7B7B7B;
+font-family: Pretendard;
+font-size: 15px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-top: 16px;
+margin-bottom: 15px;
+}
+.gifticon{
+    display: flex;
+    align-items: center;
+    gap:15px;
+}

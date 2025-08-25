@@ -1,0 +1,163 @@
+body{
+    background-color:#fafafa;
+    margin: 0px;
+}
+main{
+    display: flex;
+    justify-self: center;
+    min-width: 430px;
+    height: 100dvh; 
+    background-color: white;
+    flex-direction:column;
+    align-items: center;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+body{
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
+header{
+    display: flex;
+    margin-top: 32px;
+    width: 332px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-img{
+    width:17px;
+}
+
+.text{
+    color: #000;
+    font-family: Pretendard;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.title{
+    font-size: 24px;
+}
+
+
+#container{
+display: flex;
+flex-direction: column;
+width: 100%;
+align-items: center;
+}
+
+#containerTop{
+width: 100%;
+border-bottom: solid 1px #ccc;
+padding: 20px 46px;
+box-sizing: border-box;
+display: flex;
+flex-direction: column;
+}
+
+.storeName{
+    color: #000;
+font-size: 20px;
+font-weight: 700;
+margin: 0;
+}
+
+.storeScore{
+    width: 332px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.scoreBox{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+p{margin: 0;}
+
+.scoreComment{
+    color: #000;
+font-size: 16px;
+font-weight: 600;
+}
+
+.starBox{
+    gap: 8px;
+    display: flex;
+}
+
+.storeImg{
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+}
+
+#containerBottom{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+    padding: 20px 53px;
+}
+.box{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.review{
+    width: 317px;
+height: 127px;
+border: 1px solid #000;
+color: #B7B7B7;
+font-size: 13px;
+font-weight: 600;
+padding: 5px 22px;
+box-sizing: border-box;
+font-weight: 600;
+margin-top: 12px;
+font-family: Pretendard;
+resize: none;
+}
+
+.image{
+    width: 317px;
+height: 49px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px dashed #FFCC02;
+}
+
+.innerBox{
+    color: #FFCC02;
+font-size: 13px;
+font-weight: 600;
+}
+
+.QR{
+    width: 317px;
+height: 49px;
+border: 1px solid #FFCC02;
+background-color: transparent;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.star{
+    width: 19px;
+}

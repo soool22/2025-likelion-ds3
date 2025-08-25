@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="{% static 'CSS/self-service.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/self-service.css' %}" />
     </head>
     <body>
         <main>
@@ -34,7 +34,7 @@
                 <div class="title-box">
                     <div class="left-box">
                         <a href="{% url 'stores:owner-store-detail' data.store.id %}" class="store title">{{ data.store.name }}</a>
-                        <img src="{% static 'IMG/star-yellow.png' %}" class="star-img">
+                        <img src="{% static 'img/star-yellow.png' %}" class="star-img">
                         <div class="title">{{ data.store.rating|floatformat:1 }} ({{ data.store.reviews.count }})</div>
                     </div>
                     <div id="store-id">매장ID {{ data.store.id }}</div>
@@ -143,11 +143,9 @@
                 </div>
             </div>
         {% empty %}
-            <br/>
-                <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
+            등록된 가게가 없습니다.<br/>
         {% endfor %}
-        <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
-
+            <a href="{% url 'stores:store-create' %}" class="font13" style="display=inline; align-self:center;margin-top:12px"> 새 가게 등록하기</a>
         {% for data in store_data %}
     {% if forloop.first %}
         <div id="tapBar">

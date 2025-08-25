@@ -11,10 +11,10 @@
     <main>
         <header>
             <a href="{% url 'home:main' %}" style="text-decoration: none;">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+                <img src="{% static 'img/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle-box">
-                <img src="{% static 'IMG/top100-tittle.svg'%}">
+                <img src="{% static 'img/top100-tittle.svg'%}">
                 <div class="tittle text">오늘의 HOT</div>
             </div>
         </header>
@@ -37,7 +37,7 @@
                         <div class="third-line">
                             <div class="position text">📍{{ store.distance|default_if_none:"-" }}</div>
                             <div class="operation">
-                            <img src="{% static 'IMG/blue-time.svg' %}" style="color:#0094D6">
+                            <img src="{% static 'img/blue-time.svg' %}" style="color:#0094D6">
                             {% if store.is_open %}                                
                                 <div class="time text" style="color:#0094D6">영업중</div>
                             {% else %}
@@ -53,7 +53,7 @@
                     {% endif %}
                 </a>
             {% empty %}
-                <p>해당 지역구에 등록된 가게가 없습니다.</p>
+                <div  style="text-align:center; margin-top:3px;">해당 지역구에 등록된 가게가 없습니다.</div>
             {% endfor %}
         </div>
     </main>
