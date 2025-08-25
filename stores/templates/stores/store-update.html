@@ -56,10 +56,10 @@
                class="inputBox" id="id_number"
                value="{{ form.instance.number|default_if_none:'' }}"/>
                 <!--가게 대표 이미지-->
-                        <div>
+                        {% comment %} <div>
                             대표 이미지
                             {{ form.image }}
-                        </div>
+                        </div> {% endcomment %}
                 <!--###############################-->
                         <div class="box">
                             <p class="boxTitle">오픈 시간</p>
