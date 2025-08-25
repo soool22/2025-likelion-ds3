@@ -114,7 +114,7 @@ def my_mission(request):
     candidate_missions = Mission.objects.filter(
         start_date__lte=now,
         end_date__gte=now,
-        store__gu_name=user_gu   # 🔥 지역구 필터링 추가
+        store__gu_name=user_gu  
     ).exclude(id__in=excluded_ids).select_related('store')
 
     # 거리 계산
