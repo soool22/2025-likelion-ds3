@@ -25,7 +25,7 @@
                             <input  class="search" placeholder="주소" type="text" name="address"
                  id="id_address" value="{{ form.instance.address|default_if_none:'' }}" />
                             <button type="button" id="btn-search"><img id="searchIcon" src="{% static 'img/search.svg'%}" /></button>
-                            <button class="realSearchBtn"></button>
+                            {% comment %} <button class="realSearchBtn"></button> {% endcomment %}
                         </div>
                         <input type="hidden" name="latitude" id="id_latitude" value="{{ form.latitude.value|default_if_none:'' }}">
                         <input type="hidden" name="longitude" id="id_longitude" value="{{ form.longitude.value|default_if_none:'' }}">
@@ -67,6 +67,21 @@
                    value="{{ form.instance.close_time|default_if_none:'' }}" />
                             </div>
                         </div>
+                         <label for="imageInput" class="imageLabel">
+                            <img src="{% static 'img/imgupload.svg' %}" alt="" />
+                            <p>가게 이미지 업로드</p>
+                        </label>
+                        <img id="preview" style="max-width:310px; display:none;" alt="미리보기" />
+
+                        <!-- 업로드용 input -->
+                        <input
+                            id="imageInput"
+                            type="file"
+                            name="image"
+                            class="imageInput"
+                            accept="image/*"
+                            style="display:none"
+                        />
                         <input type="password" name="secret_code" placeholder="점주 코드"
                class="inputBox" id="id_secret_code"
                value="{{ form.instance.secret_code|default_if_none:'' }}"/>
@@ -173,6 +188,19 @@
                     }
                 });
             }
+        });
+
+        {% comment %} 이미지 업로드 {% endcomment %}
+        const input = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+
+        input.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            preview.style.display = 'block';
         });
         </script>
     </body>

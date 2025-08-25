@@ -9,7 +9,7 @@
 
 (() => {
   const sheet  = document.getElementById('sheet');
-  const handle = document.getElementById('sheetHandle');
+  const handle = document.getElementById('sheetHandle'); // 있어도 무방
   const body   = sheet.querySelector('.sheet-body');
 
   const vh = () => window.innerHeight;
@@ -44,11 +44,33 @@
     setY(currentY < mid ? minY : maxY, true);
   }
 
+  function shouldStartDragFrom(target) {
+    // 시트 안에서 시작했는지
+    if (!sheet.contains(target)) return false;
+
+    // sheet-body 위에서 시작했고, 내용이 스크롤 가능하며 현재 스크롤이 위가 아니면 드래그 시작하지 않음
+    const inBody = target.closest('.sheet-body');
+    if (inBody) {
+      const canScroll = body.scrollHeight > body.clientHeight;
+      if (canScroll && body.scrollTop > 0) return false;
+    }
+    // 버튼/입력 등 드래그 비활성화하고 싶으면 data-no-drag로 예외 처리 가능
+    if (target.closest('[data-no-drag]')) return false;
+
+    return true;
+  }
+
   function onPointerDown(e) {
+    if (!shouldStartDragFrom(e.target)) return;
+
     dragging = true;
     startY = e.clientY;
     startYPos = currentY;
+
+    // 드래그 동안 내부 스크롤/클릭 막기
     body.style.pointerEvents = 'none';
+    sheet.setPointerCapture?.(e.pointerId);
+
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp, { once: true });
   }
@@ -59,9 +81,10 @@
     setY(startYPos + dy);
   }
 
-  function onPointerUp() {
+  function onPointerUp(e) {
     dragging = false;
     body.style.pointerEvents = '';
+    sheet.releasePointerCapture?.(e.pointerId);
     window.removeEventListener('pointermove', onPointerMove);
     snap();
   }
@@ -71,7 +94,8 @@
     setY(maxY, false);
   }
 
-  handle.addEventListener('pointerdown', onPointerDown);
+  // ✅ 핸들이 아니라 시트 전체에서 드래그 시작
+  sheet.addEventListener('pointerdown', onPointerDown);
 
   window.addEventListener('resize', () => {
     const { minY, maxY } = bounds();
@@ -80,9 +104,9 @@
   });
 
   body.style.webkitOverflowScrolling = 'touch';
-
   init();
 })();
+
 
 const starIcon = document.getElementById("starIcon");
 
