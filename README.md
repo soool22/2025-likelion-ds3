@@ -34,7 +34,7 @@ $ python manage.py migrate
 $ python manage.py runserver
 
 ---
-
+```
 ## 📁 폴더 구조
 📦 2025-likelion-ds3/
 ├── 📁 accounts/        # 사용자 인증, 로그인/로그아웃, 회원가입, 마이페이지 등 계정 관련 기능
