@@ -112,7 +112,11 @@
                             {% for store in top_visits %}
                             <a href="{% url 'stores:store-detail' store.id %}">
                                 <div class="storeCard">
-                                    <img class="storeImg" src="{% static 'img/default_store.png'%}"/>
+                                    {% if store.image %}
+                                        <img class="storeImg" src="{{ store.image.url }}"/>
+                                    {% else %}
+                                        <img class="storeImg" src="{% static 'img/default_store.png' %}"/>
+                                    {% endif %}
                                     <div class="storeInfoBox">
                                         <div class="storeInfoMediumBox">
                                             <div class="storeInfoSmallBox">
