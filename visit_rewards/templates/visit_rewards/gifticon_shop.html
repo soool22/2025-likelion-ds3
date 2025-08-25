@@ -35,12 +35,25 @@
                            data-cost="{{ g.point_cost }}"
                            data-remaining="{{ g.remaining_points }}"
                            style="textdecoration:none;">  
+                           {% with name_map={
+                            '기분좋은_gSoPMiI.png': 'giboon_I3qJJ74.png',
+                            '반숙상회_DmnDivg.png': 'bansook_sMkdZXn.png',
+                            '블랙다운_BfFUqyq.png': 'blackdwon_j7jXqPw.png',
+                            '양국_wjFD8F9.png': 'yangook_wpPJQqC.png',
+                            '이요_BIQrAad.png': 'eeeyo_FV4xc4S.png',
+                            '조이키친_zca2Q7T.png': 'joykit_KjdgPgi.png',
+                            '카페레_CQgfUrn.png': 'cafere_Oh1RYH4.png',
+                            '커피공장_DrYzKBV.png': 'coffee_XEvtMyN.png'
+                        } %}
                             {% if g.image %}
-                                <img src="/media/gifticons/{{ g.image.name }}" alt="{{ g.name }}" style="width:111px;">
-
+                                {% with filename=g.image.name|slice:"10:" %} {# gifticons/ 제거 #}
+                                    <img src="/media/gifticons/{{ name_map.filename }}" alt="{{ g.name }}" style="width:111px;">
+                                {% endwith %}
                             {% else %}
                                 <img src="{% static 'IMG/default_gifticon.png' %}" alt="기본 이미지">
                             {% endif %}
+                        {% endwith %}
+                        
 
                             <div class="text-box" style="display:none" >
                                 <img src="{% static 'IMG/coin.svg'%}" class="s-coin">
