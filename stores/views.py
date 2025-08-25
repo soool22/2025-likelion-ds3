@@ -313,6 +313,8 @@ def review_best_list(request):
 # 가게 검색
 @login_required
 def store_search(request):
+    
+    
     query = request.GET.get('q')
     sort = request.GET.get('sort')
     category_slug = request.GET.get('category')

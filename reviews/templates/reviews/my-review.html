@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/MyReview.css'%}" />    
+    <link rel="stylesheet" href="{% static 'css/MyReview.css'%}" />    
 </head>
 <body>
     <main>
         <header>
             <a href="{% url 'home:main' %}">
-                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
+                <img src="{% static 'img/edit-back.png'%}" class="back-img"></img>
             </a>
             <div class="tittle text"> 내 리뷰 관리 </div>
         </header>
@@ -56,13 +56,13 @@
             </div>
             {% endfor %}
         {% else %}
-            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+            <div class="store-name text" style="text-align:center; margin-top:3px;">아직 작성한 리뷰가 없습니다.</div>
         {% endif %}
     </main>
 </body>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const filledSrc = "{% static 'IMG/starpicked.svg' %}"; // 채운 별
+  const filledSrc = "{% static 'img/starpicked.svg' %}"; // 채운 별
   const MAX = 5;
 
   document.querySelectorAll('.review-star').forEach(el => {

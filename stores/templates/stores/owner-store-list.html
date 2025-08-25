@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DDAL-LANG</title>
-        <link rel="stylesheet" href="{% static 'CSS/self-service.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/self-service.css' %}" />
     </head>
     <body>
         <main>
@@ -34,7 +34,7 @@
                 <div class="title-box">
                     <div class="left-box">
                         <a href="{% url 'stores:owner-store-detail' data.store.id %}" class="store title">{{ data.store.name }}</a>
-                        <img src="{% static 'IMG/star-yellow.png' %}" class="star-img">
+                        <img src="{% static 'img/star-yellow.png' %}" class="star-img">
                         <div class="title">{{ data.store.rating|floatformat:1 }} ({{ data.store.reviews.count }})</div>
                     </div>
                     <div id="store-id">매장ID {{ data.store.id }}</div>

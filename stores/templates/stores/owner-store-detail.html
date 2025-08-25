@@ -177,7 +177,7 @@
                             {% endif %}
                         </p>
                         {% empty %}
-                            <p class="containerSmallContent">진행 중인 챌린지가 없습니다.</p>
+                            <p class="containerSmallContent" style="text-align:center; margin-top:3px;">진행 중인 챌린지가 없습니다.</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                             <p class="price">{{ product.price|floatformat:0|intcomma }}원</p>
                         </div>
                         {% empty %}
-                        <p class="containerSmallContent">등록된 상품이 없습니다.</p>
+                        <p class="containerSmallContent" style="text-align:center; margin-top:3px;">등록된 상품이 없습니다.</p>
                         {% endfor %}
                     </div>
                 </div>

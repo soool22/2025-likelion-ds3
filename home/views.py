@@ -9,6 +9,7 @@ from ai_services.services import store_recommend
 from stores.utils import annotate_distance, get_user_location
 from missions.models import DailyMissionRanking
 from django.db.models import Count, Avg, F, FloatField, ExpressionWrapper
+from django.db.models.functions import Coalesce
 
 def main(request):
     user_location = None
@@ -53,7 +54,7 @@ def main(request):
     a, b = 0.7, 0.3
     review_best = stores_qs.annotate(
         review_count=Count('reviews'),
-        avg_rating=Avg('reviews__rating')
+        avg_rating=Coalesce(Avg('reviews__rating'), 0.0)  # None → 0.0
     ).annotate(
         score=ExpressionWrapper(
             F('avg_rating') * a + F('review_count') * b,

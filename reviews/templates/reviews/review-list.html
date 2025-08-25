@@ -5,104 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDAL-LANG</title>
-    <link rel="stylesheet" href="{% static 'CSS/WriteReview.css'%}" />
+    <link rel="stylesheet" href="{% static 'CSS/MyReview.css'%}" />    
 </head>
 <body>
     <main>
         <header>
-            <a href="./MyReviewWrite.html" style="text-decoration: none;">
-            <img src="{% static 'IMG/x.svg'%}" class="back-img"></img>
+            <a href="{% url 'home:main' %}">
+                <img src="{% static 'IMG/edit-back.png'%}" class="back-img"></img>
             </a>
-            <div class="title text" > 평가 및 리뷰 작성 </div>
-            <p> </p>
+            <div class="tittle text"> 내 리뷰 관리 </div>
         </header>
-        <div id="container">
-            <form method="POST" action="{% url 'reviews:review-create' store.id %}" enctype="multipart/form-data" id="review-form"></form>
-            {% csrf_token %}
-            <div id="containerTop">
-                <p class="storeName">{{ store.name }}</p>
-                <div class="storeScore">
-                    <div class="scoreBox">
-                        <p class="scoreComment">음식은 어떠셨나요?</p>
-                        
-                        <div class="starBox" id="rating">
-                            <img data-value="1" src="{% static 'img/stargray.svg' %}" class="star"/>
-                            <img data-value="2" src="{% static 'img/stargray.svg' %}" class="star"/>
-                            <img data-value="3" src="{% static 'img/stargray.svg' %}" class="star"/>
-                            <img data-value="4" src="{% static 'img/stargray.svg' %}" class="star"/>
-                            <img data-value="5" src="{% static 'img/stargray.svg' %}" class="star"/>
-                        </div>
-                        <input type="hidden" name="rating" id="rating-input" required>
-                                            </div>
-                    {% if store.image %}
-                    <img src="{{ store.image.url }}" alt="{{ store.name }} 이미지" class="storeImg" />
-                    {% else %}
-                    <img src="{% static 'img/default_store.png' %}" alt="Default 이미지" width="150" height="150"><br/>
-                    {% endif %}
+        <div class="separation-box"></div>
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-box">
+                <a href="{% url 'stores:store-detail' review.store.id %}">
+                    <div class="store-name text">{{ review.store.name }}</div>
+                </a>
+                <div class="second-line">
+                    <div class="review-star">
+                        {{ review.stars }}
+                    </div>
+                    <div class="date text">{{ review.created_at|date:"Y-m-d" }}({{ review.natural_days }})</div>
+                </div>
+                <div class="short-review text">{{ review.comment|linebreaks }}</div>
+                <!--이미지-->
+                <div class="review-images">
+                        {% for img in review.images.all %}
+                            {% if img.image %}
+                                <a href="{{ img.image.url }}" target="_blank">
+                                    <img src="{{ img.image.url }}" alt="리뷰 이미지" width="150" height="150">
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
 
+                <div class="fourth-line">
+                    {% if review.likes.count > 0 %}
+                        <div class="recommend-num">{{ review.likes.count }}명이 추천해요</div>
+                    {% endif %}
+                    <div style="display: flex; align-items: center;">
+                        <div class="delete-box">
+                        <img src="{% static 'IMG/delete.png'%}">
+                        <div class="delete text">
+                            <a class="delete text" href="{% url 'reviews:review-delete' review.id %}">삭제</a>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="containerBottom">
-                <p class="storeName">자세한 음식 리뷰를 작성해주세요</p>
-                <textarea class="review" name="comment" placeholder="">주문하신 메뉴의 맛과 경험하신 서비스에 대해 자세히
-써주시면 다른 사람들에게 유용한 리뷰가 돼요!</textarea>
-                <label class="image" type="image">
-                    <input type="file" id="fileInput" name="images" accept="image/*" multiple hidden>
-                    <div class="box">
-                        <img src="{% static 'img/camera.png'%}"/>
-                        <p class="innerBox">사진 추가(0/3)</p>
-                    </div>
-                </label>
-                <button class="QR" type="submit">
-                    <div class="box">
-                        <img src="{% static 'img/my-qr.png'%}"/>
-                        <p class="innerBox">리뷰 작성</p>
-                    </div>
-                </button>
-            </div>
-            </form>
-        </div>
+            {% endfor %}
+        {% else %}
+            <div class="store-name text">아직 작성한 리뷰가 없습니다.</div>
+        {% endif %}
     </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        const stars = document.querySelectorAll('#rating .star');
-        const ratingInput = document.getElementById('rating-input');
-        let selectedRating = 0;
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filledSrc = "{% static 'IMG/starpicked.svg' %}"; // 채운 별
+  const MAX = 5;
 
-        const graySrc   = "{% static 'img/stargray.svg' %}";
-        const pickedSrc = "{% static 'img/starpicked.svg' %}";
+  document.querySelectorAll('.review-star').forEach(el => {
+    const raw = (el.textContent || '').trim();
 
-        // 별 이미지 업데이트
-        function updateStars(hoverIndex = -1) {
-            stars.forEach((star, i) => {
-                if (hoverIndex >= 0) {
-                    // hover 상태 → hoverIndex까지 전부 picked
-                    star.src = i <= hoverIndex ? pickedSrc : graySrc;
-                } else {
-                    // 클릭 확정 상태 → selectedRating까지만 picked
-                    star.src = i < selectedRating ? pickedSrc : graySrc;
-                }
-            });
-        }
+    // 1) "★★★★☆" 같은 문자열이면 ★ 개수 세기
+    let filled = (raw.match(/★/g) || []).length;
 
-        stars.forEach((star, idx) => {
-            star.addEventListener('mouseover', () => updateStars(idx));
-            star.addEventListener('mouseout', () => updateStars(-1));
-            star.addEventListener('click', () => {
-                selectedRating = idx + 1;
-                ratingInput.value = selectedRating;
-                updateStars(-1);
-            });
-        });
+    // 2) 만약 숫자라면 숫자로 처리 (예: "4")
+    if (!filled && /^\d+$/.test(raw)) {
+      filled = parseInt(raw, 10) || 0;
+    }
 
-        // 별점 미선택 시 제출 방지
-        document.getElementById('review-form').addEventListener('submit', (e) => {
-            if (!ratingInput.value) {
-                e.preventDefault();
-                alert("별점을 선택해주세요.");
-            }
-        });
-    });
-    </script>
-</body><script src="{% static 'JS/WriteReview.js'%}"></script>
+    filled = Math.max(0, Math.min(MAX, filled));
+    const empty = MAX - filled;
+
+    // 이미지로 교체
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < filled; i++) {
+      const img = document.createElement('img');
+      img.src = filledSrc;
+      img.alt = '★';
+      frag.appendChild(img);
+    }
+    
+
+    el.textContent = '';   // 기존 ★ 텍스트 지우기
+    el.appendChild(frag);  // 이미지 삽입
+  });
+});
+</script>
 </html>
