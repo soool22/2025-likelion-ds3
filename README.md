@@ -141,7 +141,7 @@ $ python manage.py runserver
 ├── 📁 ai_services/     # AI 기반 기능 (추천 시스템, 리뷰 요약 등)
 ├── 📁 config/          # Django 프로젝트 설정 (환경 변수, URL 라우팅, WSGI/ASGI 등)
 ├── 📁 home/            # 메인 페이지 및 랜딩 페이지 담당 (소비자용)
-├── 📁 cupons/          # 쿠폰 생성, 발급, 유효성 검사 및 관리 기능
+├── 📁 coupons/          # 쿠폰 생성, 발급, 유효성 검사 및 관리 기능
 ├── 📁 missions/        # 챌린지 관리 (진행/완료 상태 추적, 보상 지급 등)
 ├── 📁 policies/        # 이용약관, 개인정보 처리방침 등 정책 관련 콘텐츠 관리
 ├── 📁 products/        # 상품 목록/상세, 카테고리, 등록/수정/삭제 기능
