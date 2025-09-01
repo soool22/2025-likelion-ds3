@@ -28,7 +28,7 @@
 
 ### 🦁 유수빈 (Back-end)  
 - **담당 앱**  
-  - `accounts`, `ai_services`, `cupons`, `users`, `visit_rewards`  
+  - `accounts`, `ai_services`, `coupons`, `users`, `visit_rewards`  
 - **세부 기능**  
   - `stores > popular-store-list` (방문자 많은 가게 정렬)  
   - `stores > owner-qr` (가게 QR 발급)  
